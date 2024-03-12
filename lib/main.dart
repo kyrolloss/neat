@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
+import 'package:neat/Screens/Task%20template%20Screen.dart';
 import 'package:neat/cubit/app_cubit.dart';
 
 import 'Screens/MainLayout.dart';
@@ -17,8 +18,10 @@ class MyApp extends StatelessWidget {
     return BlocProvider(
       create: (context) => AppCubit(),
       child: MaterialApp(
-          showSemanticsDebugger: false,
-          home: MainLayout()),
+          debugShowCheckedModeBanner: false,
+          home: TaskTemplateScreen(
+
+          )),
     );
   }
 }

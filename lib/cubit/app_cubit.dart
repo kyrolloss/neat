@@ -13,8 +13,28 @@ class AppCubit extends Cubit<AppState> {
   AppCubit() : super(AppInitial());
   static AppCubit get(context) => BlocProvider.of(context);
 
+  DateTime? selectedDate = DateTime.tryParse('yyyy-MM-dd');
+  int? year;
+  int? month;
+  int? day;
 
+  Future<void> showCalendar(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
 
+        selectedDate = picked;
+        year = selectedDate!.year;
+        month = selectedDate!.month;
+        day = selectedDate!.day;
+
+    }
+    emit(DatePickedSuccessfully());
+  }
 
 
   List<Widget> pagesNames = [

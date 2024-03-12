@@ -52,7 +52,7 @@ class _CalenderScreenState extends State<CalenderScreen>
                     color: AppColor.primeColor,
                   ),
                   unselectedLabelColor: AppColor.primeColor,
-                  unselectedLabelStyle: TextStyle(
+                  unselectedLabelStyle: const  TextStyle(
                       decorationStyle: TextDecorationStyle.wavy,
                       fontWeight: FontWeight.bold),
                   labelStyle: const TextStyle(
@@ -78,7 +78,7 @@ class _CalenderScreenState extends State<CalenderScreen>
                 height: height * .8,
                 child: TabBarView(
                   controller: controller,
-                    children: [
+                    children: const [
                       toDoTab()
 
                     ]
