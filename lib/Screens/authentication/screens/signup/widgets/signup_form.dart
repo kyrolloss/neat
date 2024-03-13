@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
+import 'package:neat/components/components.dart';
 
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
@@ -175,7 +177,9 @@ class SignupForm extends StatelessWidget {
                       side: const BorderSide(color: Colors.transparent),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                     ),
-                    onPressed: (){}, child: const Text(TText.createAccount,style: TextStyle(color: TColors.secondaryColor),),
+                    onPressed: (){
+                      navigateTo(context, VerifyEmailScreen());
+                    }, child: const Text(TText.createAccount,style: TextStyle(color: TColors.secondaryColor),),
                 ),
             ),
 
