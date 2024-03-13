@@ -5,6 +5,8 @@ import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 
 import '../../calender/calender.dart';
+import '../../common/widgets/appbar.dart';
+import '../../utlis/constants/colors.dart';
 
 class CalenderScreen extends StatefulWidget {
   @override
@@ -29,7 +31,10 @@ class _CalenderScreenState extends State<CalenderScreen>
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: TColors.backgroundColor,
+      appBar: TAppBar(
+
+      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
