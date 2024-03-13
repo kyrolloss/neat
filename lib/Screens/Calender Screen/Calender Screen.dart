@@ -5,7 +5,7 @@ import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 
 import '../../calender/calender.dart';
-import '../../common/widgets/appbar.dart';
+import '../../common/widgets/appbar/appbar.dart';
 import '../../utlis/constants/colors.dart';
 
 class CalenderScreen extends StatefulWidget {

@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
-import 'package:neat/components/components.dart';
 
-import '../../../../../cubit/app_cubit.dart';
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
@@ -16,22 +12,6 @@ class SignupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController firstNameController =  TextEditingController();
-    TextEditingController lastNameController =  TextEditingController();
-    TextEditingController titleController = TextEditingController();
-    TextEditingController phoneController =  TextEditingController();
-    TextEditingController emailController =  TextEditingController();
-    TextEditingController passwordController =  TextEditingController();
-    TextEditingController confirmPasswordController =  TextEditingController();
-
-
-
-    return BlocConsumer<AppCubit, AppState>(
-  listener: (context, state) {
-    // TODO: implement listener
-  },
-  builder: (context, state) {
-    var cubit= AppCubit.get(context);
     return Form(
         child: Column(
           children: [
@@ -40,7 +20,6 @@ class SignupForm extends StatelessWidget {
                 /// First name
                 Expanded(
                   child: TextFormField(
-                    controller: firstNameController,
                     expands: false,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
@@ -67,8 +46,6 @@ class SignupForm extends StatelessWidget {
                 /// Last name
                 Expanded(
                   child: TextFormField(
-                    controller: lastNameController,
-
                     expands: false,
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
@@ -96,8 +73,6 @@ class SignupForm extends StatelessWidget {
 
             ///Title
             TextFormField(
-              controller: titleController,
-
               expands: false,
               decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -120,8 +95,6 @@ class SignupForm extends StatelessWidget {
 
             /// Email
             TextFormField(
-              controller: emailController,
-
               expands: false,
               decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -145,8 +118,6 @@ class SignupForm extends StatelessWidget {
 
             /// Phone Number
             TextFormField(
-              controller: phoneController,
-
               expands: false,
               decoration: InputDecoration(
                   enabledBorder: OutlineInputBorder(
@@ -169,8 +140,6 @@ class SignupForm extends StatelessWidget {
 
             /// Password
             TextFormField(
-              controller: passwordController,
-
               expands: false,
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
@@ -206,13 +175,7 @@ class SignupForm extends StatelessWidget {
                       side: const BorderSide(color: Colors.transparent),
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10))
                     ),
-                    onPressed: (){
-                      cubit.Register(email: emailController.text, password: passwordController.text, name: lastNameController.text, phone: phoneController.text,  title: titleController.text);
-                      if (state is RegisterSuccess){
-                        navigateToToFinish(context, MainLayout());
-                      }
-                      
-                    }, child: const Text(TText.createAccount,style: TextStyle(color: TColors.secondaryColor),),
+                    onPressed: (){}, child: const Text(TText.createAccount,style: TextStyle(color: TColors.secondaryColor),),
                 ),
             ),
 
@@ -220,8 +183,6 @@ class SignupForm extends StatelessWidget {
 
           ],
         ));
-  },
-);
   }
 }
 

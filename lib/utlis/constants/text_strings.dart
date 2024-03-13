@@ -4,6 +4,8 @@ class TText {
   static const String and = "and";
   static const String skip = "Skip";
   static const String done = "Done";
+  static const String tContinue = "Continue";
+
 
   /// -- Onboarding Texts
   static const String onBoardingTitle1 = "Manage your task, quickly. ";
@@ -20,10 +22,16 @@ class TText {
   static const String iAgreeTo = "I agree to";
   static const String privacyPolicy = "Privacy Policy";
   static const String termsOfUse = "Terms of use";
+  static const String confirmEmail = "Verify your email address!";
+  static const String confirmEmailSubTitle = "Congratulations! Your Account Awaits: Verify Your Email to Start Manage your Tasks.";
+  static const String resendEmail = "Resend Email";
+
 
   // -- Authentication Headings
   static const String loginTitle = "Don't have an account? ";
   static const String signupTitle = "Let’s create your account";
+  static const String yourAccountCreatedTitle = "Your account successfully created!";
+  static const String yourAccountCreatedSubTitle = "Welcome to Your Ultimate Shopping Destination: Your Account is Created, Unleash the Joy of Seamless Online Shopping!";
 
 
 }

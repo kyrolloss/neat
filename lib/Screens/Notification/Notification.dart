@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:neat/common/widgets/appbar.dart';
+import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/utlis/constants/colors.dart';
