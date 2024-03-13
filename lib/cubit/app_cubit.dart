@@ -20,6 +20,10 @@ class AppCubit extends Cubit<AppState> {
   int? month;
   int? day;
 
+  User? getCurrentUser() {
+    return auth.currentUser;
+  }
+
   Future<void> showCalendar(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -42,13 +46,14 @@ class AppCubit extends Cubit<AppState> {
   var user = FirebaseAuth.instance.currentUser;
 
   Future<UserCredential> Register(
-      {required String email,
+      {
+        required String email,
       required String password,
       required String name,
       required String phone,
-      required String gender,
-      required String image,
-      required String title}) async {
+       String? image,
+      required String title
+      }) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -60,7 +65,6 @@ class AppCubit extends Cubit<AppState> {
         'title': title,
         'url': image,
         'phone': phone,
-        'gender': gender,
       });
       emit(RegisterSuccess());
 
@@ -79,11 +83,7 @@ class AppCubit extends Cubit<AppState> {
 
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-      // database.collection('Users').doc(userCredential.user!.uid).set({
-      //   'email': userCredential.user!.email,
-      //   'uid': userCredential.user!.uid,
-      //
-      // });
+
 
       emit(LoginSuccess());
 
@@ -95,7 +95,8 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Stream<QuerySnapshot> getMessages(String UserId, otherUserId) {
+
+  Stream<QuerySnapshot> getTasks(String UserId, otherUserId) {
     List<String> ids = [UserId, otherUserId];
 
     ids.sort();
@@ -109,7 +110,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   List<Widget> pagesNames = [
-    const HomeScreen(),
+    const HomeScreen(ReceiverId: '',),
     CalenderScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
