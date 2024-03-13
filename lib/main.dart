@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/cubit/app_cubit.dart';
 
 import 'Screens/Profile/Profile Screen.dart';
+import 'Screens/authentication/onboarding.dart';
 import 'firebase_options.dart';
 
 void main() async{
