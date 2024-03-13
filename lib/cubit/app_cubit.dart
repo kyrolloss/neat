@@ -95,6 +95,19 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
+  Stream<QuerySnapshot> getMessages(String UserId, otherUserId) {
+    List<String> ids = [UserId, otherUserId];
+
+    ids.sort();
+    String ChatRoomId = ids.join('_');
+    return database
+        .collection('chat_rooms')
+        .doc(ChatRoomId)
+        .collection('tasks')
+        .orderBy('deadline', descending: false)
+        .snapshots();
+  }
+
   List<Widget> pagesNames = [
     const HomeScreen(),
     CalenderScreen(),
