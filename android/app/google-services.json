@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "828458109496",
+    "project_id": "neat-8c41c",
+    "storage_bucket": "neat-8c41c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:828458109496:android:1b1a2bef6477332c1d74cd",
+        "android_client_info": {
+          "package_name": "com.example.neat"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAc4-S_erpBVEbK_zqznP5slfcYHDDkJZY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
