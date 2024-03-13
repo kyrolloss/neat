@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:neat/common/widgets/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
+import 'package:neat/utlis/constants/colors.dart';
 
 class NotificationScreen extends StatelessWidget {
   const NotificationScreen({super.key});
@@ -12,6 +14,11 @@ class NotificationScreen extends StatelessWidget {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
+      backgroundColor: TColors.backgroundColor,
+      appBar: TAppBar(
+        backgroundColor: TColors.backgroundColor,
+        title: Text("Notifications", style: TextStyle(color: TColors.primaryColor,fontWeight: FontWeight.bold),),
+      ),
       body:  SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.only(top: 30.0 , right: 22.5,left: 22.5),
@@ -31,7 +38,7 @@ class NotificationScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Container(
-                        height: height * .12,
+                        height: height * .13,
                         width: width * .8,
                         decoration: BoxDecoration(
                           color: AppColor.secondColor,
@@ -93,7 +100,7 @@ class NotificationScreen extends StatelessWidget {
                     return Padding(
                       padding: const EdgeInsets.all(5.0),
                       child: Container(
-                        height: height * .12,
+                        height: height * .13,
                         width: width * .8,
                         decoration: BoxDecoration(
                           color: AppColor.secondColor,
