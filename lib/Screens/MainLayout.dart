@@ -8,7 +8,7 @@ import '../cubit/app_cubit.dart';
 
 class MainLayout extends StatefulWidget {
   int buttomIndex = 1;
-   Widget widget = const HomeScreen();
+   Widget widget =  HomeScreen(ReceiverId: '');
 
 
   @override
