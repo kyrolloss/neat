@@ -115,19 +115,85 @@ class AppCubit extends Cubit<AppState> {
   // }
 
 
-  Stream<QuerySnapshot> getTasksListStream(String UserId, otherUserId) {
-    List<String> ids = [UserId, otherUserId];
+  Stream<QuerySnapshot> getTasksStream(String UserId, otherUserId) {
+    List<String> ids = [ UserId , otherUserId];
 
     ids.sort();
     String taskRoomId = ids.join('_');
+
     return database
         .collection('tasks_rooms')
         .doc(taskRoomId)
         .collection('tasks')
-        .orderBy('name', descending: false)
         .snapshots();
   }
+
+  Future<void> sendTask(
+      {
+        required String receiverID,
+        required String senderID,
+        required String title,
+        required String description,
+        required String deadline,
+        required String senderName,
+        required String senderPhone,
+        required String taskName,
+        required String taskId,
+
+        required String priority,
+
+
+
+      }) async {
+    emit(SendTaskLoading());
+    final String currentUserId = auth.currentUser!.uid;
+    final String email = auth.currentUser!.email!;
+    final Timestamp timeStamp = Timestamp.now();
+    Tasks tasks = Tasks(
+
+        name: taskName,
+
+        id: taskId,
+        senderId: senderID,
+        senderEmail: email,
+        senderName: senderName,
+        senderPhoneNumber: senderPhone,
+        receiverId: receiverID,
+        description: description,
+        date: timeStamp.toString(),
+        deadline: deadline,
+        status: 'to do',
+        priority: priority
+    );
+
+
+    List<String> ids = [currentUserId, receiverID];
+    ids.sort();
+    String taskRoomId = ids.join('_');
+    await database
+        .collection("tasks_rooms")
+        .doc(taskRoomId)
+        .collection('tasks')
+        .add(tasks.task())
+        .then((value) {
+      tasksList.add(value);
+      print('task name is${tasks.name}');
+      emit(SendTaskSuccess());
+    }).catchError((onError) {
+      emit(SendTaskFailed());
+      print('error');
+      print(onError.toString());
+    });
+  }
+
+  List<Widget> pagesNames = [
+    const HomeScreen(ReceiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',),
+    CalenderScreen(),
+    const NotificationScreen(),
+    const ProfileScreen(),
+  ];
 }
+
 
 // Stream<List<Map<String, dynamic>>> getTasksListStream() {
 //   return database.collection('tasks_rooms').snapshots().map((snapshot) {
@@ -139,68 +205,3 @@ class AppCubit extends Cubit<AppState> {
 //   });
 // }
 
-Future<void> sendTask(
-    {
-      required String receiverID,
-      required String senderID,
-      required String title,
-      required String description,
-      required String deadline,
-      required String senderName,
-      required String senderPhone,
-      required String taskName,
-      required String taskId,
-
-      required String priority,
-
-
-
-    }) async {
-  emit(SendTaskLoading());
-  final String currentUserId = auth.currentUser!.uid;
-  final String email = auth.currentUser!.email!;
-  final Timestamp timeStamp = Timestamp.now();
-  Tasks tasks = Tasks(
-
-      name: taskName,
-
-      id: taskId,
-      senderId: senderID,
-      senderEmail: email,
-      senderName: senderName,
-      senderPhoneNumber: senderPhone,
-      receiverId: receiverID,
-      description: description,
-      date: timeStamp.toString(),
-      deadline: deadline,
-      status: 'to do',
-      priority: priority
-  );
-
-
-  List<String> ids = [currentUserId, receiverID];
-  ids.sort();
-  String ChatRoomId = ids.join('_');
-  await database
-      .collection("tasks_rooms")
-      .doc(ChatRoomId)
-      .collection('tasks')
-      .add(tasks.task())
-      .then((value) {
-    tasksList.add(value);
-    print('task name is${tasks.name}');
-    emit(SendTaskSuccess());
-  }).catchError((onError) {
-    emit(SendTaskFailed());
-    print('error');
-    print(onError.toString());
-  });
-}
-
-List<Widget> pagesNames = [
-  const HomeScreen(ReceiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',),
-  CalenderScreen(),
-  const NotificationScreen(),
-  const ProfileScreen(),
-];
-}

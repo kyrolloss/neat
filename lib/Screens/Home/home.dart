@@ -164,7 +164,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        print(cubit.tasksList);
                                       },
                                       child: Container(
                                         height: height * .05,
@@ -234,7 +233,7 @@ class _HomeScreenState extends State<HomeScreen> {
     String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksListStream(widget.ReceiverId , SenderId ),
+      stream: AppCubit.get(context).getTasksStream( SenderId, widget.ReceiverId  ),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
@@ -283,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                       width: width * .2,
                       child: BuildText(
-                        text: taskData['name'],
+                        text: taskData['wCZqbXZlfkBnmeUKcy5M'],
                         size: 17.5,
                         bold: true,
                         color: AppColor.primeColor,
