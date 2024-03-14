@@ -29,7 +29,7 @@ class VerifyEmailScreen extends StatelessWidget {
           child: Column(
             children: [
               /// Image
-              Image(
+              const Image(
                 image: AssetImage(TImages.deliveredEmailIllustration2),
                 width: double.infinity,
               ),
@@ -87,7 +87,7 @@ class VerifyEmailScreen extends StatelessWidget {
                             },
                           ));
                     },
-                    child: Text(
+                    child: const Text(
                       TText.tContinue,
                       style: TextStyle(color: Colors.white),
                     )),
