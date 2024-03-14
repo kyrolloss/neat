@@ -25,7 +25,7 @@ class LoginForm extends StatelessWidget {
 
           /// Email
           TextFormField(
-
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
              enabledBorder:  OutlineInputBorder(
                borderRadius: BorderRadius.circular(40),
@@ -56,7 +56,7 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwInputFields,),
           /// -- Password
           TextFormField(
-
+            obscureText: true,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),

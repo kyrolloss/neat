@@ -12,6 +12,8 @@ class TColors{
   static const Color textPrimary = Color(0xff6368D9);
   static const Color textSecondary = Color(0xff272727);
   static const Color textWhite = Color(0xffE8FFFF);
+  static const Color darkerGrey = Color(0xff4f4f4f);
+
 
   //border Colors
   static const Color borderPrimary = Color(0xff5A7C76);

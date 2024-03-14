@@ -32,15 +32,15 @@ class ProfileScreen extends StatelessWidget {
               children: [
                 /// -- AppBar
                 TAppBar(
-
-                  title: Text(
-                    "Account",
-                    style: Theme.of(context)
-                        .textTheme
-                        .headlineMedium!
-                        .apply(color: Colors.white),
-                  ),
+                  // title: Text(
+                  //   "Account",
+                  //   style: Theme.of(context)
+                  //       .textTheme
+                  //       .headlineMedium!
+                  //       .apply(color: Colors.white),
+                  // ),
                   backgroundColor: TColors.primaryColor,
+
                 ),
 
                 /// User Profile Card
