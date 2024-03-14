@@ -101,28 +101,43 @@ class AppCubit extends Cubit<AppState> {
   }
 
 
-  Stream<QuerySnapshot> getTasks(String UserId, otherUserId) {
+  // Stream<QuerySnapshot> getTasks(String UserId, otherUserId) {
+  //   List<String> ids = [UserId, otherUserId];
+  //
+  //   ids.sort();
+  //   String ChatRoomId = ids.join('_');
+  //   return database
+  //       .collection('tasks_rooms')
+  //       .doc(ChatRoomId)
+  //       .collection('tasks')
+  //       .orderBy('name', descending: false)
+  //       .snapshots();
+  // }
+
+
+  Stream<QuerySnapshot> getTasksListStream(String UserId, otherUserId) {
     List<String> ids = [UserId, otherUserId];
 
     ids.sort();
-    String ChatRoomId = ids.join('_');
+    String taskRoomId = ids.join('_');
     return database
-        .collection('chat_rooms')
-        .doc(ChatRoomId)
+        .collection('tasks_rooms')
+        .doc(taskRoomId)
         .collection('tasks')
-        .orderBy('deadline', descending: false)
+        .orderBy('name', descending: false)
         .snapshots();
   }
-
-
-  Stream<List<Map<String, dynamic>>> getTasksListStream() {
-    return database.collection('tasks').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final task = doc.data();
-        return task;
-      }).toList();
-    });
   }
+
+  // Stream<List<Map<String, dynamic>>> getTasksListStream() {
+  //   return database.collection('tasks_rooms').snapshots().map((snapshot) {
+  //     return snapshot.docs.map((doc) {
+  //       final task = doc.data();
+  //       print(task);
+  //       return task;
+  //     }).toList();
+  //   });
+  // }
 
   Future<void> sendTask(
       {
@@ -131,7 +146,6 @@ class AppCubit extends Cubit<AppState> {
         required String title,
         required String description,
         required String deadline,
-        required String image,
         required String senderName,
         required String senderPhone,
         required String taskName,
@@ -174,10 +188,11 @@ class AppCubit extends Cubit<AppState> {
         .add(tasks.task())
         .then((value) {
       tasksList.add(value);
-      print(tasks);
+      print('task name is${tasks.name}');
       emit(SendTaskSuccess());
     }).catchError((onError) {
       emit(SendTaskFailed());
+      print('error');
       print(onError.toString());
     });
   }

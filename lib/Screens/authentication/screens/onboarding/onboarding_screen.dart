@@ -12,14 +12,16 @@ class OnboardingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: TColors.backgroundColor,
-      body: Stack(
-        children: [
-          /// Image & title
-          OnBoardingPage(image: TImages.onboardingImage, title: TText.onBoardingTitle1,),
-
-          /// Circular next button
-          OnboardingNextButton(),
-        ],
+      body: SingleChildScrollView(
+        child: Stack(
+          children: [
+            /// Image & title
+            OnBoardingPage(image: TImages.onboardingImage, title: TText.onBoardingTitle1,),
+        
+            /// Circular next button
+            OnboardingNextButton(),
+          ],
+        ),
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -9,8 +10,9 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../cubit/app_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String ReceiverId;
 
-  const HomeScreen({super.key, });
+  const HomeScreen({super.key, required this.ReceiverId, });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -161,7 +163,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                       ],
                                     ),
                                     GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        print(cubit.tasksList);
+                                      },
                                       child: Container(
                                         height: height * .05,
                                         width: width * .3,
@@ -227,8 +231,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget BuilderTasksList() {
+    String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
+
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksListStream(),
+      stream: AppCubit.get(context).getTasksListStream(widget.ReceiverId , SenderId ),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
@@ -242,8 +248,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
         return ListView(
-          children: snapshot.data!
-              .map<Widget>((userData) => BuildtaskListItem(userData, context))
+          children: snapshot.data!.docs.map((doc) => BuildtaskListItem(doc))
               .toList(),
         );
       },
@@ -251,65 +256,58 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget BuildtaskListItem(
-      Map<String, dynamic> userData, BuildContext context) {
+      DocumentSnapshot doc
+      ) {
+
+    Map<String, dynamic> taskData = doc.data() as Map<String, dynamic>;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return StreamBuilder(
-      stream: AppCubit.get(context).getTasksListStream(),
-      builder: (context, snapshot) {
-        if (userData["email"] !=
-            AppCubit.get(context).getCurrentUser()!.email) {
-          return  Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: height * .1,
-              width: 150,
-              decoration: BoxDecoration(
-                  color: AppColor.secondColor,
-                  borderRadius: BorderRadius.circular(25)),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 15.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                            width: width * .2,
-                            child: BuildText(
-                              text: userData['tasks'],
-                              size: 17.5,
-                              bold: true,
-                              color: AppColor.primeColor,
-                              maxLines: 2,
-                            )),
-                        SizedBox(
-                          width: width * .2,
-                          child: BuildText(
-                            text: userData.length.toString(),
-                            size: 17.5,
-                            color: AppColor.primeColor,
-                            maxLines: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Icon(
-                      Icons.file_copy_outlined,
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Container(
+        height: height * .1,
+        width: 150,
+        decoration: BoxDecoration(
+            color: AppColor.secondColor,
+            borderRadius: BorderRadius.circular(25)),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 15.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                      width: width * .2,
+                      child: BuildText(
+                        text: taskData['name'],
+                        size: 17.5,
+                        bold: true,
+                        color: AppColor.primeColor,
+                        maxLines: 2,
+                      )),
+                  SizedBox(
+                    width: width * .2,
+                    child: BuildText(
+                      text: taskData.length.toString(),
+                      size: 17.5,
                       color: AppColor.primeColor,
-                    )
-                  ],
-                ),
+                      maxLines: 2,
+                    ),
+                  ),
+                ],
               ),
-            ),
-          );
-        } else {
-          return const SizedBox();
-        }
-      },
+              Icon(
+                Icons.file_copy_outlined,
+                color: AppColor.primeColor,
+              )
+            ],
+          ),
+        ),
+      ),
     );
   }
 

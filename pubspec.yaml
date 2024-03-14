@@ -48,6 +48,7 @@ dependencies:
   cloud_firestore: ^4.15.6
   image_picker: ^1.0.7
   iconsax: ^0.0.8
+  uuid: ^4.3.3
 
 dev_dependencies:
   flutter_test:

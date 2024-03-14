@@ -1,3 +1,4 @@
+import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/components/Text.dart';
@@ -201,20 +202,38 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  height: height * .075,
-                  width: width * .975,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(25),
-                    color: AppColor.primeColor,
+                GestureDetector(
+                  onTap: (){
+                    var uuid = Uuid();
+                    // cubit.sendTask(
+                    //     receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+                    //     senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
+                    //     title: 'Hr',
+                    //     description: 'build Neat App with flutter',
+                    //     deadline: 'next sunday',
+                    //
+                    //     senderName: 'kerollos',
+                    //     senderPhone: '01205708870',
+                    //     taskName: 'Neat App',
+                    //     taskId: uuid.v1(),
+                    //     priority: 'important',);
+        },
+
+                  child: Container(
+                    height: height * .075,
+                    width: width * .975,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(25),
+                      color: AppColor.primeColor,
+                    ),
+                    child: Center(
+                        child: BuildText(
+                      text: 'done',
+                      size: 25,
+                      color: Colors.white,
+                      bold: true,
+                    )),
                   ),
-                  child: Center(
-                      child: BuildText(
-                    text: 'done',
-                    size: 25,
-                    color: Colors.white,
-                    bold: true,
-                  )),
                 )
               ],
             ),

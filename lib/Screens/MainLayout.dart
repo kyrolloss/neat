@@ -3,13 +3,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:inkblob_navigation_bar/inkblob_navigation_bar.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/components/color.dart';
+import 'package:neat/cubit/app_cubit.dart';
 
-import '../cubit/app_cubit.dart';
 
 class MainLayout extends StatefulWidget {
   int buttomIndex = 1;
 
-   Widget widget =  const HomeScreen( );
+   Widget widget =  const HomeScreen(ReceiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2', );
 
   MainLayout({super.key});
 
