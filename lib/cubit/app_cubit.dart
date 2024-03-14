@@ -7,7 +7,7 @@ import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/Notification/Notification.dart';
-import 'package:neat/Screens/Profile/Profile%20Screen.dart';
+import '../Screens/Profile/profile_screen.dart';
 
 
 part 'app_state.dart';

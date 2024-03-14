@@ -3,13 +3,11 @@ import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
-import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:neat/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
-import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 
 import '../../components/Text.dart';
@@ -47,23 +45,23 @@ class ProfileScreen extends StatelessWidget {
 
                 /// User Profile Card
                 TUserProfileTile(onPressed: (){
-                  navigateTo(context, EditProfileScreen());
+                  navigateTo(context, const EditProfileScreen());
                 },),
-                SizedBox(height: TSizes.spaceBtwSections,),
+                const SizedBox(height: TSizes.spaceBtwSections,),
               ],
             )),
 
             /// -- Body
-            Padding(padding: EdgeInsets.all(TSizes.defaultSpace),
+            Padding(padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               children: [
                 /// -- Account Settings
-                TSectionHeading(
+                const TSectionHeading(
                   title: "Account Settings",
                   showActionButton: false,
                   textColor: TColors.primaryColor,
                 ),
-                SizedBox(height: TSizes.spaceBtwItems,),
+                const SizedBox(height: TSizes.spaceBtwItems,),
                 Container(
                   height: height * .225,
                   width: width * .9,
@@ -133,12 +131,12 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){},),
-                SizedBox(height: TSizes.spaceBtwItems,),
-                TSettingsMenuTile(icon: Icons.language, title: "Language"),
-                SizedBox(height: TSizes.spaceBtwItems,),
-                TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
-                SizedBox(height: TSizes.spaceBtwItems,),
-                TSettingsMenuTile(icon: Icons.logout_sharp, title: "Logout")
+                const SizedBox(height: TSizes.spaceBtwItems,),
+                const TSettingsMenuTile(icon: Icons.language, title: "Language"),
+                const SizedBox(height: TSizes.spaceBtwItems,),
+                const TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
+                const SizedBox(height: TSizes.spaceBtwItems,),
+                const TSettingsMenuTile(icon: Icons.logout_sharp, title: "Logout")
               ],
             ),
             ),
