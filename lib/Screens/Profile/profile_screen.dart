@@ -45,7 +45,7 @@ class ProfileScreen extends StatelessWidget {
 
                 /// User Profile Card
                 TUserProfileTile(onPressed: (){
-                  navigateTo(context, const EditProfileScreen());
+                  navigateTo(context, EditProfileScreen());
                 },),
                 const SizedBox(height: TSizes.spaceBtwSections,),
               ],

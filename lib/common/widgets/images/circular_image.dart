@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../utlis/constants/colors.dart';
 import '../../../utlis/constants/sizes.dart';
 
 class TCircularImage extends StatelessWidget {
@@ -14,6 +13,7 @@ class TCircularImage extends StatelessWidget {
      this.width =56,
      this.height = 56,
      this.padding = TSizes.sm,
+    this.icon,
   });
 
   final BoxFit? fit;
@@ -22,6 +22,7 @@ class TCircularImage extends StatelessWidget {
   final Color? overlayColor;
   final Color? backgroundColor;
   final double width, height, padding;
+  final IconData? icon;
 
   @override
   Widget build(BuildContext context) {
