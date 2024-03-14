@@ -21,8 +21,6 @@ class LoginScreen extends StatelessWidget {
 
               /// Form
               LoginForm(),
-
-
             ],
           ),
           ),
