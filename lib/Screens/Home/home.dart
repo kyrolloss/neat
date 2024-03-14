@@ -282,7 +282,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   SizedBox(
                       width: width * .2,
                       child: BuildText(
-                        text: taskData['wCZqbXZlfkBnmeUKcy5M'],
+                        text: taskData['name'],
                         size: 17.5,
                         bold: true,
                         color: AppColor.primeColor,

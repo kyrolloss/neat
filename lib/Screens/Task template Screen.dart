@@ -32,191 +32,194 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
               children: [
                 Expanded(
                   child: SizedBox(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(
-                          height: height * .08,
-                        ),
-                        BuildText(
-                          text: 'Task Name',
-                          color: AppColor.primeColor,
-                          size: 25,
-                          bold: true,
-                        ),
-                        SizedBox(
-                          height: height * .01,
-                        ),
-                        SizedBox(
-                          height: height * .065,
-                          width: width * .975,
-                          child: TextFormField(
-                            controller: taskNameController,
-                            cursorColor: Colors.black,
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(10),
-                                fillColor: AppColor.primeColor.withOpacity(.6),
-                                filled: true,
-                                hintText: 'Name ...',
-                                hintStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17.5),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    gapPadding: 20,
-                                    borderSide: BorderSide.none),
-                                counterStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold)),
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: height * .08,
                           ),
-                        ),
-
-                        //
-
-                        SizedBox(
-                          height: height * .01,
-                        ),
-                        const Divider(),
-
-                        BuildText(
-                          text: 'Task Description',
-                          color: AppColor.primeColor,
-                          size: 25,
-                          bold: true,
-                        ),
-                        SizedBox(
-                          height: height * .01,
-                        ),
-
-                        SizedBox(
-                          height: height * .065,
-                          width: width * .975,
-                          child: TextFormField(
-                            controller: taskDescriptionController,
-                            cursorColor: Colors.black,
-                            decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.all(10),
-                                fillColor: AppColor.primeColor.withOpacity(.6),
-                                filled: true,
-                                hintText: 'Description ...',
-                                hintStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17.5),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(30),
-                                    gapPadding: 20,
-                                    borderSide: BorderSide.none),
-                                counterStyle: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontWeight: FontWeight.bold)),
+                          BuildText(
+                            text: 'Task Name',
+                            color: AppColor.primeColor,
+                            size: 25,
+                            bold: true,
                           ),
-                        ),
-
-                        //
-                        SizedBox(
-                          height: height * .01,
-                        ),
-                        const Divider(),
-                        SizedBox(
-                          height: height * .01,
-                        ),
-
-                        Row(
-                          children: [
-                            BuildText(
-                              text: 'Start Day ...',
-                              color: AppColor.primeColor,
-                              size: 25,
-                              bold: true,
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                          SizedBox(
+                            height: height * .065,
+                            width: width * .975,
+                            child: TextFormField(
+                              controller: taskNameController,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(10),
+                                  fillColor: AppColor.primeColor.withOpacity(.6),
+                                  filled: true,
+                                  hintText: 'Name ...',
+                                  hintStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.5),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gapPadding: 20,
+                                      borderSide: BorderSide.none),
+                                  counterStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold)),
                             ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () async {
-                                await cubit.showCalendar(context);
-                              },
-                              icon: const Icon(
-                                Icons.calendar_month_outlined,
-                                // Use a more appropriate calendar icon
-                                size: 30,
+                          ),
+                      
+                          //
+                      
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                          const Divider(),
+                      
+                          BuildText(
+                            text: 'Task Description',
+                            color: AppColor.primeColor,
+                            size: 25,
+                            bold: true,
+                          ),
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                      
+                          SizedBox(
+                            height: height * .065,
+                            width: width * .975,
+                            child: TextFormField(
+                              controller: taskDescriptionController,
+                              cursorColor: Colors.black,
+                              decoration: InputDecoration(
+                                  contentPadding: const EdgeInsets.all(10),
+                                  fillColor: AppColor.primeColor.withOpacity(.6),
+                                  filled: true,
+                                  hintText: 'Description ...',
+                                  hintStyle: const TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 17.5),
+                                  border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                      gapPadding: 20,
+                                      borderSide: BorderSide.none),
+                                  counterStyle: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 25,
+                                      fontWeight: FontWeight.bold)),
+                            ),
+                          ),
+                      
+                          //
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                          const Divider(),
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                      
+                          Row(
+                            children: [
+                              BuildText(
+                                text: 'Start Day ...',
+                                color: AppColor.primeColor,
+                                size: 25,
+                                bold: true,
                               ),
-                              color: AppColor.primeColor,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: height * .01,
-                        ),
-
-                        Row(
-                          children: [
-                            BuildText(
-                              text: 'DeadLine ...',
-                              color: AppColor.primeColor,
-                              size: 25,
-                              bold: true,
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () async {
-                                await cubit.showCalendar(context);
-                              },
-                              icon: const Icon(
-                                Icons.calendar_today,
-                                // Use a more appropriate calendar icon
-                                size: 30,
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () async {
+                                  await cubit.showCalendar(context);
+                                },
+                                icon: const Icon(
+                                  Icons.calendar_month_outlined,
+                                  // Use a more appropriate calendar icon
+                                  size: 30,
+                                ),
+                                color: AppColor.primeColor,
                               ),
-                              color: AppColor.primeColor,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: height * .02,
-                        ),
-
-                        Row(
-                          children: [
-                            BuildText(
-                              text: 'Attachment ...',
-                              color: AppColor.primeColor,
-                              size: 25,
-                              bold: true,
-                            ),
-                            const Spacer(),
-                            IconButton(
-                              onPressed: () {},
-                              icon: const Icon(
-                                Icons.attach_file,
-                                // Use a more appropriate calendar icon
-                                size: 32.5,
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * .01,
+                          ),
+                      
+                          Row(
+                            children: [
+                              BuildText(
+                                text: 'DeadLine ...',
+                                color: AppColor.primeColor,
+                                size: 25,
+                                bold: true,
                               ),
-                              color: AppColor.primeColor,
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: height * .008,
-                        ),
-                      ],
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () async {
+                                  await cubit.showCalendar(context);
+                                },
+                                icon: const Icon(
+                                  Icons.calendar_today,
+                                  // Use a more appropriate calendar icon
+                                  size: 30,
+                                ),
+                                color: AppColor.primeColor,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * .02,
+                          ),
+                      
+                          Row(
+                            children: [
+                              BuildText(
+                                text: 'Attachment ...',
+                                color: AppColor.primeColor,
+                                size: 25,
+                                bold: true,
+                              ),
+                              const Spacer(),
+                              IconButton(
+                                onPressed: () {},
+                                icon: const Icon(
+                                  Icons.attach_file,
+                                  // Use a more appropriate calendar icon
+                                  size: 32.5,
+                                ),
+                                color: AppColor.primeColor,
+                              ),
+                            ],
+                          ),
+                          SizedBox(
+                            height: height * .008,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
                 GestureDetector(
                   onTap: (){
                     var uuid = Uuid();
-                    // cubit.sendTask(
-                    //     receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-                    //     senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
-                    //     title: 'Hr',
-                    //     description: 'build Neat App with flutter',
-                    //     deadline: 'next sunday',
-                    //
-                    //     senderName: 'kerollos',
-                    //     senderPhone: '01205708870',
-                    //     taskName: 'Neat App',
-                    //     taskId: uuid.v1(),
-                    //     priority: 'important',);
+                    cubit.sendTask(
+                        receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+                        senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
+                        title: 'Hr',
+                        description: 'build Neat App with flutter',
+                        deadline: 'next sunday',
+
+                        senderName: 'kerollos',
+                        senderPhone: '01205708870',
+                        taskName: 'Neat App',
+                        taskId: uuid.v1(),
+                        priority: 'important'
+                      ,);
         },
 
                   child: Container(
