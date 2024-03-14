@@ -52,11 +52,11 @@ class AppCubit extends Cubit<AppState> {
   Future<UserCredential> Register(
       {
         required String email,
-      required String password,
-      required String name,
-      required String phone,
-       String? image,
-      required String title
+        required String password,
+        required String name,
+        required String phone,
+        String? image,
+        required String title
       }) async {
     try {
       emit(RegisterLoading());
@@ -127,80 +127,80 @@ class AppCubit extends Cubit<AppState> {
         .orderBy('name', descending: false)
         .snapshots();
   }
-  }
+}
 
-  // Stream<List<Map<String, dynamic>>> getTasksListStream() {
-  //   return database.collection('tasks_rooms').snapshots().map((snapshot) {
-  //     return snapshot.docs.map((doc) {
-  //       final task = doc.data();
-  //       print(task);
-  //       return task;
-  //     }).toList();
-  //   });
-  // }
+// Stream<List<Map<String, dynamic>>> getTasksListStream() {
+//   return database.collection('tasks_rooms').snapshots().map((snapshot) {
+//     return snapshot.docs.map((doc) {
+//       final task = doc.data();
+//       print(task);
+//       return task;
+//     }).toList();
+//   });
+// }
 
-  Future<void> sendTask(
-      {
-        required String receiverID,
-        required String senderID,
-        required String title,
-        required String description,
-        required String deadline,
-        required String senderName,
-        required String senderPhone,
-        required String taskName,
-        required String taskId,
+Future<void> sendTask(
+    {
+      required String receiverID,
+      required String senderID,
+      required String title,
+      required String description,
+      required String deadline,
+      required String senderName,
+      required String senderPhone,
+      required String taskName,
+      required String taskId,
 
-        required String priority,
-
-
-
-      }) async {
-    emit(SendTaskLoading());
-    final String currentUserId = auth.currentUser!.uid;
-    final String email = auth.currentUser!.email!;
-    final Timestamp timeStamp = Timestamp.now();
-   Tasks tasks = Tasks(
-
-       name: taskName,
-
-       id: taskId,
-       senderId: senderID,
-       senderEmail: email,
-       senderName: senderName,
-       senderPhoneNumber: senderPhone,
-       receiverId: receiverID,
-       description: description,
-       date: timeStamp.toString(),
-       deadline: deadline,
-       status: 'to do',
-       priority: priority
-   );
+      required String priority,
 
 
-    List<String> ids = [currentUserId, receiverID];
-    ids.sort();
-    String ChatRoomId = ids.join('_');
-    await database
-        .collection("tasks_rooms")
-        .doc(ChatRoomId)
-        .collection('tasks')
-        .add(tasks.task())
-        .then((value) {
-      tasksList.add(value);
-      print('task name is${tasks.name}');
-      emit(SendTaskSuccess());
-    }).catchError((onError) {
-      emit(SendTaskFailed());
-      print('error');
-      print(onError.toString());
-    });
-  }
 
-  List<Widget> pagesNames = [
-    const HomeScreen(),
-    CalenderScreen(),
-    const NotificationScreen(),
-    const ProfileScreen(),
-  ];
+    }) async {
+  emit(SendTaskLoading());
+  final String currentUserId = auth.currentUser!.uid;
+  final String email = auth.currentUser!.email!;
+  final Timestamp timeStamp = Timestamp.now();
+  Tasks tasks = Tasks(
+
+      name: taskName,
+
+      id: taskId,
+      senderId: senderID,
+      senderEmail: email,
+      senderName: senderName,
+      senderPhoneNumber: senderPhone,
+      receiverId: receiverID,
+      description: description,
+      date: timeStamp.toString(),
+      deadline: deadline,
+      status: 'to do',
+      priority: priority
+  );
+
+
+  List<String> ids = [currentUserId, receiverID];
+  ids.sort();
+  String ChatRoomId = ids.join('_');
+  await database
+      .collection("tasks_rooms")
+      .doc(ChatRoomId)
+      .collection('tasks')
+      .add(tasks.task())
+      .then((value) {
+    tasksList.add(value);
+    print('task name is${tasks.name}');
+    emit(SendTaskSuccess());
+  }).catchError((onError) {
+    emit(SendTaskFailed());
+    print('error');
+    print(onError.toString());
+  });
+}
+
+List<Widget> pagesNames = [
+  const HomeScreen(ReceiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',),
+  CalenderScreen(),
+  const NotificationScreen(),
+  const ProfileScreen(),
+];
 }
