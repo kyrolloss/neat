@@ -16,5 +16,7 @@ static const String loginImage = "assets/images/onboarding_images/login_image.pn
   static const String deliveredEmailIllustration2 = "assets/animations/sammy-line-man-receives-a-mail2.png";
   static const String verifyIllustration = "assets/animations/sammy-line-travel-backpack.gif";
 
+// -- Profile
+  static const String user = "assets/images/user/user.png";
 
 }

@@ -223,7 +223,7 @@ class SignupForm extends StatelessWidget {
                 },
                 child: const Text(
                   TText.createAccount,
-                  style: TextStyle(color: TColors.secondaryColor),
+                  style: TextStyle(color: Colors.white),
                 ),
               ),
             ),

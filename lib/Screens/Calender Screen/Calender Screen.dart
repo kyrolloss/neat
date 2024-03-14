@@ -33,7 +33,7 @@ class _CalenderScreenState extends State<CalenderScreen>
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
       appBar: TAppBar(
-
+backgroundColor: TColors.backgroundColor,
       ),
       body: SingleChildScrollView(
         child: Padding(
