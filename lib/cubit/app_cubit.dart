@@ -3,10 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/Notification/Notification.dart';
 import 'package:neat/Screens/Profile/Profile%20Screen.dart';
+
 
 part 'app_state.dart';
 
@@ -19,6 +21,8 @@ class AppCubit extends Cubit<AppState> {
   int? year;
   int? month;
   int? day;
+  List tasksList=[];
+
 
   User? getCurrentUser() {
     return auth.currentUser;
@@ -63,7 +67,6 @@ class AppCubit extends Cubit<AppState> {
         'email': userCredential.user!.email,
         'uid': userCredential.user!.uid,
         'title': title,
-        'url': image,
         'phone': phone,
       });
       emit(RegisterSuccess());
@@ -71,10 +74,12 @@ class AppCubit extends Cubit<AppState> {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       emit(RegisterFailed());
-      print(e.message);
+      print( e.message);
       rethrow;
     }
   }
+
+
 
   Future<UserCredential> Login(
       {required String email, required String password}) async {
@@ -109,8 +114,76 @@ class AppCubit extends Cubit<AppState> {
         .snapshots();
   }
 
+
+  Stream<List<Map<String, dynamic>>> getTasksListStream() {
+    return database.collection('tasks').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final task = doc.data();
+        return task;
+      }).toList();
+    });
+  }
+
+  Future<void> sendTask(
+      {
+        required String receiverID,
+        required String senderID,
+        required String title,
+        required String description,
+        required String deadline,
+        required String image,
+        required String senderName,
+        required String senderPhone,
+        required String taskName,
+        required String taskId,
+
+        required String priority,
+
+
+
+      }) async {
+    emit(SendTaskLoading());
+    final String currentUserId = auth.currentUser!.uid;
+    final String email = auth.currentUser!.email!;
+    final Timestamp timeStamp = Timestamp.now();
+   Tasks tasks = Tasks(
+
+       name: taskName,
+
+       id: taskId,
+       senderId: senderID,
+       senderEmail: email,
+       senderName: senderName,
+       senderPhoneNumber: senderPhone,
+       receiverId: receiverID,
+       description: description,
+       date: timeStamp.toString(),
+       deadline: deadline,
+       status: 'to do',
+       priority: priority
+   );
+
+
+    List<String> ids = [currentUserId, receiverID];
+    ids.sort();
+    String ChatRoomId = ids.join('_');
+    await database
+        .collection("tasks_rooms")
+        .doc(ChatRoomId)
+        .collection('tasks')
+        .add(tasks.task())
+        .then((value) {
+      tasksList.add(value);
+      print(tasks);
+      emit(SendTaskSuccess());
+    }).catchError((onError) {
+      emit(SendTaskFailed());
+      print(onError.toString());
+    });
+  }
+
   List<Widget> pagesNames = [
-    const HomeScreen(ReceiverId: '',),
+    const HomeScreen(),
     CalenderScreen(),
     const NotificationScreen(),
     const ProfileScreen(),
