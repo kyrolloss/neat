@@ -38,6 +38,7 @@ class SignupForm extends StatelessWidget {
                 /// First name
                 Expanded(
                   child: TextFormField(
+                    keyboardType: TextInputType.name,
                     controller: firstName,
                     expands: false,
                     decoration: InputDecoration(
@@ -65,6 +66,7 @@ class SignupForm extends StatelessWidget {
                 /// Last name
                 Expanded(
                   child: TextFormField(
+                    keyboardType: TextInputType.name,
                     controller: lastName,
                     expands: false,
                     decoration: InputDecoration(
@@ -93,6 +95,7 @@ class SignupForm extends StatelessWidget {
 
             ///Title
             TextFormField(
+              keyboardType: TextInputType.text,
               controller: titleController,
               expands: false,
               decoration: InputDecoration(
@@ -115,9 +118,11 @@ class SignupForm extends StatelessWidget {
 
             /// Email
             TextFormField(
+              keyboardType: TextInputType.emailAddress,
               controller: email,
               expands: false,
               decoration: InputDecoration(
+
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(color: TColors.primaryColor),
@@ -138,6 +143,7 @@ class SignupForm extends StatelessWidget {
 
             /// Phone Number
             TextFormField(
+              keyboardType: TextInputType.phone,
               controller: phone,
               expands: false,
               decoration: InputDecoration(
@@ -160,6 +166,7 @@ class SignupForm extends StatelessWidget {
 
             /// Password
             TextFormField(
+              obscureText: true,
               controller: password,
               expands: false,
               decoration: InputDecoration(

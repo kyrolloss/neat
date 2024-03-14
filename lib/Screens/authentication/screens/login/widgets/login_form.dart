@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import 'package:iconsax/iconsax.dart';
-import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/components/components.dart';
@@ -25,7 +24,7 @@ class LoginForm extends StatelessWidget {
 
           /// Email
           TextFormField(
-
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
              enabledBorder:  OutlineInputBorder(
                borderRadius: BorderRadius.circular(40),
@@ -54,9 +53,10 @@ class LoginForm extends StatelessWidget {
             ),
           ),
           const SizedBox(height: TSizes.spaceBtwInputFields,),
+          
           /// -- Password
           TextFormField(
-
+            obscureText: true,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
@@ -121,7 +121,7 @@ class LoginForm extends StatelessWidget {
 
               /// Create Account
               TextButton(onPressed: () {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => SignupScreen()));
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => const SignupScreen()));
               }, child: const Text(TText.createAccount,style: TextStyle(color: TColors.primaryColor),)),
             ],
           ),
