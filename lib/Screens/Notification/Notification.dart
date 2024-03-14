@@ -25,7 +25,6 @@ class NotificationScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              BuildText(text: 'Notifications' , color: AppColor.primeColor,size: 20,bold: true,),
 
               SizedBox(height: height*.02,),
               BuildText(text: 'Yesterday' , color: AppColor.primeColor,size: 17.5,bold: false,),

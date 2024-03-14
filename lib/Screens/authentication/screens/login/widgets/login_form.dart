@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Home/home.dart';
@@ -8,7 +7,6 @@ import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/components/components.dart';
 
 
-import '../../../../../cubit/app_cubit.dart';
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
@@ -19,24 +17,15 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController email = TextEditingController();
-    TextEditingController password = TextEditingController();
-
     return Form(child: Padding(padding: const EdgeInsets.symmetric(
       vertical: TSizes.spaceBtwSections,
     ),
-      child: BlocConsumer<AppCubit, AppState>(
-  listener: (context, state) {
-    // TODO: implement listener
-  },
-  builder: (context, state) {
-    var cubit = AppCubit.get(context);
-    return Column(
+      child: Column(
         children: [
 
           /// Email
           TextFormField(
-controller: email,
+
             decoration: InputDecoration(
              enabledBorder:  OutlineInputBorder(
                borderRadius: BorderRadius.circular(40),
@@ -67,7 +56,6 @@ controller: email,
           const SizedBox(height: TSizes.spaceBtwInputFields,),
           /// -- Password
           TextFormField(
-            controller: password,
 
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
@@ -111,13 +99,7 @@ controller: email,
                   ),
                 ),
                   onPressed: (){
-                  cubit.Login(email: email.text, password: password.text);
-                  if (state is LoginFailed) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('error')));
-                  } else if (state is LoginSuccess) {
-                    navigateToToFinish(context, MainLayout());
-                  }
+                  navigateTo(context, MainLayout());
                   },
                 child: const Text("Log in",style: TextStyle(fontSize: 18,color: TColors.secondaryColor),),
               ),
@@ -146,9 +128,7 @@ controller: email,
 
 
         ],
-      );
-  },
-),
+      ),
     ));
   }
 }
