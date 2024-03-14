@@ -1,8 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
@@ -12,9 +9,8 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../cubit/app_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String ReceiverId;
 
-  const HomeScreen({super.key, required this.ReceiverId});
+  const HomeScreen({super.key, });
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -219,7 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SizedBox(
                     height: height * .5,
                     width: width * .875,
-                    child:buildTaskList() ),
+                    child:BuilderTasksList() ),
               )
             ],
           ),
@@ -230,89 +226,177 @@ class _HomeScreenState extends State<HomeScreen> {
 );
   }
 
-
-  Widget buildTaskList() {
-    String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
-
+  Widget BuilderTasksList() {
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasks(widget.ReceiverId, SenderId),
+      stream: AppCubit.get(context).getTasksListStream(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text('error');
         }
         if (snapshot.connectionState == ConnectionState) {
-          return const Text('Loadingg');
+          return const Text('Loading');
         }
         if (!snapshot.hasData) {
           return CircularProgressIndicator(
             color: AppColor.primeColor,
           );
         }
-
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
-          children:
-          snapshot.data!.docs.map((doc) => BuildTaskItem(doc)).toList(),
+        return ListView(
+          children: snapshot.data!
+              .map<Widget>((userData) => BuildtaskListItem(userData, context))
+              .toList(),
         );
       },
     );
   }
 
-
-
-  Widget BuildTaskItem(
-    DocumentSnapshot doc,
-  ) {
+  Widget BuildtaskListItem(
+      Map<String, dynamic> userData, BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-
-    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     var width = MediaQuery.of(context).size.width;
 
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: height * .1,
-        width: 150,
-        decoration: BoxDecoration(
-            color: AppColor.secondColor,
-            borderRadius: BorderRadius.circular(25)),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      width: width * .2,
-                      child: BuildText(
-                        text: 'collage stuff',
-                        size: 17.5,
-                        bold: true,
-                        color: AppColor.primeColor,
-                        maxLines: 2,
-                      )),
-                  SizedBox(
-                    width: width * .2,
-                    child: BuildText(
-                      text: '27 task',
-                      size: 17.5,
-                      color: AppColor.primeColor,
-                      maxLines: 2,
+    return StreamBuilder(
+      stream: AppCubit.get(context).getTasksListStream(),
+      builder: (context, snapshot) {
+        if (userData["email"] !=
+            AppCubit.get(context).getCurrentUser()!.email) {
+          return  Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Container(
+              height: height * .1,
+              width: 150,
+              decoration: BoxDecoration(
+                  color: AppColor.secondColor,
+                  borderRadius: BorderRadius.circular(25)),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(
+                            width: width * .2,
+                            child: BuildText(
+                              text: userData['tasks'],
+                              size: 17.5,
+                              bold: true,
+                              color: AppColor.primeColor,
+                              maxLines: 2,
+                            )),
+                        SizedBox(
+                          width: width * .2,
+                          child: BuildText(
+                            text: userData.length.toString(),
+                            size: 17.5,
+                            color: AppColor.primeColor,
+                            maxLines: 2,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                ],
+                    Icon(
+                      Icons.file_copy_outlined,
+                      color: AppColor.primeColor,
+                    )
+                  ],
+                ),
               ),
-              Icon(
-                Icons.file_copy_outlined,
-                color: AppColor.primeColor,
-              )
-            ],
-          ),
-        ),
-      ),
+            ),
+          );
+        } else {
+          return const SizedBox();
+        }
+      },
     );
   }
+
+
+//
+  // Widget buildTaskList() {
+  //   String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
+  //
+  //   return StreamBuilder(
+  //     stream: AppCubit.get(context).getTasks(widget.ReceiverId, SenderId),
+  //     builder: (context, snapshot) {
+  //       if (snapshot.hasError) {
+  //         return const Text('error');
+  //       }
+  //       if (snapshot.connectionState == ConnectionState) {
+  //         return const Text('Loadingg');
+  //       }
+  //       if (!snapshot.hasData) {
+  //         return CircularProgressIndicator(
+  //           color: AppColor.primeColor,
+  //         );
+  //       }
+  //
+  //       return GridView(
+  //         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+  //         children:
+  //         snapshot.data!.docs.map((doc) => BuildTaskItem(doc)).toList(),
+  //       );
+  //     },
+  //   );
+  // }
+  //
+  //
+  //
+  // Widget BuildTaskItem(
+  //   DocumentSnapshot doc,
+  // ) {
+  //   var height = MediaQuery.of(context).size.height;
+  //
+  //   Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+  //   var width = MediaQuery.of(context).size.width;
+  //
+  //   return Padding(
+  //     padding: const EdgeInsets.all(8.0),
+  //     child: Container(
+  //       height: height * .1,
+  //       width: 150,
+  //       decoration: BoxDecoration(
+  //           color: AppColor.secondColor,
+  //           borderRadius: BorderRadius.circular(25)),
+  //       child: Padding(
+  //         padding: const EdgeInsets.symmetric(horizontal: 15.0),
+  //         child: Row(
+  //           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+  //           children: [
+  //             Column(
+  //               crossAxisAlignment: CrossAxisAlignment.start,
+  //               mainAxisAlignment: MainAxisAlignment.center,
+  //               children: [
+  //                 SizedBox(
+  //                     width: width * .2,
+  //                     child: BuildText(
+  //                       text: data['tasks'],
+  //                       size: 17.5,
+  //                       bold: true,
+  //                       color: AppColor.primeColor,
+  //                       maxLines: 2,
+  //                     )),
+  //                 SizedBox(
+  //                   width: width * .2,
+  //                   child: BuildText(
+  //                     text: data.length.toString(),
+  //                     size: 17.5,
+  //                     color: AppColor.primeColor,
+  //                     maxLines: 2,
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //             Icon(
+  //               Icons.file_copy_outlined,
+  //               color: AppColor.primeColor,
+  //             )
+  //           ],
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
 }

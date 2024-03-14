@@ -16,3 +16,8 @@ class RegisterFailed extends AppState {}
 class LoginLoading extends AppState {}
 class LoginSuccess extends AppState {}
 class LoginFailed extends AppState {}
+
+
+class SendTaskLoading extends AppState {}
+class SendTaskSuccess extends AppState {}
+class SendTaskFailed extends AppState {}
