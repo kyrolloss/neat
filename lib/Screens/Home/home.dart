@@ -12,6 +12,7 @@ import '../../cubit/app_cubit.dart';
 class HomeScreen extends StatefulWidget {
   final String ReceiverId;
 
+
   const HomeScreen({
     super.key,
     required this.ReceiverId,
@@ -32,6 +33,7 @@ class _HomeScreenState extends State<HomeScreen> {
         // TODO: implement listener
       },
       builder: (context, state) {
+
         var cubit = AppCubit.get(context);
 
         return Scaffold(
@@ -160,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   child: Center(
                                                     child: BuildText(
                                                       text:
-                                                          'You have 3 more tasks to do',
+                                                          'You have ${cubit.numberOfTodoTasks} more tasks to do',
                                                       color:
                                                           AppColor.secondColor,
                                                       size: 20,
@@ -172,26 +174,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                               ],
                                             )
                                           ],
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {},
-                                          child: Container(
-                                            height: height * .05,
-                                            width: width * .3,
-                                            decoration: BoxDecoration(
-                                              color: AppColor.secondColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(25),
-                                            ),
-                                            child: Center(
-                                              child: BuildText(
-                                                text: "Details",
-                                                color: AppColor.primeColor,
-                                                size: 17.5,
-                                                bold: true,
-                                              ),
-                                            ),
-                                          ),
                                         ),
                                       ],
                                     ),
@@ -240,15 +222,16 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget BuilderTasksList() {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
 
     String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
       stream: AppCubit.get(context).getTasksStream(SenderId, widget.ReceiverId),
       builder: (context, snapshot) {
-        if (snapshot.hasError) {
+        AppCubit.get(context).getTasksStream(SenderId, widget.ReceiverId).listen((event) {
+          AppCubit.get(context).numberOfTodoTasks=event.docs.length;
+        });
+       if (snapshot.hasError) {
           return const Text('error');
         }
         if (snapshot.connectionState == ConnectionState) {
@@ -259,7 +242,10 @@ class _HomeScreenState extends State<HomeScreen> {
             color: AppColor.primeColor,
           );
         }
-        return ListView(
+        return GridView(
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 , childAspectRatio: 1.5),
+
+
 
           children:
               snapshot.data!.docs.map((doc) => BuildtaskListItem(doc)).toList(),
@@ -273,12 +259,13 @@ class _HomeScreenState extends State<HomeScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
       child: ConstrainedBox(
         constraints: BoxConstraints(
           maxWidth: width * .2,
-          minWidth: width * .1,
+          minWidth: width * .05,
         ),
         child: Container(
           height: height * .1,
@@ -305,27 +292,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         color: AppColor.primeColor,
                         maxLines: 2,
                       )),
-                  SizedBox(
-                    width: width * .2,
-                    child: BuildText(
-                      text: taskData.length.toString(),
-                      size: 17.5,
-                      color: AppColor.primeColor,
-                      maxLines: 2,
-                    ),
-                  ),
+
                 ],
               ),
-              Icon(
-                Icons.file_copy_outlined,
-                color: AppColor.primeColor,
-              )
+
             ],
           ),
         ),
       ),
     );
   }
+
+
 
 //
 // Widget buildTaskList() {

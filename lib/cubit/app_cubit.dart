@@ -22,6 +22,7 @@ class AppCubit extends Cubit<AppState> {
   int? month;
   int? day;
   List tasksList=[];
+  int numberOfTodoTasks = 0;
 
 
   User? getCurrentUser() {
