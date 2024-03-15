@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       create: (context) => AppCubit(),
       child: const MaterialApp(
           debugShowCheckedModeBanner: false,
-        
+
           home: OnboardingScreen()),
     );
   }

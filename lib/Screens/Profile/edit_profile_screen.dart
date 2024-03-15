@@ -1,7 +1,6 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
 import 'package:neat/utils.dart';
@@ -11,9 +10,8 @@ import '../../common/widgets/images/circular_image.dart';
 import '../../common/widgets/texts/section_heading.dart';
 import '../../utlis/constants/colors.dart';
 import '../../utlis/constants/image_strings.dart';
-
 class EditProfileScreen extends StatefulWidget {
-  EditProfileScreen({super.key});
+  const EditProfileScreen({super.key});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -63,12 +61,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             backgroundImage: MemoryImage(_image!),
                           ) :
 
-                       TCircularImage(
+                       const TCircularImage(
                         image: TImages.user,
                         width: 80,
                         height: 80,
                       ),
                       Positioned(
+                        bottom: -10,
+                        left: 45,
                         child: IconButton(
                           onPressed: selectImage,
                           icon: const Icon(
@@ -76,12 +76,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             color: TColors.primaryColor,
                           ),
                         ),
-                        bottom: -10,
-                        left: 45,
                       ),
                     ]),
                     TextButton(
-                      onPressed: () {},
+                      onPressed: ()  {
+
+                      },
                       child: const Text(
                         "Change Profile Picture",
                         style: TextStyle(color: TColors.primaryColor),

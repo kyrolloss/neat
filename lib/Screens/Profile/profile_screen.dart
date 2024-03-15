@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
@@ -9,6 +11,7 @@ import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/Text.dart';
 import '../../components/color.dart';
@@ -61,6 +64,7 @@ class ProfileScreen extends StatelessWidget {
                   showActionButton: false,
                   textColor: TColors.primaryColor,
                 ),
+
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 Container(
                   height: height * .225,
