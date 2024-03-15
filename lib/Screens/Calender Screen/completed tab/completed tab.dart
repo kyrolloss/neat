@@ -5,25 +5,25 @@ import 'package:neat/components/color.dart';
 
 import '../../../cubit/app_cubit.dart';
 
-class toDoTab extends StatefulWidget {
+class completedTab extends StatefulWidget {
   final String receiverId;
 
-  const toDoTab({super.key, required this.receiverId});
+  const completedTab({super.key, required this.receiverId});
 
   @override
-  State<toDoTab> createState() => _toDoTabState();
+  State<completedTab> createState() => _toDoTabState();
 }
 
-class _toDoTabState extends State<toDoTab> {
+class _toDoTabState extends State<completedTab> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return BuilderToDoTasksList(
+    return BuilderInProgressTasksList(
     );
   }
-  Widget BuilderToDoTasksList() {
+  Widget BuilderInProgressTasksList() {
 
     String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
@@ -61,7 +61,7 @@ class _toDoTabState extends State<toDoTab> {
     var width = MediaQuery.of(context).size.width;
 
 
-    return taskData['status'] =='to do'? Padding(
+    return taskData['status'] =='completed'? Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
         height: height * .125,

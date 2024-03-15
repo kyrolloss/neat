@@ -10,12 +10,12 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import '../../cubit/app_cubit.dart';
 
 class HomeScreen extends StatefulWidget {
-  final String ReceiverId;
+  final String receiverId;
 
 
   const HomeScreen({
     super.key,
-    required this.ReceiverId,
+    required this.receiverId,
   });
 
   @override
@@ -223,12 +223,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget BuilderTasksList() {
 
-    String SenderId = AppCubit.get(context).getCurrentUser()!.uid;
+    String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream(SenderId, widget.ReceiverId),
+      stream: AppCubit.get(context).getTasksStream(senderId, widget.receiverId),
       builder: (context, snapshot) {
-        AppCubit.get(context).getTasksStream(SenderId, widget.ReceiverId).listen((event) {
+        AppCubit.get(context).getTasksStream(senderId, widget.receiverId).listen((event) {
           AppCubit.get(context).numberOfTodoTasks=event.docs.length;
         });
        if (snapshot.hasError) {
@@ -243,7 +243,7 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
         return GridView(
-          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 , childAspectRatio: 1.5),
+          gridDelegate:const  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 , childAspectRatio: 1.5),
 
 
 

@@ -23,6 +23,7 @@ class AppCubit extends Cubit<AppState> {
   int? day;
   List tasksList=[];
   int numberOfTodoTasks = 0;
+  String id = '';
 
 
   User? getCurrentUser() {
@@ -141,7 +142,7 @@ class AppCubit extends Cubit<AppState> {
         required String senderPhone,
         required String taskName,
         required String taskId,
-
+        required String status,
         required String priority,
 
 
@@ -164,8 +165,9 @@ class AppCubit extends Cubit<AppState> {
         description: description,
         date: timeStamp.toString(),
         deadline: deadline,
-        status: 'to do',
+        status: status,
         priority: priority
+
     );
 
 
@@ -189,7 +191,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   List<Widget> pagesNames = [
-    const HomeScreen(ReceiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',),
+    const HomeScreen(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',),
     CalenderScreen(),
     const NotificationScreen(),
     const ProfileScreen(),

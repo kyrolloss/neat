@@ -203,22 +203,37 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     var uuid = Uuid();
-                    // cubit.sendTask(
-                    //     receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-                    //     senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
-                    //     title: 'Hr',
-                    //     description: 'build Neat App with flutter',
-                    //     deadline: 'next sunday',
-                    //
-                    //     senderName: 'kerollos',
-                    //     senderPhone: '01205708870',
-                    //     taskName: 'Neat App',
-                    //     taskId: uuid.v1(),
-                    //     priority: 'important',);
-        },
+                    cubit.sendTask(
+                      receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+                      senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
+                      title: 'Hr',
+                      description: """
+                        UI Design:
 
+Develop visually appealing UI designs for various screens of the gaming application, including home screens, game menus, settings pages, and in-game interfaces.
+UX Enhancement:
+
+Analyze user feedback and gaming trends to identify areas for UX improvement.
+Streamline user flows, optimize navigation paths, and enhance overall usability to increase user engagement.
+Wireframing and Prototyping:
+
+Create wireframes and interactive prototypes to visualize design concepts and gather feedback from stakeholders.
+Iterate on designs based on feedback and usability testing results.
+Graphic Assets Production:
+
+Produce high-quality graphic assets such as icons, buttons, illustrations, and animations to complement the UI design.
+                        """,
+                      deadline: 'next friday',
+                      senderName: 'kerollos',
+                      senderPhone: '01205708870',
+                      taskName: 'gym UI',
+                      taskId: uuid.v1(),
+                      priority: 'important', status: 'inProgress',
+
+                    );
+                  },
                   child: Container(
                     height: height * .075,
                     width: width * .975,

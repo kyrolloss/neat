@@ -1,22 +1,24 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/Calender%20Screen/completed%20tab/completed%20tab.dart';
+import 'package:neat/Screens/Calender%20Screen/in%20Progress%20tab/in%20Progress%20tab.dart';
 import 'package:neat/Screens/Calender%20Screen/to%20do%20tab/to%20do%20tap.dart';
-import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 
 import '../../calender/calender.dart';
-import '../../common/widgets/appbar/appbar.dart';
+import '../../cubit/app_cubit.dart';
 import '../../utlis/constants/colors.dart';
 
 class CalenderScreen extends StatefulWidget {
+
   @override
   State<CalenderScreen> createState() => _CalenderScreenState();
 }
 
 class _CalenderScreenState extends State<CalenderScreen>
     with SingleTickerProviderStateMixin {
-  final EasyInfiniteDateTimelineController _controller =
-      EasyInfiniteDateTimelineController();
+
   late TabController controller;
 
   @override
@@ -28,13 +30,15 @@ class _CalenderScreenState extends State<CalenderScreen>
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
 
+    return BlocConsumer<AppCubit, AppState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    var cubit= AppCubit.get(context);
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
-      appBar: TAppBar(
-backgroundColor: TColors.backgroundColor,
-      ),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),
@@ -82,9 +86,12 @@ backgroundColor: TColors.backgroundColor,
               SizedBox(
                 height: height * .8,
                 child: TabBarView(
+
                   controller: controller,
-                    children: const [
-                      toDoTab()
+                    children:  const [
+                      toDoTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
+                      inProgress(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
+                      completedTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
 
                     ]
                 ),
@@ -94,5 +101,7 @@ backgroundColor: TColors.backgroundColor,
         ),
       ),
     );
+  },
+);
   }
 }
