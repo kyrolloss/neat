@@ -25,7 +25,7 @@ class LoginForm extends StatelessWidget {
 
           /// Email
           TextFormField(
-
+            keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
              enabledBorder:  OutlineInputBorder(
                borderRadius: BorderRadius.circular(40),
@@ -56,7 +56,7 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwInputFields,),
           /// -- Password
           TextFormField(
-
+            obscureText: true,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
@@ -99,9 +99,9 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
                   onPressed: (){
-                  navigateTo(context, MainLayout());
+                  navigateTo(context,MainLayout());
                   },
-                child: const Text("Log in",style: TextStyle(fontSize: 18,color: TColors.secondaryColor),),
+                child: const Text("Log in",style: TextStyle(fontSize: 18,color: Colors.white),),
               ),
           ),
 
