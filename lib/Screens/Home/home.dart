@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
+import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../cubit/app_cubit.dart';
+import '../Task Details Screen/Task Details Screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final String receiverId;
@@ -260,43 +262,48 @@ class _HomeScreenState extends State<HomeScreen> {
     var width = MediaQuery.of(context).size.width;
 
 
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
-      child: ConstrainedBox(
-        constraints: BoxConstraints(
-          maxWidth: width * .2,
-          minWidth: width * .05,
-        ),
-        child: Container(
-          height: height * .1,
-          decoration: BoxDecoration(
-              color: AppColor.secondColor,
-              borderRadius: BorderRadius.circular(25)),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              Icon(
-                Icons.note_sharp,
-                color: AppColor.primeColor,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                      width: width * .2,
-                      child: BuildText(
-                        text: taskData['name'],
-                        size: 17.5,
-                        bold: true,
-                        color: AppColor.primeColor,
-                        maxLines: 2,
-                      )),
+    return GestureDetector(
+      onTap: (){
+        navigateTo(context, taskDetailsScreen(task: taskData,));
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: width * .2,
+            minWidth: width * .05,
+          ),
+          child: Container(
+            height: height * .1,
+            decoration: BoxDecoration(
+                color: AppColor.secondColor,
+                borderRadius: BorderRadius.circular(25)),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Icon(
+                  Icons.note_sharp,
+                  color: AppColor.primeColor,
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                        width: width * .2,
+                        child: BuildText(
+                          text: taskData['name'],
+                          size: 17.5,
+                          bold: true,
+                          color: AppColor.primeColor,
+                          maxLines: 2,
+                        )),
 
-                ],
-              ),
+                  ],
+                ),
 
-            ],
+              ],
+            ),
           ),
         ),
       ),
