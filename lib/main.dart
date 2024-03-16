@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/Task%20template%20Screen.dart';
 import 'package:neat/cubit/app_cubit.dart';
+import 'Screens/Task Details Screen/Task Details Screen.dart';
 import 'Screens/Task template Screen.dart';
 import 'Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'firebase_options.dart';
@@ -23,10 +24,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AppCubit(),
-      child: const MaterialApp(
+      child:  MaterialApp(
           debugShowCheckedModeBanner: false,
         
-          home: OnboardingScreen()),
+          home: taskDetailsScreen()),
     );
   }
 }
