@@ -265,12 +265,12 @@ class _HomeScreenState extends State<HomeScreen> {
             taskDetailsScreen(
               name: taskData['name'],
               description: taskData['description'],
-              // deadline: taskData['deadline'],
+              deadline: taskData['deadline'],
               // status: taskData['status'],
-              // senderID: taskData['senderId'],
-              // senderName: taskData['senderName'],
-              // senderEmail: taskData['senderEmail'],
-              // senderPhone: taskData['senderPhoneNumber'],
+              senderID: taskData['senderId'],
+              senderName: taskData['senderName'],
+              senderEmail: taskData['senderEmail'],
+              senderPhone: taskData['senderPhoneNumber'],
               // taskId: taskData['id'],
             ));
       },
