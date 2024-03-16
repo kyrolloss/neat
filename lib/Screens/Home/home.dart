@@ -14,7 +14,6 @@ import '../Task Details Screen/Task Details Screen.dart';
 class HomeScreen extends StatefulWidget {
   final String receiverId;
 
-
   const HomeScreen({
     super.key,
     required this.receiverId,
@@ -35,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
         // TODO: implement listener
       },
       builder: (context, state) {
-
         var cubit = AppCubit.get(context);
 
         return Scaffold(
@@ -224,16 +222,17 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget BuilderTasksList() {
-
     String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
       stream: AppCubit.get(context).getTasksStream(senderId, widget.receiverId),
       builder: (context, snapshot) {
-        AppCubit.get(context).getTasksStream(senderId, widget.receiverId).listen((event) {
-          AppCubit.get(context).numberOfTodoTasks=event.docs.length;
+        AppCubit.get(context)
+            .getTasksStream(senderId, widget.receiverId)
+            .listen((event) {
+          AppCubit.get(context).numberOfTodoTasks = event.docs.length;
         });
-       if (snapshot.hasError) {
+        if (snapshot.hasError) {
           return const Text('error');
         }
         if (snapshot.connectionState == ConnectionState) {
@@ -245,10 +244,8 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         }
         return GridView(
-          gridDelegate:const  SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2 , childAspectRatio: 1.5),
-
-
-
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2, childAspectRatio: 1.5),
           children:
               snapshot.data!.docs.map((doc) => BuildtaskListItem(doc)).toList(),
         );
@@ -261,10 +258,21 @@ class _HomeScreenState extends State<HomeScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-
     return GestureDetector(
-      onTap: (){
-        navigateTo(context, taskDetailsScreen(task: taskData,));
+      onTap: () async {
+        navigateTo(
+            context,
+            taskDetailsScreen(
+              name: taskData['name'],
+              description: taskData['description'],
+              // deadline: taskData['deadline'],
+              // status: taskData['status'],
+              // senderID: taskData['senderId'],
+              // senderName: taskData['senderName'],
+              // senderEmail: taskData['senderEmail'],
+              // senderPhone: taskData['senderPhoneNumber'],
+              // taskId: taskData['id'],
+            ));
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
@@ -298,10 +306,8 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: AppColor.primeColor,
                           maxLines: 2,
                         )),
-
                   ],
                 ),
-
               ],
             ),
           ),
@@ -309,8 +315,6 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-
 
 //
 // Widget buildTaskList() {
