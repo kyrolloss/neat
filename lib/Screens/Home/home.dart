@@ -75,8 +75,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     SizedBox(
                                       width: width * .025,
                                     ),
-                                    TCircularImage(image: TImages.user,width: 100,height: 100,),
-                                    SizedBox(width: TSizes.spaceBtwItems/2,),
+                                    const TCircularImage(image: TImages.user,width: 100,height: 100,),
+                                    const SizedBox(width: TSizes.spaceBtwItems/2,),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
