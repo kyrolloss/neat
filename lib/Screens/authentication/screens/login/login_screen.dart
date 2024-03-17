@@ -9,8 +9,8 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: const Scaffold(
+    return const SafeArea(
+      child:  Scaffold(
         backgroundColor: TColors.backgroundColor,
         body: SingleChildScrollView(
           child: Padding(padding: TSpacingStyle.paddingWithAppBarHeight,

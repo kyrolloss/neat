@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 
+import '../../../components/components.dart';
 import '../../../cubit/app_cubit.dart';
+import '../../Task Details Screen/Task Details Screen.dart';
 
 class completedTab extends StatefulWidget {
   final String receiverId;
@@ -63,48 +65,64 @@ class _toDoTabState extends State<completedTab> {
 
     return taskData['status'] =='completed'? Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-        height: height * .125,
-        width: width * .8,
-        decoration: BoxDecoration(
-          color: AppColor.secondColor,
-          borderRadius: BorderRadius.circular(25),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              BuildText(
-                text:taskData['name'],
-                color: AppColor.primeColor,
-                size: 20,
-                bold: true,
-              ),
+      child: GestureDetector(
+        onTap: (){
+          navigateTo(context, taskDetailsScreen(
+            name: taskData['name'],
+            description: taskData['description'],
+            deadline: taskData['deadline'],
+            // status: taskData['status'],
+            senderID: taskData['senderId'],
+            senderName: taskData['senderName'],
+            senderEmail: taskData['senderEmail'],
+            senderPhone: taskData['senderPhoneNumber'],
+            taskId: taskData['id'],
+
+          ));
+        },
+        child: Container(
+          height: height * .125,
+          width: width * .8,
+          decoration: BoxDecoration(
+            color: AppColor.secondColor,
+            borderRadius: BorderRadius.circular(25),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(15),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                BuildText(
+                  text:taskData['name'],
+                  color: AppColor.primeColor,
+                  size: 20,
+                  bold: true,
+                ),
 
 
 
-              Row(
-                children: [
-                  Icon(
-                    Icons.watch_later_outlined,
-                    color: AppColor.primeColor,
-                    size: 20,
-                  ),
-                  SizedBox(
-                    width: width * .02,
-                  ),
-                  BuildText(
-                    text:'deadline is ${ taskData['deadline']}',
-                    color: AppColor.primeColor,
-                    size: 15,
-                    bold: true,
+                Row(
+                  children: [
+                    Icon(
+                      Icons.watch_later_outlined,
+                      color: AppColor.primeColor,
+                      size: 20,
+                    ),
+                    SizedBox(
+                      width: width * .02,
+                    ),
+                    BuildText(
+                      text:'deadline is ${ taskData['deadline']}',
+                      color: AppColor.primeColor,
+                      size: 15,
+                      bold: true,
 
-                  ),
-                ],
-              )
-            ],
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
