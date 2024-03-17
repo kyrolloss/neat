@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/MainLayout.dart';
+import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
@@ -218,7 +219,7 @@ class SignupForm extends StatelessWidget {
                     ScaffoldMessenger.of(context)
                         .showSnackBar(const SnackBar(content: Text('error')));
                   } else if (state is RegisterSuccess) {
-                    navigateToToFinish(context, MainLayout());
+                    navigateToToFinish(context, const VerifyEmailScreen());
                   }
                 },
                 child: const Text(

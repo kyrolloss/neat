@@ -20,12 +20,12 @@ class VerifyEmailScreen extends StatelessWidget {
         backgroundColor: TColors.backgroundColor,
         automaticallyImplyLeading: false,
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(CupertinoIcons.clear))
+          IconButton(onPressed: () {}, icon: const Icon(CupertinoIcons.clear))
         ],
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(TSizes.defaultSpace),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
               /// Image

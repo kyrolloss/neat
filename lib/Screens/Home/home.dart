@@ -2,10 +2,13 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/chat/chat_screen.dart';
+import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
+import 'package:neat/utlis/constants/sizes.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 import '../../cubit/app_cubit.dart';
@@ -38,8 +41,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: TColors.backgroundColor,
+          appBar: AppBar(
+            backgroundColor: TColors.backgroundColor,
+            automaticallyImplyLeading: false,
+            actions: [
+              IconButton(onPressed: (){
+                navigateTo(context, const ChatScreen());
+              }, icon: const Icon(Icons.chat,color: TColors.primaryColor,))
+            ],
+          ),
           body: Padding(
-            padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
