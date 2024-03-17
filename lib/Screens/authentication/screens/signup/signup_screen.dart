@@ -26,7 +26,7 @@ class SignupScreen extends StatelessWidget {
                       .headlineMedium!
                       .apply(color: TColors.primaryColor),
                 ),
-                SizedBox(
+                const SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
 
