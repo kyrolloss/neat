@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
+import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
+import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -70,13 +72,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    const CircleAvatar(
-                                      backgroundColor: Color(0xff6368d9),
-                                      maxRadius: 35,
-                                    ),
                                     SizedBox(
                                       width: width * .025,
                                     ),
+                                    TCircularImage(image: TImages.user,width: 100,height: 100,),
+                                    SizedBox(width: TSizes.spaceBtwItems/2,),
                                     Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
