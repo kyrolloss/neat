@@ -76,16 +76,14 @@ class VerifyEmailScreen extends StatelessWidget {
                     style: ElevatedButton.styleFrom(
                         backgroundColor: TColors.primaryColor),
                     onPressed: () {
-                      navigateTo(
-                          context,
-                          SuccessScreen(
-                            image: TImages.staticSuccessIllustration,
-                            title: TText.yourAccountCreatedTitle,
-                            subTitle: TText.yourAccountCreatedSubTitle,
-                            onPressed: () {
-                              navigateTo(context, const LoginScreen());
-                            },
-                          ));
+                      navigateTo(context, SuccessScreen(
+                        image: TImages.staticSuccessIllustration,
+                        title: TText.yourAccountCreatedTitle,
+                        subTitle: TText.yourAccountCreatedSubTitle,
+                        onPressed: () {
+                          navigateTo(context, const LoginScreen());
+                        },
+                      ));
                     },
                     child: const Text(
                       TText.tContinue,

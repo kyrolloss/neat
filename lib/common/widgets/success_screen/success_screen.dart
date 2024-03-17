@@ -58,11 +58,11 @@ class SuccessScreen extends StatelessWidget {
               ElevatedButton(
                   style: ElevatedButton.styleFrom(
                       backgroundColor: TColors.primaryColor,
-                      side: BorderSide(
+                      side: const BorderSide(
                         color: Colors.transparent,
                       )),
                   onPressed: onPressed,
-                  child: Text(
+                  child: const Text(
                     TText.tContinue,
                     style: TextStyle(color: Colors.white),
                   )),

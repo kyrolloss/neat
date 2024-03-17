@@ -217,7 +217,11 @@ class SignupForm extends StatelessWidget {
                       title: titleController.text);
                   if (state is RegisterFailed) {
                     ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(content: Text('error')));
+                        .showSnackBar(const SnackBar(
+                        content: Text('error',style: TextStyle(color: Colors.white),),
+                      backgroundColor: Colors.red,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+                    ));
                   } else if (state is RegisterSuccess) {
                     navigateToToFinish(context, const VerifyEmailScreen());
                   }

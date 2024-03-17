@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
+import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -136,14 +137,16 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, ChatScreen());
+                  navigateTo(context, const ChatScreen());
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
                 const SizedBox(height: TSizes.spaceBtwItems,),
-                const TSettingsMenuTile(icon: Icons.logout_sharp, title: "Logout")
+                 TSettingsMenuTile(icon: Icons.logout_sharp, title: "Logout",onTap: (){
+                  navigateTo(context, const LoginScreen());
+                },)
               ],
             ),
             ),

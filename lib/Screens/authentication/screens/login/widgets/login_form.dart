@@ -13,10 +13,11 @@ import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
 class LoginForm extends StatelessWidget {
-  const LoginForm({
+   LoginForm({
     super.key,
   });
-
+  TextEditingController email = TextEditingController();
+  TextEditingController password = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Form(child: Padding(padding: const EdgeInsets.symmetric(
@@ -33,6 +34,8 @@ class LoginForm extends StatelessWidget {
 
           /// Email
           TextFormField(
+            controller: email,
+            expands: false,
             keyboardType: TextInputType.emailAddress,
             decoration: InputDecoration(
              enabledBorder:  OutlineInputBorder(
@@ -64,7 +67,9 @@ class LoginForm extends StatelessWidget {
           const SizedBox(height: TSizes.spaceBtwInputFields,),
           /// -- Password
           TextFormField(
+            controller: password,
             obscureText: true,
+            expands: false,
             decoration: InputDecoration(
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(40),
@@ -107,15 +112,16 @@ class LoginForm extends StatelessWidget {
                   ),
                 ),
                   onPressed: (){
-                  
+                  cubit.Login(email: email.text, password: password.text);
                   if (state is LoginSuccess) {
                     navigateTo(context,MainLayout());
                   }
                   else if (state is LoginFailed){
                     ScaffoldMessenger.of(context).showSnackBar(
                      const  SnackBar(
-                        content: Text('error'),
-                        duration: const Duration(seconds: 2),
+                        content: Text('error',style: TextStyle(color: Colors.white),),
+                        backgroundColor: Colors.red,
+                        duration: Duration(seconds: 2),
                       ),
                     );
                   }

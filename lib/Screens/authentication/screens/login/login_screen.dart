@@ -9,7 +9,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SafeArea(
+    return  SafeArea(
       child:  Scaffold(
         backgroundColor: TColors.backgroundColor,
         body: SingleChildScrollView(
@@ -17,7 +17,7 @@ class LoginScreen extends StatelessWidget {
           child: Column(
             children: [
               /// Logo
-              LoginHeader(),
+              const LoginHeader(),
 
               /// Form
               LoginForm(),
