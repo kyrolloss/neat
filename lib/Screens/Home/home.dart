@@ -3,7 +3,6 @@ import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
-import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
@@ -89,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           size: 20,
                                         ),
                                         BuildText(
-                                          text: 'Kerollos harby!',
+                                          text: '${cubit.name} !',
                                           color: AppColor.primeColor,
                                           size: 20,
                                           bold: true,

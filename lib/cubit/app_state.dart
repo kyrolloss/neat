@@ -21,3 +21,11 @@ class LoginFailed extends AppState {}
 class SendTaskLoading extends AppState {}
 class SendTaskSuccess extends AppState {}
 class SendTaskFailed extends AppState {}
+
+class GetUserInfoLoading extends AppState {}
+class GetUserInfoSuccess extends AppState {}
+class GetUserInfoFailed extends AppState {}
+
+class UpdateUserInfoLoading extends AppState {}
+class UpdateUserInfoSuccess extends AppState {}
+class UpdateUserInfoFailed extends AppState {}

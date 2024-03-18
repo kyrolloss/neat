@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,7 +12,6 @@ import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
-import 'package:provider/provider.dart';
 
 import '../../components/Text.dart';
 import '../../components/color.dart';
@@ -36,21 +34,15 @@ class ProfileScreen extends StatelessWidget {
                 child: Column(
               children: [
                 /// -- AppBar
-                TAppBar(
-                  // title: Text(
-                  //   "Account",
-                  //   style: Theme.of(context)
-                  //       .textTheme
-                  //       .headlineMedium!
-                  //       .apply(color: Colors.white),
-                  // ),
+               const TAppBar(
+
                   backgroundColor: TColors.primaryColor,
 
                 ),
 
                 /// User Profile Card
                 TUserProfileTile(onPressed: (){
-                  navigateTo(context, EditProfileScreen());
+                  navigateTo(context, const EditProfileScreen());
                 },),
                 const SizedBox(height: TSizes.spaceBtwSections,),
               ],

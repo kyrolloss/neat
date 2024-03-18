@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:iconsax/iconsax.dart';
-import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/components/components.dart';
@@ -12,12 +11,20 @@ import '../../../../../cubit/app_cubit.dart';
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
-class LoginForm extends StatelessWidget {
-  LoginForm({
+class LoginForm extends StatefulWidget {
+  const LoginForm({
     super.key,
   });
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
   TextEditingController email = TextEditingController();
+
   TextEditingController password = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Form(child: Padding(padding: const EdgeInsets.symmetric(
@@ -25,7 +32,12 @@ class LoginForm extends StatelessWidget {
     ),
       child: BlocConsumer<AppCubit, AppState>(
         listener: (context, state) {
-          // TODO: implement listener
+          var cubit = AppCubit.get(context);
+
+          if (state is LoginSuccess) {
+            navigateTo(context,MainLayout(uid: cubit.id,));
+          }
+
         },
         builder: (context, state) {
           var cubit = AppCubit.get(context);
@@ -111,20 +123,11 @@ class LoginForm extends StatelessWidget {
                         color: Colors.transparent
                     ),
                   ),
-                  onPressed: (){
-                    cubit.Login(email: email.text, password: password.text);
-                    if (state is LoginSuccess) {
-                      navigateTo(context,MainLayout());
-                    }
-                    else if (state is LoginFailed){
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const  SnackBar(
-                          content: Text('error',style: TextStyle(color: Colors.white),),
-                          backgroundColor: Colors.red,
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    }
+                  onPressed: ()async{
+                    await cubit.Login(email: email.text, password: password.text);
+
+
+
                   },
                   child: const Text("Log in",style: TextStyle(fontSize: 18,color: Colors.white),),
                 ),

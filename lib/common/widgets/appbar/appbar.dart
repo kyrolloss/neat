@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 
@@ -30,6 +29,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         leading: const Icon(Icons.arrow_back_ios,color: TColors.primaryColor,),
         title: title,
         actions: actions,
+
       ),
     );
   }

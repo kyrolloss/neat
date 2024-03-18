@@ -7,12 +7,13 @@ import 'package:neat/cubit/app_cubit.dart';
 
 
 class MainLayout extends StatefulWidget {
-  int buttomIndex = 1;
+  int buttomIndex = 0;
+  final String uid;
+  Widget? widget;
 
-   Widget widget =  const HomeScreen(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2', );
-
-  MainLayout({super.key});
-
+  MainLayout({super.key, required this.uid}) {
+    widget = HomeScreen(receiverId: uid);
+  }
 
   @override
   State<MainLayout> createState() => _MainLayoutState();
@@ -22,11 +23,7 @@ class MainLayout extends StatefulWidget {
 class _MainLayoutState extends State<MainLayout> {
 
 
-  @override
-  void initState() {
-    super.initState();
-    AppCubit.get(context).id='aiQxoxrg5zPLIQ7NniWdyUFnwmF2';
-  }
+
 
 
   @override

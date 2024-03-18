@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
 import 'package:neat/utils.dart';
@@ -8,6 +9,7 @@ import 'package:neat/utlis/constants/sizes.dart';
 import '../../common/widgets/appbar/appbar.dart';
 import '../../common/widgets/images/circular_image.dart';
 import '../../common/widgets/texts/section_heading.dart';
+import '../../cubit/app_cubit.dart';
 import '../../utlis/constants/colors.dart';
 import '../../utlis/constants/image_strings.dart';
 class EditProfileScreen extends StatefulWidget {
@@ -18,6 +20,10 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  TextEditingController nameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
   Uint8List? _image;
 
   void selectImage() async{
@@ -29,6 +35,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    return BlocConsumer<AppCubit, AppState>(
+  listener: (context, state) {
+  },
+  builder: (context, state) {
+    var cubit = AppCubit.get(context);
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
       appBar: TAppBar(
@@ -112,11 +123,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: TSizes.spaceBtwItems,
               ),
 
-              TProfileMenu(onPressed: () {}, title: "Name", value: "Username"),
+              TProfileMenu(onPressed: () {
+                showDialog(context: context, builder: (context) {
+
+
+                  return Dialog(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextFormField(
+                        controller: nameController,
+
+                        decoration:  InputDecoration(
+
+                          hintText: '  Write The New Value ...',
+                            suffixIcon: IconButton(onPressed: (){
+                              cubit.updateUserInfo('name', nameController.text);
+                              nameController.clear();
+                              Navigator.pop(context);
+                            }, icon: const Icon(Icons.done_all))
+                        ),
+                      ),
+                    ),
+                  );
+                },);
+              }, title: 'name', value:cubit.name ),
               TProfileMenu(
-                  onPressed: () {},
-                  title: "Username",
-                  value: "Username@gmail.com"),
+                  onPressed: () {
+
+                    showDialog(context: context, builder: (context) {
+
+
+                      return Dialog(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: titleController,
+
+                            decoration:  InputDecoration(
+
+                                hintText: '  Write The New Value ...',
+                                suffixIcon: IconButton(onPressed: (){
+                                  cubit.updateUserInfo('title', titleController.text);
+                                  titleController.clear();
+                                  Navigator.pop(context);
+                                }, icon: const Icon(Icons.done_all))
+                            ),
+                          ),
+                        ),
+                      );
+                    },);
+                  },
+                  title: "title",
+                  value: cubit.title),
 
               const SizedBox(
                 height: TSizes.spaceBtwItems,
@@ -138,23 +196,99 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: TSizes.spaceBtwItems,
               ),
 
-              TProfileMenu(onPressed: () {}, title: "User ID", value: "456789"),
+            GestureDetector(
+              onTap: (){},
+              child: Padding(padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwItems/1.5),
+                child: Row(
+                  children: [
+                    Expanded(
+                        flex: 3,
+                        child: Text( "User ID",
+                          style: Theme.of(context).textTheme.bodySmall!.apply(color: TColors.textPrimary) ,
+                          overflow: TextOverflow.ellipsis,
+                        )),
+
+                    Expanded(
+                      flex: 5,
+                      child: Text(cubit.id,
+                        style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.darkerGrey),
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                    const Expanded(
+                        child: Icon(Icons.copy_rounded,
+                          size: 18,
+                          color: TColors.primaryColor,
+                        )),
+
+                  ],
+                ),
+              ),
+            ),
+
+
               TProfileMenu(
-                  onPressed: () {},
+                  onPressed: () {
+
+                    showDialog(context: context, builder: (context) {
+
+
+                      return Dialog(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: emailController,
+
+                            decoration:  InputDecoration(
+
+                                hintText: '  Write The New Value ...',
+                                suffixIcon: IconButton(onPressed: (){
+                                  cubit.updateUserInfo('email', emailController.text);
+                                  emailController.clear();
+                                  Navigator.pop(context);
+                                }, icon: const Icon(Icons.done_all))
+                            ),
+                          ),
+                        ),
+                      );
+                    },);
+                  },
                   title: "E-mail",
-                  value: "username@gmail.com"),
+                  value:cubit.email),
               TProfileMenu(
-                  onPressed: () {},
+                  onPressed: () {
+                    showDialog(context: context, builder: (context) {
+
+
+                      return Dialog(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            controller: phoneController,
+
+                            decoration:  InputDecoration(
+
+                                hintText: '  Write The New Value ...',
+                                suffixIcon: IconButton(onPressed: (){
+                                  cubit.updateUserInfo('phone', phoneController.text);
+                                  phoneController.clear();
+                                  Navigator.pop(context);
+                                }, icon: const Icon(Icons.done_all))
+                            ),
+                          ),
+                        ),
+                      );
+                    },);
+                  },
                   title: "Phone Number",
-                  value: "0122 545 5546"),
-              TProfileMenu(
-                  onPressed: () {},
-                  title: "Date of Birth",
-                  value: "1 Oct 2001"),
+                  value: cubit.phone),
+
             ],
           ),
         ),
       ),
     );
+  },
+);
   }
 }
