@@ -46,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
             automaticallyImplyLeading: false,
             actions: [
               IconButton(onPressed: (){
-                navigateTo(context, const ChatScreen());
+                navigateTo(context,  ChatScreen(receiverUserEmail: '', receiverUserID: '',));
               }, icon: const Icon(Icons.chat,color: TColors.primaryColor,))
             ],
           ),

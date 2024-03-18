@@ -5,13 +5,13 @@ import 'package:neat/Models/message.dart';
 
 class ChatService extends ChangeNotifier {
   /// get instance of auth and firestore
-  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   /// SEND MESSAGE
   Future<void> sendMessage(String receiverId, String message) async {
     /// get current user info
-    final String currentUserId = _firebaseAuth.currentUser!.uid;
+     String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
     final Timestamp timestamp = Timestamp.now();
 
@@ -23,7 +23,7 @@ class ChatService extends ChangeNotifier {
         message: message,
         timestamp: timestamp);
 
-    /// construct chat room id from current user id and reciever id (sorted to insure uniqueness)
+    /// construct chat room id from current user id and receiver id (sorted to insure uniqueness)
     List<String> ids = [currentUserId, receiverId];
     ids.sort(); // sort the ids (this ensures the chat room id is always the same for any pair of people
     String chatRoomId = ids.join(

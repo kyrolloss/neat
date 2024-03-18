@@ -129,7 +129,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const ChatScreen());
+                  navigateTo(context, const ChatScreen(receiverUserEmail: '', receiverUserID: '',));
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
