@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -73,14 +74,11 @@ class AppCubit extends Cubit<AppState> {
       await userRef.update({valueName: newValue});
       if (valueName == 'name') {
         name = newValue;
-      }
-      else if (valueName == 'title') {
+      } else if (valueName == 'title') {
         title = newValue;
-      }
-      else if (valueName == 'email') {
+      } else if (valueName == 'email') {
         email = newValue;
-      }
-      else if (valueName == 'phone') {
+      } else if (valueName == 'phone') {
         phone = newValue;
       }
       emit(UpdateUserInfoSuccess());
@@ -234,6 +232,10 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
+
+
+
+
   List<Widget> pagesNames = [
     const HomeScreen(
       receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
@@ -243,15 +245,5 @@ class AppCubit extends Cubit<AppState> {
     const ProfileScreen(),
   ];
 
-//hello
 }
 
-// Stream<List<Map<String, dynamic>>> getTasksListStream() {
-//   return database.collection('tasks_rooms').snapshots().map((snapshot) {
-//     return snapshot.docs.map((doc) {
-//       final task = doc.data();
-//       print(task);
-//       return task;
-//     }).toList();
-//   });
-// }
