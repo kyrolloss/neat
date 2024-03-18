@@ -133,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "62.5% completed",
+                                              "${cubit.numberOfTodoTasks}",
                                               style: TextStyle(
                                                   color: AppColor.secondColor,
                                                   fontSize: 15,
