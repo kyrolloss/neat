@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:neat/Screens/chat/widgets/chat_box.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/utlis/constants/colors.dart';
@@ -17,14 +18,15 @@ class ChatScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: TColors.primaryColor,
         automaticallyImplyLeading: true,
-        leading: Icon(
-          CupertinoIcons.back,
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(color: Colors.white, ),
+        shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(15),
+          bottomRight: Radius.circular(15),
+        )),
         title: Row(
           children: [
-            TCircularImage(image: TImages.user),
-            SizedBox(
+            const TCircularImage(image: TImages.user),
+            const SizedBox(
               width: 10,
             ),
             Text(
@@ -39,7 +41,7 @@ class ChatScreen extends StatelessWidget {
         actions: [
           IconButton(
               onPressed: () {},
-              icon: Icon(
+              icon: const Icon(
                 Icons.more_vert,
                 color: Colors.white,
               )),
@@ -52,36 +54,7 @@ class ChatScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.end,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            TCircularContainer(
-              radius: 20,
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                      child: TextField(
-                    decoration: InputDecoration(
-                      contentPadding: EdgeInsets.symmetric(
-                        vertical: 10,
-                        horizontal: 20,
-                      ),
-                      hintText: "Type a message ...",
-                      hintStyle: TextStyle(color: Colors.grey),
-                      prefixIcon: IconButton(
-                          onPressed: () {},
-                          icon: Icon(Icons.emoji_emotions_outlined,color: TColors.primaryColor,)),
-                      // icon: IconButton(onPressed: (){}, icon: Icon(Icons.attach_file_rounded,color: TColors.primaryColor,)),
-                      border: InputBorder.none,
-                    ),
-                  )),
-                  IconButton(
-                      onPressed: () {},
-                      icon: Icon(
-                        Icons.send_rounded,
-                        color: TColors.primaryColor,
-                      ))
-                ],
-              ),
-            )
+            ChatBox()
           ],
         ),
       )),
