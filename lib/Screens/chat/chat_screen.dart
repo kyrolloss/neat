@@ -3,8 +3,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import 'package:neat/Screens/chat/services/chat_services.dart';
+import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/Screens/chat/widgets/chat_box.dart';
+import 'package:neat/Screens/chat/widgets/chat_bubble.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/utlis/constants/colors.dart';
@@ -26,13 +27,14 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final ChatService _chatService = ChatService();
+  final AuthService _chatService = AuthService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   void sendMessage() async {
     /// only send message if there is something to send
-    if(_messageController.text.isNotEmpty){
-      await _chatService.sendMessage(widget.receiverUserID, _messageController.text);
+    if (_messageController.text.isNotEmpty) {
+      await _chatService.sendMessage(
+          widget.receiverUserID, _messageController.text);
 
       /// Clear the controller after sending the message
       _messageController.clear();
@@ -62,7 +64,10 @@ class _ChatScreenState extends State<ChatScreen> {
             ),
             Text(
               widget.receiverUserEmail,
-              style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.white),
+              style: Theme.of(context)
+                  .textTheme
+                  .bodySmall!
+                  .apply(color: Colors.white),
             ),
           ],
         ),
@@ -83,40 +88,111 @@ class _ChatScreenState extends State<ChatScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             /// Messages
-            Expanded(child: _buildMessageList(),
+            Expanded(
+              child: _buildMessageList(),
             ),
+
             /// User Input
-            _buildMessageInput();
-        ],
+            _buildMessageInput(),
+          ],
         ),
       )),
     );
   }
-}
 
-/// build Message List
+  /// build Message List
+  Widget _buildMessageList() {
+    return StreamBuilder(
+        stream: _chatService.getMessages(
+            widget.receiverUserID, _firebaseAuth.currentUser!.uid),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text('Error${snapshot.error}');
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return const Text('Loading..');
+          }
+          return ListView(
+            children: snapshot.data!.docs
+                .map((document) => _buildMessageItem(document))
+                .toList(),
+          );
+        });
+  }
 
-/// build Message Item
-Widget _buildMessageItem (DocumentSnapshot document){
-  Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+  /// build Message Item
+  Widget _buildMessageItem(DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
-  /// align the messages to the right if the sender is the current user , otherwise to the left
-  var alignment = (data['senderId'] == _firebaseAuth.currentUser!.uid) ?  Alignment.centerRight : Alignment.centerLeft;
-  return Container(
-    alignment: alignment,
-    child: Column(
+    /// align the messages to the right if the sender is the current user , otherwise to the left
+    var alignment = (data['senderId'] == _firebaseAuth.currentUser!.uid)
+        ? Alignment.centerRight
+        : Alignment.centerLeft;
+    return Container(
+      alignment: alignment,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          crossAxisAlignment:
+              (data['senderId'] == _firebaseAuth.currentUser!.uid)
+                  ? CrossAxisAlignment.end
+                  : CrossAxisAlignment.start,
+          mainAxisAlignment:
+              (data['senderId'] == _firebaseAuth.currentUser!.uid)
+                  ? MainAxisAlignment.end
+                  : MainAxisAlignment.start,
+          children: [
+            Text(data['senderEmail'],style: const TextStyle(color: TColors.primaryColor),),
+            const SizedBox(height: 5,),
+            ChatBubble(message: data['message']),
+          ],
+        ),
+      ),
+    );
+  }
+
+  /// build Message Input
+  Widget _buildMessageInput() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        Text(data['senderEmail']),
-        Text(data['message']),
+        Expanded(
+          child: TCircularContainer(
+            radius: 20,
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                    child: TextField(
+                  controller: _messageController,
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 10,
+                      horizontal: 20,
+                    ),
+                    hintText: "Type a message ...",
+                    hintStyle: const TextStyle(color: Colors.grey),
+                    prefixIcon: IconButton(
+                        onPressed: () {},
+                        icon: const Icon(
+                          Icons.emoji_emotions_outlined,
+                          color: TColors.primaryColor,
+                        )),
+                    // icon: IconButton(onPressed: (){}, icon: Icon(Icons.attach_file_rounded,color: TColors.primaryColor,)),
+                    border: InputBorder.none,
+                  ),
+                )),
+                IconButton(
+                    onPressed: sendMessage,
+                    icon: const Icon(
+                      Icons.send_rounded,
+                      color: TColors.primaryColor,
+                    )),
+              ],
+            ),
+          ),
+        ),
       ],
-    ),
-  );
-}
-/// build Message Input
-Widget _buildMessageInput(){
-  return Row(
-    children: [
-      ChatBox(),
-    ],
-  );
+    );
+  }
 }

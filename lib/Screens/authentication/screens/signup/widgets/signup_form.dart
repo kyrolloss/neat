@@ -6,22 +6,59 @@ import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
+import '../../../../chat/services/auth_services.dart';
 
-class SignupForm extends StatelessWidget {
+class SignupForm extends StatefulWidget {
   SignupForm({
     super.key,
   });
 
+  @override
+  State<SignupForm> createState() => _SignupFormState();
+}
+
+class _SignupFormState extends State<SignupForm> {
+  /// text controllers
+
   TextEditingController firstName = TextEditingController();
+
   TextEditingController email = TextEditingController();
+
   TextEditingController password = TextEditingController();
+
+  TextEditingController confirmPassword = TextEditingController();
+
   TextEditingController lastName = TextEditingController();
+
   TextEditingController phone = TextEditingController();
+
   TextEditingController titleController = TextEditingController();
+
+  /// sign up user
+  void signUp() async {
+    if (password.text != confirmPassword.text) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Password doesn't match"),
+        ),
+      );
+      return;
+    }
+
+    /// get auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      await authService.signUpWithEmailandPassword(email.text, password.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text(e.toString())));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +160,6 @@ class SignupForm extends StatelessWidget {
               controller: email,
               expands: false,
               decoration: InputDecoration(
-
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(15),
                     borderSide: const BorderSide(color: TColors.primaryColor),
@@ -187,6 +223,32 @@ class SignupForm extends StatelessWidget {
                 suffixIconColor: TColors.primaryColor,
               ),
             ),
+            const SizedBox(
+              height: TSizes.spaceBtwInputFields,
+            ),
+
+            /// Confirm password
+            TextFormField(
+              obscureText: true,
+              controller: confirmPassword,
+              expands: false,
+              decoration: InputDecoration(
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(color: TColors.primaryColor),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: const BorderSide(color: TColors.secondaryColor),
+                ),
+                labelText: TText.confirmPassword,
+                labelStyle: const TextStyle(color: TColors.primaryColor),
+                prefixIcon: const Icon(Iconsax.password_check),
+                prefixIconColor: TColors.primaryColor,
+                suffixIcon: const Icon(Iconsax.eye_slash),
+                suffixIconColor: TColors.primaryColor,
+              ),
+            ),
 
             const SizedBox(
               height: TSizes.spaceBtwSections,
@@ -216,13 +278,17 @@ class SignupForm extends StatelessWidget {
                       phone: phone.text,
                       title: titleController.text);
                   if (state is RegisterFailed) {
-                    ScaffoldMessenger.of(context)
-                        .showSnackBar(const SnackBar(
-                        content: Text('error',style: TextStyle(color: Colors.white),),
+                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                      content: Text(
+                        'error',
+                        style: TextStyle(color: Colors.white),
+                      ),
                       backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(25))),
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25))),
                     ));
-                  } else if (state is RegisterSuccess) {
+                  }
+                  else if (state is RegisterSuccess) {
                     navigateToToFinish(context, const VerifyEmailScreen());
                   }
                 },

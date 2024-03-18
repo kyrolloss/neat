@@ -15,6 +15,7 @@ class TText {
   static const String email = "E-Mail";
   static const String title = "Title";
   static const String password = "Password";
+  static const String confirmPassword = "Confirm Password";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
   static const String username = "Username";

@@ -3,15 +3,51 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:neat/Models/message.dart';
 
-class ChatService extends ChangeNotifier {
+class AuthService extends ChangeNotifier {
   /// get instance of auth and firestore
-   FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  /// get instance of firestore
+
+  /// sign user in
+  Future<UserCredential> signInWithEmailandPassword(
+      String email, String password) async {
+    try {
+      /// sign in
+      UserCredential userCredential = await _firebaseAuth
+          .signInWithEmailAndPassword(email: email, password: password);
+      return userCredential;
+    }
+
+    /// catch any errors
+    on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
+  }
+
+  /// create a new user
+  Future<UserCredential> signUpWithEmailandPassword(
+      String email, password) async {
+    try {
+      UserCredential userCredential = await _firebaseAuth
+          .createUserWithEmailAndPassword(email: email, password: password);
+      return userCredential;
+    } on FirebaseAuthException catch (e) {
+      throw Exception(e.code);
+    }
+  }
+
+
+  /// sign user out
+  Future<void> signOut() async {
+    return await FirebaseAuth.instance.signOut();
+  }
 
   /// SEND MESSAGE
   Future<void> sendMessage(String receiverId, String message) async {
     /// get current user info
-     String currentUserId = _firebaseAuth.currentUser!.uid;
+    String currentUserId = _firebaseAuth.currentUser!.uid;
     final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
     final Timestamp timestamp = Timestamp.now();
 
