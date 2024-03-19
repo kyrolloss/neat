@@ -1,4 +1,5 @@
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
@@ -102,7 +103,10 @@ class ProfileScreen extends StatelessWidget {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () {},
+                          onTap: () async{
+                            final fcmToken =  await FirebaseMessaging.instance.getToken();
+                            print('token is ${fcmToken}');
+                          },
                           child: Container(
                             height: height * .03,
                             width: width * .3,

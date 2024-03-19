@@ -4,11 +4,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/Notification/Notification.dart';
 import '../Screens/Profile/profile_screen.dart';
+import '../main.dart';
 
 part 'app_state.dart';
 
@@ -27,13 +29,63 @@ class AppCubit extends Cubit<AppState> {
   String name = '';
   String email = '';
   String phone = '';
-  String uid = '';
   String title = '';
+
 
   var auth = FirebaseAuth.instance;
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
   var user = FirebaseAuth.instance.currentUser;
+
+
+
+  final FirebaseMessaging message = FirebaseMessaging.instance;
+
+
+
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  Future<void> initialize() async {
+    // Request permission for notifications
+    await _firebaseMessaging.requestPermission();
+
+    // Get the device's FCM token
+    String? token = await _firebaseMessaging.getToken();
+    print('FCM Token: $token');
+
+    // Set up a listener for incoming notifications
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        showDialog(
+          context: navigatorKey.currentContext!,
+          builder: (context) {
+            return AlertDialog(
+              title: Text(message.notification!.title!),
+              content: Text(message.notification!.body!),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
+    });
+
+    // Set up a background message handler
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
+
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    if (message.notification != null) {
+      print('Background notification received: ${message.notification!.title}/${message.notification!.body}');
+    }
+  }
+
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -50,6 +102,7 @@ class AppCubit extends Cubit<AppState> {
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
+
 
         name = userName;
         id = userUid;
@@ -207,10 +260,10 @@ class AppCubit extends Cubit<AppState> {
         senderName: senderName,
         senderPhoneNumber: senderPhone,
         receiverId: receiverID,
-        description: description,
-        date: timeStamp.toString(),
+        description:  description,
+        date:     timeStamp.toString(),
         deadline: deadline,
-        status: status,
+        status:   status,
         priority: priority);
 
     List<String> ids = [currentUserId, receiverID];
