@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
@@ -30,6 +31,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -48,9 +51,19 @@ class _HomeScreenState extends State<HomeScreen> {
             backgroundColor: TColors.backgroundColor,
             automaticallyImplyLeading: false,
             actions: [
-              IconButton(onPressed: (){
-                navigateTo(context,  ChatScreen(receiverUserEmail: '', receiverUserID: '',));
-              }, icon: const Icon(Icons.chat,color: TColors.primaryColor,))
+              IconButton(
+                  onPressed: () {
+                    navigateTo(
+                        context,
+                        ChatScreen(
+                          receiverUserEmail: '',
+                          receiverUserID: '',
+                        ));
+                  },
+                  icon: const Icon(
+                    Icons.chat,
+                    color: TColors.primaryColor,
+                  ))
             ],
           ),
           body: Padding(
@@ -73,8 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    TCircularImage(image: TImages.user, width: 90,height: 90,),
 
+                                    TCircularImage(
+                                      image: TImages.user,
+                                      width: 90,
+                                      height: 90,
+                                    ),
                                     SizedBox(
                                       width: width * .025,
                                     ),
@@ -173,13 +190,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 SizedBox(
-                                                  height: TSizes.lg*5,
+                                                  height: TSizes.lg * 5,
                                                   width: width * .4,
                                                   child: Center(
                                                     child: BuildText(
                                                       text:
                                                           'You have ${cubit.numberOfTodoTasks} more tasks to do',
-
                                                       color:
                                                           AppColor.secondColor,
                                                       size: 20,
@@ -236,6 +252,50 @@ class _HomeScreenState extends State<HomeScreen> {
         );
       },
     );
+  }
+
+  /// build a list of users except for the current logged in user
+  Widget _buildUserList(DocumentSnapshot document) {
+    return StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('users').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) {
+            return Text("Error");
+          }
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading..");
+          }
+          return ListView(
+            children: snapshot.data!.docs
+                .map<Widget>((doc) => _buildUserListItem(doc))
+                .toList(),
+          );
+        });
+  }
+
+  /// build individual user list items
+  Widget _buildUserListItem(DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data()! as Map< String, dynamic>;
+
+    /// display all users except current user
+    if (_auth.currentUser!.email != data['email']) {
+      return ListTile(
+        title:Text( data['email']),
+        onTap: () {
+          /// pass the clicked user's UID to the chat page
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => ChatScreen(
+                      receiverUserEmail: data['email'],
+                      receiverUserID: data['uid'],
+                  )));
+        },
+      );
+    } else{
+      /// return empty container
+      return Container();
+    }
   }
 
   Widget BuilderTasksList() {
