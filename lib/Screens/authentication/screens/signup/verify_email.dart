@@ -77,7 +77,7 @@ class VerifyEmailScreen extends StatelessWidget {
                         backgroundColor: TColors.primaryColor),
                     onPressed: () {
                       navigateTo(context, SuccessScreen(
-                        image: TImages.staticSuccessIllustration,
+                        image: TImages.staticSuccessIllustration2,
                         title: TText.yourAccountCreatedTitle,
                         subTitle: TText.yourAccountCreatedSubTitle,
                         onPressed: () {

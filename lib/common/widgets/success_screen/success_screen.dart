@@ -47,7 +47,7 @@ class SuccessScreen extends StatelessWidget {
 
               Text(
                 subTitle,
-                style: Theme.of(context).textTheme.labelMedium,
+                style: Theme.of(context).textTheme.labelMedium!.apply(color: TColors.primaryColor.withOpacity(0.6)),
                 textAlign: TextAlign.center,
               ),
               const SizedBox(

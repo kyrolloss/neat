@@ -32,7 +32,7 @@ class TText {
   static const String loginTitle = "Don't have an account? ";
   static const String signupTitle = "Let’s create your account";
   static const String yourAccountCreatedTitle = "Your account successfully created!";
-  static const String yourAccountCreatedSubTitle = "Welcome to Your Ultimate Shopping Destination: Your Account is Created, Unleash the Joy of Seamless Online Shopping!";
+  static const String yourAccountCreatedSubTitle = "Welcome to  NEAT , Get ready to organize your tasks efficiently and boost your productivity!";
 
 
 }
