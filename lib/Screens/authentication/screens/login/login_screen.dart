@@ -22,11 +22,11 @@ class LoginScreen extends StatelessWidget {
 
               /// Form
               DottedBorder(
-                dashPattern: [8,6],
+                dashPattern: const [8,6],
                   strokeWidth: 2,
                   color: TColors.primaryColor,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                  child: const Padding(
+                    padding:  EdgeInsets.all(8.0),
                     child: LoginForm(),
                   )),
             ],

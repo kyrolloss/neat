@@ -7,6 +7,7 @@ import 'package:neat/cubit/app_cubit.dart';
 import 'Screens/Task template Screen.dart';
 import 'Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'firebase_options.dart';
+final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,7 +28,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => AppCubit(),
-      child: const MaterialApp(
+      child:  MaterialApp(
+        navigatorKey: navigatorKey,
           debugShowCheckedModeBanner: false, home: OnboardingScreen()),
     );
   }
