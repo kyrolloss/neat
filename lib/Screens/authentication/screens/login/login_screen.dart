@@ -1,3 +1,4 @@
+import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:neat/Screens/authentication/screens/login/widgets/login_form.dart';
 import 'package:neat/Screens/authentication/screens/login/widgets/login_header.dart';
@@ -20,7 +21,14 @@ class LoginScreen extends StatelessWidget {
               const LoginHeader(),
 
               /// Form
-              LoginForm(),
+              DottedBorder(
+                dashPattern: [8,6],
+                  strokeWidth: 2,
+                  color: TColors.primaryColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: LoginForm(),
+                  )),
             ],
           ),
           ),

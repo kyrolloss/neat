@@ -5,6 +5,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
+import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:neat/common/widgets/list_tiles/settings_menu_tile.dart';
@@ -13,12 +14,27 @@ import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:provider/provider.dart';
 
 import '../../components/Text.dart';
 import '../../components/color.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  /// Sign user out
+  void signOut(){
+    /// get auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+
+    authService.signOut();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,16 +149,16 @@ class ProfileScreen extends StatelessWidget {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const ChatScreen());
+                  navigateTo(context, const ChatScreen(receiverUserEmail: '', receiverUserID: '',));
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
                 const SizedBox(height: TSizes.spaceBtwItems,),
-                 TSettingsMenuTile(icon: Icons.logout_sharp, title: "Logout",onTap: (){
-                  navigateTo(context, const LoginScreen());
-                },)
+                 TSettingsMenuTile(icon: Icons.logout_sharp,
+                   title: "Logout",
+                   onTap: signOut,)
               ],
             ),
             ),

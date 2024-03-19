@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import '../../../common/widgets/custom_shapes/containers/circular_container.dart';
 import '../../../utlis/constants/colors.dart';
 class ChatBox extends StatelessWidget {
-  const ChatBox({
+   ChatBox({
     super.key,
   });
+  final TextEditingController _messageController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +21,7 @@ class ChatBox extends StatelessWidget {
               children: [
                 Expanded(
                     child: TextField(
+                      controller: _messageController,
                       decoration: InputDecoration(
                         contentPadding: const EdgeInsets.symmetric(
                           vertical: 10,

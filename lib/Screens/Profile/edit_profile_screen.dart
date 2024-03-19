@@ -6,7 +6,6 @@ import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
 import 'package:neat/utils.dart';
 import 'package:neat/utlis/constants/sizes.dart';
-import '../../common/widgets/appbar/appbar.dart';
 import '../../common/widgets/images/circular_image.dart';
 import '../../common/widgets/texts/section_heading.dart';
 import '../../cubit/app_cubit.dart';
@@ -42,19 +41,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     var cubit = AppCubit.get(context);
     return Scaffold(
       backgroundColor: TColors.backgroundColor,
-      appBar: TAppBar(
-        showBackArrow: true,
-        backgroundColor: TColors.backgroundColor,
-        leadingOnPressed: () {
-          Navigator.pop(context);
-        },
-        title: Text(
-          "Profile",
-          style: Theme.of(context).textTheme.headlineLarge!.apply(
-                color: TColors.primaryColor,
-              ),
-        ),
-      ),
+       appBar: AppBar(
+         backgroundColor: TColors.backgroundColor,
+         automaticallyImplyLeading: true,
+         iconTheme: IconThemeData(color: TColors.primaryColor,),
+         title: Text("Profile"),
+         titleTextStyle: Theme.of(context).textTheme.headlineMedium!.apply(color: TColors.primaryColor),
+
+
+       ),
+
+
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(TSizes.defaultSpace),

@@ -4,10 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
+import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
+import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
+import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -46,7 +49,7 @@ class _HomeScreenState extends State<HomeScreen> {
             automaticallyImplyLeading: false,
             actions: [
               IconButton(onPressed: (){
-                navigateTo(context, const ChatScreen());
+                navigateTo(context,  ChatScreen(receiverUserEmail: '', receiverUserID: '',));
               }, icon: const Icon(Icons.chat,color: TColors.primaryColor,))
             ],
           ),
@@ -70,10 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   children: [
-                                    const CircleAvatar(
-                                      backgroundColor: Color(0xff6368d9),
-                                      maxRadius: 35,
-                                    ),
+                                    TCircularImage(image: TImages.user, width: 90,height: 90,),
+
                                     SizedBox(
                                       width: width * .025,
                                     ),
@@ -89,7 +90,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           size: 20,
                                         ),
                                         BuildText(
-                                          text: 'Kerollos harby!',
+                                          text: cubit.name,
                                           color: AppColor.primeColor,
                                           size: 20,
                                           bold: true,
@@ -110,12 +111,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                 SizedBox(
                                   height: height * .02,
                                 ),
-                                Container(
-                                  height: height * .225,
-                                  width: width * .775,
-                                  decoration: BoxDecoration(
-                                      color: AppColor.primeColor,
-                                      borderRadius: BorderRadius.circular(20)),
+                                TCircularContainer(
+                                  // height: height * .225,
+                                  // width: width * .775,
+                                  // decoration: BoxDecoration(
+                                  //     color: AppColor.primeColor,
+                                  //     borderRadius: BorderRadius.circular(20)),
+                                  backgroundColor: TColors.primaryColor,
+                                  height: 200,
+                                  width: 330,
                                   child: Padding(
                                     padding: const EdgeInsets.all(15.0),
                                     child: Column(
@@ -129,7 +133,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(
-                                              "62.5% completed",
+                                              "${cubit.numberOfTodoTasks}",
                                               style: TextStyle(
                                                   color: AppColor.secondColor,
                                                   fontSize: 15,
@@ -169,12 +173,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   MainAxisAlignment.center,
                                               children: [
                                                 SizedBox(
-                                                  height: height * .09,
+                                                  height: TSizes.lg*5,
                                                   width: width * .4,
                                                   child: Center(
                                                     child: BuildText(
                                                       text:
                                                           'You have ${cubit.numberOfTodoTasks} more tasks to do',
+
                                                       color:
                                                           AppColor.secondColor,
                                                       size: 20,

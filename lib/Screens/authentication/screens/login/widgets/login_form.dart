@@ -4,7 +4,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
+import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/components/components.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../../cubit/app_cubit.dart';
 import '../../../../../utlis/constants/colors.dart';
@@ -24,6 +26,20 @@ class _LoginFormState extends State<LoginForm> {
   TextEditingController email = TextEditingController();
 
   TextEditingController password = TextEditingController();
+
+  /// Sign in user
+  void signIn() async {
+    /// get the auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+    try {
+      await authService.signInWithEmailandPassword(email.text, password.text);
+    } catch (e) {
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(
+        backgroundColor: Colors.red,
+          content: Text("e.toString()")));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +139,6 @@ class _LoginFormState extends State<LoginForm> {
                   onPressed: () async {
                     await cubit.Login(
                         email: email.text, password: password.text);
-
                   },
                   child: const Text(
                     "Log in",
