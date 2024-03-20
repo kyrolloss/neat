@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
@@ -60,9 +59,9 @@ class _UsersScreenState extends State<UsersScreen> {
               ],
             ),
           ),
-           Expanded(
-             child: _buildUserList(),
-           ),
+           Container(
+             height: 85,
+               child: _buildUserList()),
 
         ],
       ),
@@ -100,24 +99,20 @@ class _UsersScreenState extends State<UsersScreen> {
 
     /// display all users except current user
     if (_auth.currentUser!.email != data['email']) {
-      return Padding(
-        
-        padding: const EdgeInsets.all(8.0),
-        child: TCircularContainer(
-          backgroundColor: TColors.primaryColor,
-          child: ListTile(
-            title: Text(data['name'],style: TextStyle(color: TColors.backgroundColor),),
-            onTap: () {
-              /// pass the clicked user's UID to the chat page
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                            receiverUserEmail: data['email'],
-                            receiverUserID: data['uid'],
-                          )));
-            },
-          ),
+      return TCircularContainer(
+        backgroundColor: TColors.primaryColor,
+        child: ListTile(
+          title: Text(data['email'],style: TextStyle(color: TColors.backgroundColor),),
+          onTap: () {
+            /// pass the clicked user's UID to the chat page
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => ChatScreen(
+                          receiverUserEmail: data['email'],
+                          receiverUserID: data['uid'],
+                        )));
+          },
         ),
       );
     } else {

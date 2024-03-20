@@ -5,6 +5,8 @@ import 'package:neat/Screens/Notification/notification%20services/notification%2
 import 'package:neat/cubit/app_cubit.dart';
 import 'Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'firebase_options.dart';
+
+
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {

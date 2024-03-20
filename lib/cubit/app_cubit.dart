@@ -38,6 +38,19 @@ class AppCubit extends Cubit<AppState> {
 
 
 
+  Stream<List<Map<String, dynamic>>> getUsersStream() {
+    return database.collection('Users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final user = doc.data();
+        return user;
+      }).toList();
+    });
+  }
+  User? getCurrentUser() {
+    return auth.currentUser;
+  }
+
+
   final FirebaseMessaging message = FirebaseMessaging.instance;
 
 
@@ -140,9 +153,7 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  User? getCurrentUser() {
-    return auth.currentUser;
-  }
+
 
   Future<void> showCalendar(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
