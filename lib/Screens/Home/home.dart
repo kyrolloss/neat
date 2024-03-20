@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
+import 'package:neat/Screens/chat/users_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
@@ -31,7 +32,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,12 +54,7 @@ class _HomeScreenState extends State<HomeScreen> {
             actions: [
               IconButton(
                   onPressed: () {
-                    navigateTo(
-                        context,
-                        ChatScreen(
-                          receiverUserEmail: '',
-                          receiverUserID: '',
-                        ));
+                    navigateTo(context, const UsersScreen());
                   },
                   icon: const Icon(
                     Icons.chat,
@@ -86,7 +82,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               children: [
                                 Row(
                                   children: [
-
                                     TCircularImage(
                                       image: TImages.user,
                                       width: 90,
@@ -254,49 +249,7 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  /// build a list of users except for the current logged in user
-  Widget _buildUserList(DocumentSnapshot document) {
-    return StreamBuilder<QuerySnapshot>(
-        stream: FirebaseFirestore.instance.collection('users').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) {
-            return Text("Error");
-          }
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading..");
-          }
-          return ListView(
-            children: snapshot.data!.docs
-                .map<Widget>((doc) => _buildUserListItem(doc))
-                .toList(),
-          );
-        });
-  }
 
-  /// build individual user list items
-  Widget _buildUserListItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data()! as Map< String, dynamic>;
-
-    /// display all users except current user
-    if (_auth.currentUser!.email != data['email']) {
-      return ListTile(
-        title:Text( data['email']),
-        onTap: () {
-          /// pass the clicked user's UID to the chat page
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => ChatScreen(
-                      receiverUserEmail: data['email'],
-                      receiverUserID: data['uid'],
-                  )));
-        },
-      );
-    } else{
-      /// return empty container
-      return Container();
-    }
-  }
 
   Widget BuilderTasksList() {
     String senderId = AppCubit.get(context).getCurrentUser()!.uid;

@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
+import 'package:neat/Screens/chat/services/chat_service.dart';
 import 'package:neat/Screens/chat/widgets/chat_box.dart';
 import 'package:neat/Screens/chat/widgets/chat_bubble.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
@@ -11,6 +12,7 @@ import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+
 
 class ChatScreen extends StatefulWidget {
   final String receiverUserEmail;
@@ -27,7 +29,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController _messageController = TextEditingController();
-  final AuthService _chatService = AuthService();
+  final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
 
   void sendMessage() async {
@@ -48,6 +50,9 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         backgroundColor: TColors.primaryColor,
         automaticallyImplyLeading: true,
+        leading: IconButton(onPressed: (){
+          Navigator.pop(context);
+        }, icon: const Icon(Icons.arrow_back_ios_new)),
         iconTheme: const IconThemeData(
           color: Colors.white,
         ),
