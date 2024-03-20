@@ -19,7 +19,7 @@ class AuthService extends ChangeNotifier {
           .signInWithEmailAndPassword(email: email, password: password);
 
       /// add a new document for the user in the users collection if it doesn't already exists
-      _firestore.collection('users').doc(userCredential.user!.uid).set({
+      _firestore.collection('Users').doc(userCredential.user!.uid).set({
         'uid' : userCredential.user!.uid,
         'email' : email,
       }, SetOptions(merge: true));
@@ -43,7 +43,7 @@ class AuthService extends ChangeNotifier {
           password: password);
 
       /// after creating the user , create a new document for the user in the users collection
-      _firestore.collection('users').doc(userCredential.user!.uid).set({
+      _firestore.collection('Users').doc(userCredential.user!.uid).set({
         'uid' : userCredential.user!.uid,
         'email' : email,
       });

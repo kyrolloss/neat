@@ -52,7 +52,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 /// -- AppBar
                const TAppBar(
-
+                 showBackArrow: true,
                   backgroundColor: TColors.primaryColor,
 
                 ),

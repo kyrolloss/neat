@@ -7,6 +7,7 @@ class Message {
   final String message;
   final Timestamp timestamp;
 
+
   Message(
       {required this.senderId,
       required this.senderEmail,

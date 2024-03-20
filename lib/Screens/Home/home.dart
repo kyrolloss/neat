@@ -48,20 +48,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: TColors.backgroundColor,
-          appBar: AppBar(
-            backgroundColor: TColors.backgroundColor,
-            automaticallyImplyLeading: false,
-            actions: [
-              IconButton(
-                  onPressed: () {
-                    navigateTo(context, const UsersScreen());
-                  },
-                  icon: const Icon(
-                    Icons.chat,
-                    color: TColors.primaryColor,
-                  ))
-            ],
-          ),
+          // appBar: AppBar(
+          //   backgroundColor: TColors.backgroundColor,
+          //   automaticallyImplyLeading: false,
+          //   actions: [
+          //
+          //   ],
+          // ),
           body: Padding(
             padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: SingleChildScrollView(
@@ -81,6 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                   children: [
                                     TCircularImage(
                                       image: TImages.user,
@@ -106,9 +100,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                           color: AppColor.primeColor,
                                           size: 20,
                                           bold: true,
-                                        )
+                                        ),
                                       ],
                                     ),
+                                    SizedBox(width: width * 0.1),
+                                    /// Chats
+                                    IconButton(
+                                        onPressed: () {
+                                          navigateTo(context, const UsersScreen());
+                                        },
+                                        icon: const Icon(
+                                          Icons.chat,
+                                          color: TColors.primaryColor,
+                                        ))
                                   ],
                                 ),
                                 SizedBox(

@@ -38,9 +38,9 @@ class ChatService extends ChangeNotifier{
   }
 
   /// GET MESSAGES
-  Stream<QuerySnapshot> getMessages(String userId, String otherUserId) {
+  Stream<QuerySnapshot> getMessages(String userId, String otherUserId , ) {
     /// construct chat room id from user ids (sorted to ensure it matches the id used when sending messages
-    List<String> ids = [userId, otherUserId];
+    List<String> ids = [userId, otherUserId] ;
     ids.sort();
     String chatRoomId = ids.join("_");
 

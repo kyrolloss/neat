@@ -29,7 +29,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
         automaticallyImplyLeading: true,
         leading:  IconButton(color: iconColor, onPressed: () {
           Navigator.pop(context);
-        }, icon:Icon(Icons.arrow_back_ios),),
+        }, icon:Icon(Icons.arrow_back_ios,color: iconColor),),
         title: title,
         actions: actions,
 

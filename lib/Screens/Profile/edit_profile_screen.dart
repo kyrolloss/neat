@@ -44,6 +44,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
        appBar: AppBar(
          backgroundColor: TColors.backgroundColor,
          automaticallyImplyLeading: true,
+         leading: IconButton(onPressed: (){
+           Navigator.pop(context);
+         }, icon: Icon(Icons.arrow_back_ios,color: TColors.primaryColor,)),
          iconTheme: IconThemeData(color: TColors.primaryColor,),
          title: Text("Profile"),
          titleTextStyle: Theme.of(context).textTheme.headlineMedium!.apply(color: TColors.primaryColor),
