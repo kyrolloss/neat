@@ -1,4 +1,4 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
+  import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
@@ -63,5 +63,17 @@ class ChatService extends ChangeNotifier{
         .collection('messages')
         .orderBy('timestamp', descending: false)
         .snapshots();
+  }
+
+  Stream<List<Map<String, dynamic>>> getUsersStream() {
+    return _firestore.collection('Users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        final user = doc.data();
+        return user;
+      }).toList();
+    });
+  }
+  User? getCurrentUser() {
+    return _firebaseAuth.currentUser;
   }
 }
