@@ -3,9 +3,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
+import 'package:neat/Screens/chat/services/chat_service.dart';
+import 'package:neat/Screens/chat/widgets/user_tile.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
+import 'package:neat/common/widgets/drawer/drawer.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:provider/provider.dart';
@@ -20,13 +23,9 @@ class UsersScreen extends StatefulWidget {
 }
 
 class _UsersScreenState extends State<UsersScreen> {
-  void signOut() {
-    /// get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
-    authService.signOut();
-  }
-
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ChatService _chatService = ChatService();
+  final AuthService _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -45,14 +44,6 @@ class _UsersScreenState extends State<UsersScreen> {
                     "Chats",
                     style: TextStyle(color: TColors.backgroundColor),
                   ),
-                  actions: [
-                    IconButton(
-                        onPressed: signOut,
-                        icon: const Icon(
-                          Icons.logout,
-                          color: TColors.backgroundColor,
-                        ))
-                  ],
                 ),
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
@@ -60,10 +51,9 @@ class _UsersScreenState extends State<UsersScreen> {
               ],
             ),
           ),
-           Expanded(
-             child: _buildUserList(),
-           ),
-
+          Expanded(
+            child: _buildUserList(),
+          ),
         ],
       ),
     );
@@ -72,13 +62,14 @@ class _UsersScreenState extends State<UsersScreen> {
   /// build a list of users except for the current logged in user
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection('Users').snapshots(),
+      stream: _chatService.getUserStream(),
       builder: (context, snapshot) {
         if (snapshot.hasError) {
           return const Text("Error");
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Text("Loading..");
+          return const CircularProgressIndicator(color: TColors.primaryColor,
+          );
         }
         if (!snapshot.hasData) {
           return const CircularProgressIndicator(
@@ -86,38 +77,34 @@ class _UsersScreenState extends State<UsersScreen> {
           );
         }
         return ListView(
-          children: snapshot.data!.docs
-              .map<Widget>((doc) => _buildUserListItem(doc))
+          children: snapshot.data!
+              .map<Widget>((userData) => _buildUserListItem(userData, context))
               .toList(),
         );
       },
     );
   }
 
-  /// build individual user list items
-  Widget _buildUserListItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
-
+  /// build individual list tile for user
+  Widget _buildUserListItem(
+      Map<String, dynamic> userData, BuildContext context) {
     /// display all users except current user
-    if (_auth.currentUser!.email != data['email']) {
+    if (_authService.getCurrentUser()!.email != userData['email']) {
       return Padding(
-        
         padding: const EdgeInsets.all(8.0),
-        child: TCircularContainer(
-          backgroundColor: TColors.primaryColor,
-          child: ListTile(
-            title: Text(data['name'],style: TextStyle(color: TColors.backgroundColor),),
-            onTap: () {
-              /// pass the clicked user's UID to the chat page
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ChatScreen(
-                            receiverUserEmail: data['email'],
-                            receiverUserID: data['uid'],
-                          )));
-            },
-          ),
+        child: UserTile(
+          text: userData['name'],
+          onTap: () {
+            /// tapped on user -> go to chat page
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ChatScreen(
+                    receiverUserEmail: userData['email'],
+                    receiverUserID: userData['uid']),
+              ),
+            );
+          },
         ),
       );
     } else {

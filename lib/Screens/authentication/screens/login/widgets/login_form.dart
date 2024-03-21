@@ -23,21 +23,33 @@ class LoginForm extends StatefulWidget {
 }
 
 class _LoginFormState extends State<LoginForm> {
+  /// email and password text controllers
   TextEditingController email = TextEditingController();
 
   TextEditingController password = TextEditingController();
 
+
+
   /// Sign in user
-  void signIn() async {
+  void signIn(BuildContext context) async {
     /// get the auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final authService = AuthService();
+    /// try login
     try {
-      await authService.signInWithEmailandPassword(email.text, password.text);
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(
-        backgroundColor: Colors.red,
-          content: Text("e.toString()")));
+      await authService.signInWithEmailandPassword(
+          email.text,
+          password.text
+      );
+    }
+    /// catch any error
+    catch (e) {
+      showDialog(
+          context: context,
+          builder: (context)=> AlertDialog(
+            title: Text("Error", style: TextStyle(color: Colors.white),),
+            backgroundColor: Colors.red,
+          ),
+      );
     }
   }
 
@@ -126,6 +138,7 @@ class _LoginFormState extends State<LoginForm> {
                 height: TSizes.spaceBtwSections,
               ),
 
+              /// Login Button
               SizedBox(
                 width: double.infinity,
                 height: 50,
