@@ -59,7 +59,7 @@ class _UsersScreenState extends State<UsersScreen> {
               ],
             ),
           ),
-           Container(
+            Container(
              height: 85,
                child: _buildUserList()),
 

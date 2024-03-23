@@ -1,12 +1,55 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/utlis/constants/colors.dart';
 
-class NotificationScreen extends StatelessWidget {
+class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
+
+  @override
+  State<NotificationScreen> createState() => _NotificationScreenState();
+}
+
+class _NotificationScreenState extends State<NotificationScreen> {
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    _firebaseMessaging.requestPermission();
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      print("onMessage: $message");
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: Text(message.notification!.title!),
+          content: Text(message.notification!.body!),
+          actions: <Widget>[
+            MaterialButton(
+              child: Text('Close'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+          ],
+        ),
+      );
+    });
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      print("onMessageOpenedApp: $message");
+    });
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+    _firebaseMessaging.getToken().then((token) {
+      print('Token: $token');
+    });
+  }
+
+  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    print("Handling a background message: ${message.messageId}");
+  }
+
 
 
   @override
@@ -24,7 +67,7 @@ class NotificationScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.only(top: 30.0 , right: 22.5,left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
-            stream :FirebaseFirestore.instance.collection('notifications').orderBy('timestamp', descending: true).snapshots(),
+            stream :FirebaseFirestore.instance.collection('tasks').orderBy('timestamp', descending: true).snapshots(),
 
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -32,7 +75,9 @@ class NotificationScreen extends StatelessWidget {
                     child: CircularProgressIndicator(),
                   );
                 }
-              return  SizedBox(
+                final documents = snapshot.data!.docs;
+
+                return  SizedBox(
                 height: height*.45,
                 child: ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),

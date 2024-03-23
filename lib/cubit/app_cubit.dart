@@ -35,27 +35,22 @@ class AppCubit extends Cubit<AppState> {
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
   var user = FirebaseAuth.instance.currentUser;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  final CollectionReference tasksRoomsCollection =
+  FirebaseFirestore.instance.collection('tasks_rooms');
 
 
 
-  Stream<List<Map<String, dynamic>>> getUsersStream() {
-    return database.collection('Users').snapshots().map((snapshot) {
-      return snapshot.docs.map((doc) {
-        final user = doc.data();
-        return user;
-      }).toList();
-    });
-  }
   User? getCurrentUser() {
     return auth.currentUser;
   }
 
 
-  final FirebaseMessaging message = FirebaseMessaging.instance;
+Stream<QuerySnapshot<Map<String,dynamic>>>notificationStream=
+FirebaseFirestore.instance.collection('Notification').snapshots();
 
 
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   Future<void> initialize() async {
     // Request permission for notifications
@@ -230,6 +225,10 @@ class AppCubit extends Cubit<AppState> {
         .collection('tasks')
         .snapshots();
   }
+
+
+
+
 
   // Stream<QuerySnapshot> getUserInfoStream(String UserId, otherUserId) {
   //   List<String> ids = [ UserId , otherUserId];

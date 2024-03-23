@@ -28,6 +28,7 @@ class _SignupFormState extends State<SignupForm> {
   TextEditingController firstName = TextEditingController();
 
   TextEditingController email = TextEditingController();
+  TextEditingController titleController = TextEditingController();
 
   TextEditingController password = TextEditingController();
 
@@ -37,7 +38,6 @@ class _SignupFormState extends State<SignupForm> {
 
   TextEditingController phone = TextEditingController();
 
-  TextEditingController titleController = TextEditingController();
 
   /// sign up user
   void signUp() async {
