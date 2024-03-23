@@ -52,9 +52,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 /// -- AppBar
                const TAppBar(
-                 showBackArrow: true,
+                 showBackArrow:false,
                   backgroundColor: TColors.primaryColor,
-
+                 iconColor: TColors.primaryColor,
                 ),
 
                 /// User Profile Card

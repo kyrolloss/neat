@@ -8,15 +8,28 @@ class ChatService extends ChangeNotifier{
   final  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  /// get user stream
+  Stream<List<Map<String, dynamic>>> getUserStream(){
+    return _firestore.collection('Users').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        /// go through each individual user
+        final user = doc.data();
+        /// return user
+        return user;
+      }).toList();
+    });
+  }
+
   /// SEND MESSAGE
   Future<void> sendMessage(String receiverId, String message) async {
     /// get current user info
     String currentUserId = _firebaseAuth.currentUser!.uid;
-    final String currentUserEmail = _firebaseAuth.currentUser!.email.toString();
+    final String currentUserEmail = _firebaseAuth.currentUser!.email!;
     final Timestamp timestamp = Timestamp.now();
 
     /// create a new message
     Message newMessage = Message(
+      
         senderId: currentUserId,
         senderEmail: currentUserEmail,
         receiverId: receiverId,

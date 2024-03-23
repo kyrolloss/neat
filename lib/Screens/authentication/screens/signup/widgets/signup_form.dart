@@ -40,25 +40,57 @@ class _SignupFormState extends State<SignupForm> {
 
 
   /// sign up user
-  void signUp() async {
-    if (password.text != confirmPassword.text) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text("Password doesn't match"),
+  void signUp (BuildContext context){
+    /// get auth service
+    final authService = AuthService();
+
+    /// If password Match -> create user
+    if(password.text == confirmPassword.text){
+      try{
+        authService.signUpWithEmailandPassword(
+            email.text,
+            password.text
+        );
+      } catch (e){
+        showDialog(
+          context: context,
+          builder: (context)=> AlertDialog(
+            title: Text("Error", style: TextStyle(color: Colors.white),),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+    /// Password doesn't match -> tell error to fix
+    else{
+      showDialog(
+        context: context,
+        builder: (context)=> AlertDialog(
+          title: Text("Password doesn't match", style: TextStyle(color: Colors.white),),
+          backgroundColor: Colors.red,
         ),
       );
-      return;
-    }
-
-    /// get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
-    try {
-      await authService.signUpWithEmailandPassword(email.text, password.text);
-    } catch (e) {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: Text(e.toString())));
     }
   }
+  // void signUp() async {
+  //   if (password.text != confirmPassword.text) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(
+  //         content: Text("Password doesn't match"),
+  //       ),
+  //     );
+  //     return;
+  //   }
+  //
+  //   /// get auth service
+  //   final authService = Provider.of<AuthService>(context, listen: false);
+  //   try {
+  //     await authService.signUpWithEmailandPassword(email.text, password.text);
+  //   } catch (e) {
+  //     ScaffoldMessenger.of(context)
+  //         .showSnackBar(SnackBar(content: Text(e.toString())));
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -260,7 +292,7 @@ class _SignupFormState extends State<SignupForm> {
               height: TSizes.spaceBtwSections,
             ),
 
-            /// Create Acoount Btn
+            /// Create Account Btn
             SizedBox(
               height: 50,
               width: double.infinity,
