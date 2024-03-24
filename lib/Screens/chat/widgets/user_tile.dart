@@ -29,7 +29,6 @@ class UserTile extends StatelessWidget {
 
             Icon(Icons.person, color: TColors.secondaryColor,),
             SizedBox(width: TSizes.spaceBtwItems,),
-
             /// user name
             Text(text,style: const TextStyle(color: Colors.white),),
           ],
