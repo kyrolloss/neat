@@ -106,7 +106,7 @@ class _UsersScreenState extends State<UsersScreen> {
         child: TCircularContainer(
           backgroundColor: TColors.primaryColor,
           child: ListTile(
-            title: Text(data['name'],style: TextStyle(color: TColors.backgroundColor),),
+            title: Text(data['name'],style: const TextStyle(color: TColors.backgroundColor),),
             onTap: () {
               /// pass the clicked user's UID to the chat page
               Navigator.push(
