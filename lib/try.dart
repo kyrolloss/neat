@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -9,6 +10,7 @@ import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/text_strings.dart';
 
 class FirestoreNotifications extends StatefulWidget {
+
   @override
   _FirestoreNotificationsState createState() => _FirestoreNotificationsState();
 }
@@ -20,29 +22,63 @@ class _FirestoreNotificationsState extends State<FirestoreNotifications> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+   String receiverId = 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2';
+
   @override
   void initState() {
     super.initState();
     const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
+    AndroidInitializationSettings('@mipmap/ic_launcher');
 
     InitializationSettings initializationSettings =
-        const InitializationSettings(
+    const InitializationSettings(
       android: androidInitializationSettings,
       iOS: null,
     );
 
+    var auth = FirebaseAuth.instance;
+
+    User? getCurrentUser() {
+      return auth.currentUser;
+    }
+
+    print(getCurrentUser()!.uid);
+
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
     );
+
+    String UserId = getCurrentUser()!.uid;
+
+    List<String> ids = [UserId, receiverId];
+
+    ids.sort();
+    String taskRoomId = ids.join('_');
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+    FirebaseFirestore.instance.collection('tasks_rooms').doc(taskRoomId).collection('tasks')
+        .snapshots();
+
+    notificationStream.listen((event) {
+      if (event.docs.isNotEmpty){
+        return;
+      }
+      showNotification(event);
+    });
+
+
+
   }
 
   String channelId = 'your_channel_id';
 
-  showNotification() {
+  showNotification(QuerySnapshot<Map<String,dynamic>>event) {
+    String name = event.docs[0].data()['name'];
+    String deadline = event.docs[0].data()['deadline'];
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(channelId, 'Notify my',
-            importance: Importance.high);
+    AndroidNotificationDetails(channelId, 'Notify my',
+        channelDescription: 'to send Local Notification',
+        importance: Importance.high);
+
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
@@ -51,9 +87,12 @@ class _FirestoreNotificationsState extends State<FirestoreNotifications> {
         linux: null);
 
     flutterLocalNotificationsPlugin.show(
-        01, email.text, titleController.text, notificationDetails);
+      0, // id للإشعار
+      'New Notification',
+      'Title: $name, Deadline: $deadline',
+      notificationDetails,
+    );
   }
-
   TextEditingController email = TextEditingController();
   TextEditingController titleController = TextEditingController();
 
@@ -167,7 +206,9 @@ class _FirestoreNotificationsState extends State<FirestoreNotifications> {
                     side: const BorderSide(color: Colors.transparent),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
-                onPressed: showNotification,
+                onPressed: (){
+                  showNotification;
+                },
                 child: const Text(
                   TText.createAccount,
                   style: TextStyle(color: Colors.white),

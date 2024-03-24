@@ -1,15 +1,14 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
-import 'package:neat/Screens/chat/services/chat_service.dart';
-import 'package:neat/Screens/chat/widgets/user_tile.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:provider/provider.dart';
 
 import 'chat_screen.dart';
 
@@ -21,10 +20,11 @@ class UsersScreen extends StatefulWidget {
 }
 
 class _UsersScreenState extends State<UsersScreen> {
-  /// Chat & Auth Service
-  final ChatService _chatService = ChatService();
-  final AuthService _authService = AuthService();
-
+  void signOut() {
+    /// get auth service
+    final authService = Provider.of<AuthService>(context, listen: false);
+    authService.signOut();
+  }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -45,6 +45,14 @@ class _UsersScreenState extends State<UsersScreen> {
                     "Chats",
                     style: TextStyle(color: TColors.backgroundColor),
                   ),
+                  actions: [
+                    IconButton(
+                        onPressed: signOut,
+                        icon: const Icon(
+                          Icons.logout,
+                          color: TColors.backgroundColor,
+                        ))
+                  ],
                 ),
                 const SizedBox(
                   height: TSizes.spaceBtwSections,
@@ -64,25 +72,22 @@ class _UsersScreenState extends State<UsersScreen> {
   /// build a list of users except for the current logged in user
   Widget _buildUserList() {
     return StreamBuilder(
-      stream: _chatService.getUserStream(),
+      stream: FirebaseFirestore.instance.collection('Users').snapshots(),
       builder: (context, snapshot) {
-        /// error
         if (snapshot.hasError) {
           return const Text("Error");
         }
-        /// loading...
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Text("Loading..");
         }
-        /// return list view
         if (!snapshot.hasData) {
           return const CircularProgressIndicator(
             color: TColors.primaryColor,
           );
         }
         return ListView(
-          children: snapshot.data!
-              .map<Widget>((userData) => _buildUserListItem(userData, context))
+          children: snapshot.data!.docs
+              .map<Widget>((doc) => _buildUserListItem(doc))
               .toList(),
         );
       },
@@ -90,27 +95,27 @@ class _UsersScreenState extends State<UsersScreen> {
   }
 
   /// build individual user list items
-  Widget _buildUserListItem(Map<String, dynamic> userData , BuildContext context) {
-
+  Widget _buildUserListItem(DocumentSnapshot document) {
+    Map<String, dynamic> data = document.data()! as Map<String, dynamic>;
 
     /// display all users except current user
-    if (_authService.getCurrentUser()!.email != userData['email']) {
+    if (_auth.currentUser!.email != data['email']) {
       return Padding(
-
+        
         padding: const EdgeInsets.all(8.0),
         child: TCircularContainer(
           backgroundColor: TColors.primaryColor,
-          child: UserTile(
-            text: userData['name'],
+          child: ListTile(
+            title: Text(data['name'],style: TextStyle(color: TColors.backgroundColor),),
             onTap: () {
-              /// pass the clicked user's UID => to the chat page
+              /// pass the clicked user's UID to the chat page
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ChatScreen(
-                        receiverUserEmail: userData['email'],
-                        receiverUserID: userData['uid'],
-                      )));
+                            receiverUserEmail: data['email'],
+                            receiverUserID: data['uid'],
+                          )));
             },
           ),
         ),
