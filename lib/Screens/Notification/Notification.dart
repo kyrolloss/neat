@@ -1,9 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
+import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
 
 class NotificationScreen extends StatefulWidget {
@@ -17,40 +20,67 @@ class _NotificationScreenState extends State<NotificationScreen> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+      FlutterLocalNotificationsPlugin();
+
+  String receiverId = 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2';
+
   @override
   void initState() {
     super.initState();
-    _firebaseMessaging.requestPermission();
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      print("onMessage: $message");
-      showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: Text(message.notification!.title!),
-          content: Text(message.notification!.body!),
-          actions: <Widget>[
-            MaterialButton(
-              child: Text('Close'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-          ],
-        ),
-      );
-    });
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      print("onMessageOpenedApp: $message");
-    });
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-    _firebaseMessaging.getToken().then((token) {
-      print('Token: $token');
+    const AndroidInitializationSettings androidInitializationSettings =
+        AndroidInitializationSettings('@mipmap/ic_launcher');
+
+    InitializationSettings initializationSettings =
+        const InitializationSettings(
+      android: androidInitializationSettings,
+      iOS: null,
+    );
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+    );
+
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+        FirebaseFirestore.instance
+            .collection('tasks_rooms')
+            .doc('aiQxoxrg5zPLIQ7NniWdyUFnwmF2_aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
+            .collection('tasks').orderBy('date')
+            .snapshots();
+
+    notificationStream.listen((event) {
+      if (event.docs.isEmpty) {
+        return;
+      }
+      showNotification(event.docs.last);
     });
   }
 
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print("Handling a background message: ${message.messageId}");
+  String channelId = '1';
+
+  showNotification(QueryDocumentSnapshot<Map<String, dynamic>> event) {
+    // String name = event.docs[0].data()['name'];
+    // String deadline = event.docs[0].data()['deadline'];
+    print('get nof');
+    AndroidNotificationDetails androidNotificationDetails =
+        AndroidNotificationDetails(channelId, 'Notify my',
+            channelDescription: 'to send Local Notification',
+            importance: Importance.high);
+
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails,
+        iOS: null,
+        macOS: null,
+        linux: null);
+
+    flutterLocalNotificationsPlugin.show(
+      01, // id للإشعار
+      event.get('name'),
+      event.get('deadline'),
+
+      notificationDetails,
+    );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,14 +91,20 @@ class _NotificationScreenState extends State<NotificationScreen> {
       backgroundColor: TColors.backgroundColor,
       appBar: const TAppBar(
         backgroundColor: TColors.backgroundColor,
-        title: Text("Notifications", style: TextStyle(color: TColors.primaryColor,fontWeight: FontWeight.bold),),
+        title: Text(
+          "Notifications",
+          style: TextStyle(
+              color: TColors.primaryColor, fontWeight: FontWeight.bold),
+        ),
       ),
-      body:  SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.only(top: 30.0 , right: 22.5,left: 22.5),
+          padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
-            stream :FirebaseFirestore.instance.collection('tasks').orderBy('timestamp', descending: true).snapshots(),
-
+              stream: FirebaseFirestore.instance
+                  .collection('tasks_rooms')
+                  .orderBy('timestamp', descending: true)
+                  .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
                   return const Center(
@@ -77,69 +113,66 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 }
                 final documents = snapshot.data!.docs;
 
-                return  SizedBox(
-                height: height*.45,
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: snapshot.data!.docs.length,
-                  itemBuilder: (context, index) {
-                    var notification = snapshot.data!.docs[index];
+                return SizedBox(
+                  height: height * .45,
+                  child: ListView.builder(
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: snapshot.data!.docs.length,
+                    itemBuilder: (context, index) {
+                      var notification = snapshot.data!.docs[index];
 
-                    return Padding(
-                      padding: const EdgeInsets.all(5.0),
-                      child: Container(
-                        height: height * .13,
-                        width: width * .8,
-                        decoration: BoxDecoration(
-                          color: AppColor.secondColor,
-                          borderRadius: BorderRadius.circular(25),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(15),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              BuildText(
-                                text: notification['title'],
-                                color: AppColor.primeColor,
-                                size: 15,
-                              ),
-
-                              BuildText(
-                                text: notification['body'],
-                                color: AppColor.primeColor,
-                                size: 17.5,
-                                bold: true,
-                              ),
-
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.watch_later_outlined,
-                                    color: AppColor.primeColor,
-                                    size: 20,
-                                  ),
-                                  SizedBox(
-                                    width: width * .02,
-                                  ),
-                                  BuildText(
-                                    text: '15.00 pm - 16.00',
-                                    color: AppColor.primeColor,
-                                    size: 15,
-                                  ),
-                                ],
-                              )
-                            ],
+                      return Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Container(
+                          height: height * .13,
+                          width: width * .8,
+                          decoration: BoxDecoration(
+                            color: AppColor.secondColor,
+                            borderRadius: BorderRadius.circular(25),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(15),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                BuildText(
+                                  text: notification['title'],
+                                  color: AppColor.primeColor,
+                                  size: 15,
+                                ),
+                                BuildText(
+                                  text: notification['body'],
+                                  color: AppColor.primeColor,
+                                  size: 17.5,
+                                  bold: true,
+                                ),
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.watch_later_outlined,
+                                      color: AppColor.primeColor,
+                                      size: 20,
+                                    ),
+                                    SizedBox(
+                                      width: width * .02,
+                                    ),
+                                    BuildText(
+                                      text: '15.00 pm - 16.00',
+                                      color: AppColor.primeColor,
+                                      size: 15,
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
                           ),
                         ),
-                      ),
-                    );
-                  },
-                ),
-              );
-            }
-          ),
+                      );
+                    },
+                  ),
+                );
+              }),
         ),
       ),
     );

@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
@@ -30,69 +31,64 @@ class AppCubit extends Cubit<AppState> {
   String phone = '';
   String title = '';
 
-
-  var auth = FirebaseAuth.instance;
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
   var user = FirebaseAuth.instance.currentUser;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final CollectionReference tasksRoomsCollection =
-  FirebaseFirestore.instance.collection('tasks_rooms');
-
-
+      FirebaseFirestore.instance.collection('tasks_rooms');
+  var auth = FirebaseAuth.instance;
 
   User? getCurrentUser() {
     return auth.currentUser;
   }
 
 
-Stream<QuerySnapshot<Map<String,dynamic>>>notificationStream=
-FirebaseFirestore.instance.collection('Notification').snapshots();
 
 
+  // Future<void> initialize() async {
+  //   // Request permission for notifications
+  //   await _firebaseMessaging.requestPermission();
+  //
+  //   // Get the device's FCM token
+  //   String? token = await _firebaseMessaging.getToken();
+  //   print('FCM Token: $token');
+  //
+  //   // Set up a listener for incoming notifications
+  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  //     if (message.notification != null) {
+  //       showDialog(
+  //         context: navigatorKey.currentContext!,
+  //         builder: (context) {
+  //           return AlertDialog(
+  //             title: Text(message.notification!.title!),
+  //             content: Text(message.notification!.body!),
+  //             actions: [
+  //               TextButton(
+  //                 onPressed: () {
+  //                   Navigator.pop(context);
+  //                 },
+  //                 child: Text('OK'),
+  //               ),
+  //             ],
+  //           );
+  //         },
+  //       );
+  //     }
+  //   });
+  //
+  //   // Set up a background message handler
+  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  // }
 
-  Future<void> initialize() async {
-    // Request permission for notifications
-    await _firebaseMessaging.requestPermission();
-
-    // Get the device's FCM token
-    String? token = await _firebaseMessaging.getToken();
-    print('FCM Token: $token');
-
-    // Set up a listener for incoming notifications
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      if (message.notification != null) {
-        showDialog(
-          context: navigatorKey.currentContext!,
-          builder: (context) {
-            return AlertDialog(
-              title: Text(message.notification!.title!),
-              content: Text(message.notification!.body!),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text('OK'),
-                ),
-              ],
-            );
-          },
-        );
-      }
-    });
-
-    // Set up a background message handler
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    if (message.notification != null) {
-      print('Background notification received: ${message.notification!.title}/${message.notification!.body}');
-    }
-  }
-
+  // Future<void> _firebaseMessagingBackgroundHandler(
+  //     RemoteMessage message) async {
+  //   if (message.notification != null) {
+  //     print(
+  //         'Background notification received: ${message.notification!.title}/${message.notification!.body}');
+  //   }
+  // }
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -109,7 +105,6 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
-
 
         name = userName;
         id = userUid;
@@ -147,8 +142,6 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
       print(e.toString());
     }
   }
-
-
 
   Future<void> showCalendar(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -213,6 +206,8 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
     }
   }
 
+
+
   Stream<QuerySnapshot> getTasksStream(String UserId, otherUserId) {
     List<String> ids = [UserId, otherUserId];
 
@@ -225,10 +220,6 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
         .collection('tasks')
         .snapshots();
   }
-
-
-
-
 
   // Stream<QuerySnapshot> getUserInfoStream(String UserId, otherUserId) {
   //   List<String> ids = [ UserId , otherUserId];
@@ -256,6 +247,7 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
     required String taskId,
     required String status,
     required String priority,
+
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
@@ -269,10 +261,10 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
         senderName: senderName,
         senderPhoneNumber: senderPhone,
         receiverId: receiverID,
-        description:  description,
-        date:     timeStamp.toString(),
+        description: description,
+        date: timeStamp.toString(),
         deadline: deadline,
-        status:   status,
+        status: status,
         priority: priority);
 
     List<String> ids = [currentUserId, receiverID];
@@ -297,6 +289,31 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
 
 
 
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
+  FlutterLocalNotificationsPlugin();
+
+
+
+  String channelId = 'your_channel_id';
+
+  showNotification( {required String title , required String body}) {
+    AndroidNotificationDetails androidNotificationDetails =
+    AndroidNotificationDetails(channelId, 'Notify my',
+        importance: Importance.high);
+
+    NotificationDetails notificationDetails = NotificationDetails(
+        android: androidNotificationDetails,
+        iOS: null,
+        macOS: null,
+        linux: null);
+
+    flutterLocalNotificationsPlugin.show(
+        01, title, body, notificationDetails);
+  }
+
+  Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+  FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
+
 
   List<Widget> pagesNames = [
     const HomeScreen(
@@ -306,6 +323,4 @@ FirebaseFirestore.instance.collection('Notification').snapshots();
     const NotificationScreen(),
     const ProfileScreen(),
   ];
-
 }
-

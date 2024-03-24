@@ -4,6 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:neat/Screens/Notification/Notification.dart';
 import 'package:neat/Screens/Notification/notification%20services/notification%20services.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/try.dart';
@@ -79,7 +80,7 @@ class _MyAppState extends State<MyApp> {
       create: (context) => AppCubit(),
       child:  MaterialApp(
         navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false, home: FirestoreNotifications()),
+          debugShowCheckedModeBanner: false, home: NotificationScreen()),
     );
   }
 }
