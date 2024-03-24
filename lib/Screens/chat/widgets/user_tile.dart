@@ -20,17 +20,17 @@ class UserTile extends StatelessWidget {
         padding: EdgeInsets.all(12),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
-          color: TColors.primaryColor,
+          color: TColors.secondaryColor,
         ),
         // margin: EdgeInsets.symmetric(vertical: 5,horizontal: 25),
         child: Row(
           children: [
             /// Icon
 
-            Icon(Icons.person, color: TColors.secondaryColor,),
+            Icon(Icons.person, color: TColors.primaryColor,),
             SizedBox(width: TSizes.spaceBtwItems,),
             /// user name
-            Text(text,style: const TextStyle(color: Colors.white),),
+            Text(text,style: Theme.of(context).textTheme.bodyLarge!.apply(color: TColors.primaryColor)),
           ],
         ),
       ),

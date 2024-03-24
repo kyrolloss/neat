@@ -96,7 +96,7 @@ class _UsersScreenState extends State<UsersScreen> {
         
         padding: const EdgeInsets.all(8.0),
         child: TCircularContainer(
-          backgroundColor: TColors.primaryColor,
+
           child: UserTile(
             text:
               userData['name'],
