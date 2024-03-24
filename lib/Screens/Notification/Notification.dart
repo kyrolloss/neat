@@ -44,7 +44,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
         FirebaseFirestore.instance
             .collection('tasks_rooms')
-            .doc('aiQxoxrg5zPLIQ7NniWdyUFnwmF2_aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
+            .doc('TxbGPjh63WeGyvNyv4jgqGXaaky1_aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
             .collection('tasks').orderBy('date')
             .snapshots();
 
