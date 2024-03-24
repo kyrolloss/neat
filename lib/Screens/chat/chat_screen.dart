@@ -136,10 +136,13 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildMessageItem(DocumentSnapshot document) {
     Map<String, dynamic> data = document.data() as Map<String, dynamic>;
 
+    /// is current user
+    bool isCurrentUser = data['senderId'] == _authService.getCurrentUser()!.uid;
+
     /// align the messages to the right if the sender is the current user , otherwise to the left
-    var alignment = (data['senderId'] == _firebaseAuth.currentUser!.uid)
-        ? Alignment.centerRight
-        : Alignment.centerLeft;
+    var alignment =
+    isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+
     return Container(
       alignment: alignment,
       child: Padding(

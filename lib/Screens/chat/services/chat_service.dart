@@ -7,7 +7,19 @@ class ChatService extends ChangeNotifier{
   /// get instance of auth and firestore
   final  FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
+  /// get user stream
+  /*
+  [
+  {
+    'email' : test@gmail.com,
+    'id' : ...
+  },
+  {
+    'email' : user@gmail.com,
+    'id' : ...
+  },
+  ]
+   */
   /// get user stream
   Stream<List<Map<String, dynamic>>> getUserStream(){
     return _firestore.collection('Users').snapshots().map((snapshot) {

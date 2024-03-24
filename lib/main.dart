@@ -79,7 +79,8 @@ class _MyAppState extends State<MyApp> {
       create: (context) => AppCubit(),
       child:  MaterialApp(
         navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false, home: FirestoreNotifications()),
+          debugShowCheckedModeBanner: false,
+          home: const OnboardingScreen()),
     );
   }
 }

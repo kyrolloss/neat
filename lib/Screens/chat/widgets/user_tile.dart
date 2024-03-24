@@ -26,11 +26,12 @@ class UserTile extends StatelessWidget {
         child: Row(
           children: [
             /// Icon
+
             Icon(Icons.person, color: TColors.secondaryColor,),
             SizedBox(width: TSizes.spaceBtwItems,),
 
             /// user name
-            Text(text,style: TextStyle(color: Colors.white),),
+            Text(text,style: const TextStyle(color: Colors.white),),
           ],
         ),
       ),

@@ -228,7 +228,7 @@ Produce high-quality graphic assets such as icons, buttons, illustrations, and a
                       deadline: 'next friday',
                       senderName: 'kerollos',
                       senderPhone: '01205708870',
-                      taskName: 'gym UI',
+                      taskName: 'newTask',
                       taskId: uuid.v1(),
                       priority: 'important', status: 'inProgress',
 
