@@ -1,3 +1,4 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -7,6 +8,8 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Screens/Notification/notification%20services/notification%20services.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/try.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 import 'Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'firebase_options.dart';
 
@@ -20,7 +23,10 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 await FirebaseApi().initNotification();
-  runApp(const MyApp());
+  runApp(
+      ChangeNotifierProvider(create: (context) => ThemeProvider(),
+        child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatefulWidget {
@@ -79,7 +85,10 @@ class _MyAppState extends State<MyApp> {
       create: (context) => AppCubit(),
       child:  MaterialApp(
         navigatorKey: navigatorKey,
-          debugShowCheckedModeBanner: false, home: OnboardingScreen()),
+          debugShowCheckedModeBanner: false,
+          home: OnboardingScreen(),
+        theme: Provider.of<ThemeProvider>(context).themeData,
+      ),
     );
   }
 }

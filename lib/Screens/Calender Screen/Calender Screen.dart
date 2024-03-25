@@ -4,6 +4,8 @@ import 'package:neat/Screens/Calender%20Screen/completed%20tab/completed%20tab.d
 import 'package:neat/Screens/Calender%20Screen/in%20Progress%20tab/in%20Progress%20tab.dart';
 import 'package:neat/Screens/Calender%20Screen/to%20do%20tab/to%20do%20tap.dart';
 import 'package:neat/components/color.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../../calender/calender.dart';
 import '../../cubit/app_cubit.dart';
@@ -28,6 +30,8 @@ class _CalenderScreenState extends State<CalenderScreen>
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
 
     return BlocConsumer<AppCubit, AppState>(
@@ -37,7 +41,7 @@ class _CalenderScreenState extends State<CalenderScreen>
   builder: (context, state) {
     var cubit= AppCubit.get(context);
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(15.0),

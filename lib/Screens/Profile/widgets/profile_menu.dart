@@ -34,7 +34,7 @@ class TProfileMenu extends StatelessWidget {
           Expanded(
             flex: 5,
             child: Text(value,
-            style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.darkerGrey),
+            style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.primaryColor.withOpacity(0.7)),
               overflow: TextOverflow.ellipsis,
             ),
           ),

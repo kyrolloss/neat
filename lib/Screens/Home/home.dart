@@ -16,7 +16,9 @@ import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../../cubit/app_cubit.dart';
 import '../Task Details Screen/Task Details Screen.dart';
@@ -38,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode=
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -49,17 +53,17 @@ class _HomeScreenState extends State<HomeScreen> {
         var cubit = AppCubit.get(context);
 
         return Scaffold(
-          backgroundColor: TColors.backgroundColor,
+          backgroundColor: Theme.of(context).colorScheme.background,
           appBar: TAppBar(
-            backgroundColor: TColors.backgroundColor,
+            backgroundColor: Colors.transparent,
             actions: [
               IconButton(
                   onPressed: () {
                     navigateTo(context, const UsersScreen());
                   },
-                  icon: const Icon(
+                  icon:  Icon(
                     Icons.chat,
-                    color: TColors.primaryColor,
+                    color: isDarkMode ? TColors.secondaryColor: TColors.primaryColor,
                   )),
             ],
           ),
@@ -112,12 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       BuildText(
                                         text: 'Hello,',
-                                        color: AppColor.primeColor,
+                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
                                         size: 20,
                                       ),
                                       BuildText(
                                         text: cubit.name,
-                                        color: AppColor.primeColor,
+                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
                                         size: 20,
                                         bold: true,
                                       ),
@@ -133,8 +137,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                                 BuildText(
                                   text: "Let's Check Out Your Tasks",
-                                  color: AppColor.primeColor,
-                                  size: 15,
+                                  color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+
+                                  size: 20,
                                   bold: true,
                                 ),
                                 SizedBox(
@@ -252,11 +257,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   DottedBorder(
                     dashPattern: const [8, 6],
                     strokeWidth: 2,
-                    color: AppColor.primeColor,
+                    color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
                     child: SizedBox(
                         height: height * .5,
                         width: width * .875,
-                        child: BuilderTasksList()),
+                        child: Padding(
+                          padding: const EdgeInsets.all(TSizes.defaultSpace/2),
+                          child: BuilderTasksList(),
+                        )),
                   )
                 ],
               ),

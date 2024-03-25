@@ -40,9 +40,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   builder: (context, state) {
     var cubit = AppCubit.get(context);
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
        appBar: AppBar(
-         backgroundColor: TColors.backgroundColor,
+         backgroundColor: Colors.transparent,
          automaticallyImplyLeading: true,
          leading: IconButton(onPressed: (){
            Navigator.pop(context);
@@ -146,7 +146,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   );
                 },);
-              }, title: 'name', value:cubit.name ),
+              }, title: 'name', value:cubit.name, ),
               TProfileMenu(
                   onPressed: () {
 

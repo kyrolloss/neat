@@ -10,6 +10,7 @@ import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:neat/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:neat/common/widgets/list_tiles/user_profile_tile.dart';
+import 'package:neat/common/widgets/settings_screen/settings_screen.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
@@ -42,7 +43,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -154,7 +155,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
                 const SizedBox(height: TSizes.spaceBtwItems,),
-                const TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
+                 TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings", onTap: (){
+                  navigateTo(context, const SettingsScreen());
+                },  ),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                  TSettingsMenuTile(icon: Icons.logout_sharp,
                    title: "Logout",
