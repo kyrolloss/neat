@@ -33,19 +33,19 @@ class _UsersScreenState extends State<UsersScreen> {
       backgroundColor: TColors.backgroundColor,
       body: Column(
         children: [
-          TPrimaryHeaderContainer(
+          const TPrimaryHeaderContainer(
             child: Column(
               children: [
                 TAppBar(
                   showBackArrow: true,
                   iconColor: TColors.backgroundColor,
                   backgroundColor: TColors.primaryColor,
-                  title: const Text(
+                  title: Text(
                     "Chats",
                     style: TextStyle(color: TColors.backgroundColor),
                   ),
                 ),
-                const SizedBox(
+                SizedBox(
                   height: TSizes.spaceBtwSections,
                 ),
               ],

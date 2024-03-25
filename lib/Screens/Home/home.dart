@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/users_screen.dart';
@@ -61,10 +63,21 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 15.0, right: 15, left: 15, bottom: 8),
-                    child: Column(
+                  Stack(
+                    children:[
+                      Positioned(
+                        right: 0,
+                        top: 10,
+                        child: IconButton(
+                            onPressed: () {
+                              navigateTo(context, const UsersScreen());
+                            },
+                            icon: const Icon(
+                              Icons.chat,
+                              color: TColors.primaryColor,
+                            )),
+                      ),
+                      Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
@@ -74,47 +87,40 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TCircularImage(
-                                      image: TImages.user,
-                                      width: 90,
-                                      height: 90,
-                                    ),
-                                    SizedBox(
-                                      width: width * .025,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        BuildText(
-                                          text: 'Hello,',
-                                          color: AppColor.primeColor,
-                                          size: 20,
-                                        ),
-                                        BuildText(
-                                          text: cubit.name,
-                                          color: AppColor.primeColor,
-                                          size: 20,
-                                          bold: true,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: width * 0.1),
-                                    /// Chats
-                                    IconButton(
-                                        onPressed: () {
-                                          navigateTo(context, const UsersScreen());
-                                        },
-                                        icon: const Icon(
-                                          Icons.chat,
-                                          color: TColors.primaryColor,
-                                        ))
-                                  ],
-                                ),
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TCircularImage(
+                                    image: TImages.user,
+                                    width: 90,
+                                    height: 90,
+                                  ),
+                                  SizedBox(
+                                    width: width * .025,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      BuildText(
+                                        text: 'Hello,',
+                                        color: AppColor.primeColor,
+                                        size: 20,
+                                      ),
+                                      BuildText(
+                                        text: cubit.name,
+                                        color: AppColor.primeColor,
+                                        size: 20,
+                                        bold: true,
+                                      ),
+                                    ],
+                                  ),
+
+                                  /// Chats
+
+                                ],
+                                                                  ),
                                 SizedBox(
                                   height: height * .045,
                                 ),
@@ -217,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    ]
                   ),
                   SizedBox(
                     height: height * .01,
