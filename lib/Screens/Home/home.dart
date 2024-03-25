@@ -1,10 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
-<<<<<<< HEAD
-=======
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
->>>>>>> origin/main
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,6 +18,7 @@ import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/widgets/appbar/appbar.dart';
 import '../../cubit/app_cubit.dart';
 import '../Task Details Screen/Task Details Screen.dart';
 
