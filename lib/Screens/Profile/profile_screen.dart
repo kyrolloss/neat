@@ -34,9 +34,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
   /// Sign user out
   void signOut(){
     /// get auth service
-    final _firebaseAuth = AuthService();
+    final authService = Provider.of<AuthService>(context, listen: false);
 
-    _firebaseAuth.signOut();
+    authService.signOut();
   }
 
   @override
