@@ -203,15 +203,13 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Stream<QuerySnapshot> getTasksStream(String senderID, receiverID) {
-    List<String> ids = [senderID, receiverID];
+  Stream<QuerySnapshot> getTasksStream(receiverID) {
 
-    ids.sort();
-    String taskRoomId = ids.join('_');
+
 
     return database
         .collection('tasks_rooms')
-        .doc(taskRoomId)
+        .doc('taskRoomId')
         .collection('tasks')
         .snapshots();
   }
@@ -261,12 +259,12 @@ class AppCubit extends Cubit<AppState> {
         status: status,
         priority: priority);
 
-    List<String> ids = [currentUserId, receiverID];
-    ids.sort();
-    String taskRoomId = ids.join('_');
+    // List<String> ids = [currentUserId, receiverID];
+    // ids.sort();
+    // String taskRoomId = ids.join('_');
     await database
         .collection("tasks_rooms")
-        .doc(taskRoomId)
+        .doc('taskRoomId')
         .collection('tasks')
         .add(tasks.task())
         .then((value) {

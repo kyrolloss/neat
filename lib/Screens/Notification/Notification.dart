@@ -43,8 +43,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
         FirebaseFirestore.instance
-            .collection('tasks_rooms')
-            .where('receiverId', isEqualTo: AppCubit.get(context).id)
+            .collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('name' ,isEqualTo: AppCubit.get(context).id)
+
             .snapshots();
 
     notificationStream.listen((event) {
