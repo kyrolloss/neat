@@ -44,9 +44,6 @@ class AppCubit extends Cubit<AppState> {
     return auth.currentUser;
   }
 
-
-
-
   // Future<void> initialize() async {
   //   // Request permission for notifications
   //   await _firebaseMessaging.requestPermission();
@@ -206,10 +203,8 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-
-
-  Stream<QuerySnapshot> getTasksStream(String UserId, otherUserId) {
-    List<String> ids = [UserId, otherUserId];
+  Stream<QuerySnapshot> getTasksStream(String senderID, receiverID) {
+    List<String> ids = [senderID, receiverID];
 
     ids.sort();
     String taskRoomId = ids.join('_');
@@ -247,7 +242,6 @@ class AppCubit extends Cubit<AppState> {
     required String taskId,
     required String status,
     required String priority,
-
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
@@ -286,20 +280,15 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-
-
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
-
-
+      FlutterLocalNotificationsPlugin();
 
   String channelId = 'your_channel_id';
 
-  showNotification( {required String title , required String body}) {
+  showNotification({required String title, required String body}) {
     AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(channelId, 'Notify my',
-        importance: Importance.high);
+        AndroidNotificationDetails(channelId, 'Notify my',
+            importance: Importance.high);
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
@@ -307,13 +296,11 @@ class AppCubit extends Cubit<AppState> {
         macOS: null,
         linux: null);
 
-    flutterLocalNotificationsPlugin.show(
-        01, title, body, notificationDetails);
+    flutterLocalNotificationsPlugin.show(01, title, body, notificationDetails);
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-  FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
-
+      FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
   List<Widget> pagesNames = [
     const HomeScreen(
