@@ -4,6 +4,7 @@ import 'package:inkblob_navigation_bar/inkblob_navigation_bar.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
+import 'package:neat/utlis/constants/colors.dart';
 
 
 class MainLayout extends StatefulWidget {
@@ -35,22 +36,24 @@ class _MainLayoutState extends State<MainLayout> {
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
+
           bottomNavigationBar: InkblobNavigationBar(
+            backgroundColor: TColors.secondaryColor.withOpacity(0.9),
             selectedIndex: 1,
             iconSize: 35,
             items: [
               InkblobBarItem(
-                  emptyIcon:  Icon(Icons.home , color: AppColor.primeColor,),
-                  filledIcon:  Icon(Icons.home_outlined, color: AppColor.primeColor,)),
+                  emptyIcon:  Icon(Icons.home , color: TColors.primaryColor,),
+                  filledIcon:  Icon(Icons.home_outlined, color: TColors.backgroundColor,)),
               InkblobBarItem(
-                  emptyIcon:  Icon(Icons.calendar_month, color: AppColor.primeColor,),
-                  filledIcon:  Icon(Icons.calendar_month_outlined, color: AppColor.primeColor,)),
+                  emptyIcon:  Icon(Icons.calendar_month, color: TColors.primaryColor,),
+                  filledIcon:  Icon(Icons.calendar_month_outlined, color: TColors.primaryColor,)),
               InkblobBarItem(
-                  emptyIcon:  Icon(Icons.notifications, color: AppColor.primeColor,),
-                  filledIcon:  Icon(Icons.notifications_none, color: AppColor.primeColor,)),
+                  emptyIcon:  Icon(Icons.notifications, color: TColors.primaryColor,),
+                  filledIcon:  Icon(Icons.notifications_none, color: TColors.backgroundColor,)),
               InkblobBarItem(
-                  emptyIcon:  Icon(Icons.person, color: AppColor.primeColor,),
-                  filledIcon:  Icon(Icons.person_outline, color: AppColor.primeColor,)),
+                  emptyIcon:  Icon(Icons.person, color: TColors.primaryColor,),
+                  filledIcon:  Icon(Icons.person_outline, color: TColors.backgroundColor,)),
 
 
             ],

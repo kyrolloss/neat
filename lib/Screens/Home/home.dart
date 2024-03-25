@@ -50,13 +50,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
         return Scaffold(
           backgroundColor: TColors.backgroundColor,
-          // appBar: AppBar(
-          //   backgroundColor: TColors.backgroundColor,
-          //   automaticallyImplyLeading: false,
-          //   actions: [
-          //
-          //   ],
-          // ),
+          appBar: TAppBar(
+            backgroundColor: TColors.backgroundColor,
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    navigateTo(context, const UsersScreen());
+                  },
+                  icon: const Icon(
+                    Icons.chat,
+                    color: TColors.primaryColor,
+                  )),
+            ],
+          ),
+
           body: Padding(
             padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: SingleChildScrollView(
@@ -65,18 +72,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: [
                   Stack(
                     children:[
-                      Positioned(
-                        right: 0,
-                        top: 10,
-                        child: IconButton(
-                            onPressed: () {
-                              navigateTo(context, const UsersScreen());
-                            },
-                            icon: const Icon(
-                              Icons.chat,
-                              color: TColors.primaryColor,
-                            )),
-                      ),
+                      // Positioned(
+                      //   right: 0,
+                      //   top: 10,
+                      //   child: IconButton(
+                      //       onPressed: () {
+                      //         navigateTo(context, const UsersScreen());
+                      //       },
+                      //       icon: const Icon(
+                      //         Icons.chat,
+                      //         color: TColors.primaryColor,
+                      //       )),
+                      // ),
                       Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

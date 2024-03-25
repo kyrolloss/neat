@@ -115,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
         stream: _chatService.getMessages(
-            widget.receiverUserID, _firebaseAuth.currentUser!.uid),
+            widget.receiverUserID, senderID),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error${snapshot.error}');
@@ -125,15 +125,15 @@ class _ChatScreenState extends State<ChatScreen> {
           }
           return ListView(
             children: snapshot.data!.docs
-                .map((document) => _buildMessageItem(document))
+                .map((doc) => _buildMessageItem(doc))
                 .toList(),
           );
         });
   }
 
   /// build Message Item
-  Widget _buildMessageItem(DocumentSnapshot document) {
-    Map<String, dynamic> data = document.data() as Map<String, dynamic>;
+  Widget _buildMessageItem(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
 
     /// is current user
     bool isCurrentUser = data['senderId'] == _authService.getCurrentUser()!.uid;
@@ -141,7 +141,6 @@ class _ChatScreenState extends State<ChatScreen> {
     /// align the messages to the right if the sender is the current user , otherwise to the left
     var alignment =
     isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
-
     return Container(
       alignment: alignment,
       child: Padding(
@@ -158,7 +157,8 @@ class _ChatScreenState extends State<ChatScreen> {
           children: [
             Text(data['senderEmail'],style: const TextStyle(color: TColors.primaryColor),),
             const SizedBox(height: 5,),
-            ChatBubble(message: data['message']),
+            ChatBubble(message: data['message'],
+              isCurrentUser: isCurrentUser,),
           ],
         ),
       ),
@@ -172,6 +172,7 @@ class _ChatScreenState extends State<ChatScreen> {
       children: [
         Expanded(
           child: TCircularContainer(
+            backgroundColor: TColors.secondaryColor.withOpacity(0.9),
             radius: 20,
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -196,16 +197,23 @@ class _ChatScreenState extends State<ChatScreen> {
                     border: InputBorder.none,
                   ),
                 )),
-                IconButton(
-                    onPressed: sendMessage,
-                    icon: const Icon(
-                      Icons.send_rounded,
-                      color: TColors.primaryColor,
-                    )),
+
               ],
             ),
           ),
         ),
+        const SizedBox(width: TSizes.spaceBtwItems/2,),
+        /// send button
+        TCircularContainer(
+          backgroundColor: TColors.primaryColor,
+          radius: 30,
+          child: IconButton(
+              onPressed: sendMessage,
+              icon:  Icon(
+                Icons.send_rounded,
+                color: TColors.backgroundColor.withOpacity(0.8),
+              )),
+        )
       ],
     );
   }
