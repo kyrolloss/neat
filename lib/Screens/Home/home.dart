@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+<<<<<<< HEAD
+=======
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+>>>>>>> origin/main
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/users_screen.dart';
-import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
@@ -278,13 +279,12 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Widget BuilderTasksList() {
-    String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream(senderId, widget.receiverId),
+      stream: AppCubit.get(context).getTasksStream( widget.receiverId),
       builder: (context, snapshot) {
         AppCubit.get(context)
-            .getTasksStream(senderId, widget.receiverId)
+            .getTasksStream( widget.receiverId)
             .listen((event) {
           AppCubit.get(context).numberOfTodoTasks = event.docs.length;
         });
