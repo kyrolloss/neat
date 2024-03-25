@@ -12,7 +12,9 @@ import '../../cubit/app_cubit.dart';
 import '../../utlis/constants/colors.dart';
 
 class CalenderScreen extends StatefulWidget {
+  final String uid;
 
+  const CalenderScreen({Key? key, required this.uid});
   @override
   State<CalenderScreen> createState() => _CalenderScreenState();
 }

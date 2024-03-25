@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Screens/chat/users_screen.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
@@ -279,10 +276,10 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget BuilderTasksList() {
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream( widget.receiverId),
+      stream: AppCubit.get(context).getTasksStream( ),
       builder: (context, snapshot) {
         AppCubit.get(context)
-            .getTasksStream( widget.receiverId)
+            .getTasksStream( )
             .listen((event) {
           AppCubit.get(context).numberOfTodoTasks = event.docs.length;
         });

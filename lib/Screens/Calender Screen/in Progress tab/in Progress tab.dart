@@ -30,9 +30,9 @@ class _toDoTabState extends State<inProgress> {
     String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream( widget.receiverId),
+      stream: AppCubit.get(context).getTasksStream( ),
       builder: (context, snapshot) {
-        AppCubit.get(context).getTasksStream(widget.receiverId).listen((event) {
+        AppCubit.get(context).getTasksStream().listen((event) {
           AppCubit.get(context).numberOfTodoTasks=event.docs.length;
         });
         if (snapshot.hasError) {

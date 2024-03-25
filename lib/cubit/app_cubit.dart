@@ -195,6 +195,8 @@ class AppCubit extends Cubit<AppState> {
       emit(LoginSuccess());
       getUserInfo(user!.uid);
 
+      id =userCredential.user!.uid;
+      print(id);
       return userCredential;
     } on FirebaseAuthException catch (e) {
       emit(LoginFailed());
@@ -203,14 +205,12 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Stream<QuerySnapshot> getTasksStream(receiverID) {
-
-
-
+  Stream<QuerySnapshot> getTasksStream() {
     return database
         .collection('tasks_rooms')
         .doc('taskRoomId')
         .collection('tasks')
+        .where('receiverId', isEqualTo: id)
         .snapshots();
   }
 
@@ -300,12 +300,18 @@ class AppCubit extends Cubit<AppState> {
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
       FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
-  List<Widget> pagesNames = [
-    const HomeScreen(
-      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+  List<Widget> pagesNames =  [
+    HomeScreen(
+      receiverId: '',
     ),
-    CalenderScreen(),
-    const NotificationScreen(),
-    const ProfileScreen(),
+    CalenderScreen(
+      uid: '',
+    ),
+    NotificationScreen(
+      uid: '',
+    ),
+    ProfileScreen(
+      uid: '',
+    ),
   ];
 }

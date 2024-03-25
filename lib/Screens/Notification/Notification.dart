@@ -13,20 +13,18 @@ import 'package:provider/provider.dart';
 import '../../utlis/constants/themes/theme_provider.dart';
 
 class NotificationScreen extends StatefulWidget {
-  const NotificationScreen({super.key});
+  const NotificationScreen({super.key, required this.uid});
+  final String uid;
 
   @override
   State<NotificationScreen> createState() => _NotificationScreenState();
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
-  String receiverId = 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2';
 
   @override
   void initState() {
@@ -46,23 +44,27 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
         FirebaseFirestore.instance
-            .collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('name' ,isEqualTo: AppCubit.get(context).id)
+            .collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('receiverId' ,isEqualTo: AppCubit.get(context).id)
 
             .snapshots();
 
-    notificationStream.listen((event) {
+
+
+
+
+    notificationStream.listen((event) async{
       if (event.docs.isEmpty) {
         return;
       }
-      showNotification(event.docs.last);
+      await FirebaseFirestore.instance
+          .collection('Notification').doc(AppCubit.get(context).id).collection('notification').add(event.docs.last.data());
+      await showNotification(event.docs.last);
     });
   }
 
   String channelId = '1';
 
   showNotification(QueryDocumentSnapshot<Map<String, dynamic>> event) {
-    // String name = event.docs[0].data()['name'];
-    // String deadline = event.docs[0].data()['deadline'];
     print('get nof');
     AndroidNotificationDetails androidNotificationDetails =
         AndroidNotificationDetails(channelId, 'Notify my',
@@ -108,8 +110,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
           padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('tasks_rooms')
-                  .orderBy('timestamp', descending: true)
+                  .collection('Notification').doc(AppCubit.get(context).id).collection('notification')
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
@@ -117,7 +118,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                     child: CircularProgressIndicator(),
                   );
                 }
-                final documents = snapshot.data!.docs;
 
                 return SizedBox(
                   height: height * .45,

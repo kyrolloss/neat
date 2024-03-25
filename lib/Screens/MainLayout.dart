@@ -6,11 +6,15 @@ import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
 
+import 'Calender Screen/Calender Screen.dart';
+import 'Notification/Notification.dart';
+
 
 class MainLayout extends StatefulWidget {
   int buttomIndex = 0;
   final String uid;
   Widget? widget;
+
 
   MainLayout({super.key, required this.uid}) {
     widget = HomeScreen(receiverId: uid);
