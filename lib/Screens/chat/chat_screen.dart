@@ -6,13 +6,13 @@ import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/Screens/chat/services/chat_service.dart';
 import 'package:neat/Screens/chat/widgets/chat_box.dart';
 import 'package:neat/Screens/chat/widgets/chat_bubble.dart';
+import 'package:neat/Screens/chat/widgets/text_field.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/drawer/drawer.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
-
 
 class ChatScreen extends StatefulWidget {
   final String receiverUserEmail;
@@ -35,10 +35,52 @@ class _ChatScreenState extends State<ChatScreen> {
   final ChatService _chatService = ChatService();
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
   final AuthService _authService = AuthService();
+
+  /// for text-field focus
+  FocusNode myFocusNode = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    /// add listener to focus node
+    myFocusNode.addListener(() {
+      if (myFocusNode.hasFocus) {
+        /// cause a delay so that the keyboard has time to show up
+        /// then the amount of remaining space will be calculated ,
+        /// then scroll down
+        Future.delayed(
+          Duration(milliseconds: 500),
+          () => scrollDown(),
+        );
+      }
+    });
+    /// wait a bit for listview to be built , then scroll to bottom
+    Future.delayed(Duration(
+      milliseconds: 500,
+    ),
+        ()=> scrollDown(),
+    );
+  }
+
+  @override
+  void dispose() {
+    myFocusNode.dispose();
+    _messageController.dispose();
+    super.dispose();
+  }
+
+  /// scroll controller
+  final ScrollController _scrollController = ScrollController();
+
+  void scrollDown() {
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+  }
+
   void sendMessage() async {
     /// only send message if there is something to send
     if (_messageController.text.isNotEmpty) {
-
       /// send the message
       await _chatService.sendMessage(
           widget.receiverUserID, _messageController.text);
@@ -46,6 +88,7 @@ class _ChatScreenState extends State<ChatScreen> {
       /// Clear the controller after sending the message
       _messageController.clear();
     }
+    scrollDown();
   }
 
   @override
@@ -55,11 +98,14 @@ class _ChatScreenState extends State<ChatScreen> {
       appBar: AppBar(
         backgroundColor: TColors.primaryColor,
         automaticallyImplyLeading: true,
-        leading: IconButton(onPressed: (){
-          Navigator.pop(context);
-        }, icon: const Icon(Icons.arrow_back_ios_new,
-          color: Colors.white,)),
-
+        leading: IconButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios_new,
+              color: Colors.white,
+            )),
         shape: const RoundedRectangleBorder(
             borderRadius: BorderRadius.only(
           bottomLeft: Radius.circular(15),
@@ -89,7 +135,6 @@ class _ChatScreenState extends State<ChatScreen> {
               )),
         ],
       ),
-
       body: SafeArea(
           child: Padding(
         padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -114,8 +159,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget _buildMessageList() {
     String senderID = _authService.getCurrentUser()!.uid;
     return StreamBuilder(
-        stream: _chatService.getMessages(
-            widget.receiverUserID, senderID),
+        stream: _chatService.getMessages(widget.receiverUserID, senderID),
         builder: (context, snapshot) {
           if (snapshot.hasError) {
             return Text('Error${snapshot.error}');
@@ -124,6 +168,7 @@ class _ChatScreenState extends State<ChatScreen> {
             return const Text('Loading..');
           }
           return ListView(
+            controller: _scrollController ,
             children: snapshot.data!.docs
                 .map((doc) => _buildMessageItem(doc))
                 .toList(),
@@ -140,7 +185,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
     /// align the messages to the right if the sender is the current user , otherwise to the left
     var alignment =
-    isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
+        isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
     return Container(
       alignment: alignment,
       child: Padding(
@@ -155,10 +200,17 @@ class _ChatScreenState extends State<ChatScreen> {
                   ? MainAxisAlignment.end
                   : MainAxisAlignment.start,
           children: [
-            Text(data['senderEmail'],style: const TextStyle(color: TColors.primaryColor),),
-            const SizedBox(height: 5,),
-            ChatBubble(message: data['message'],
-              isCurrentUser: isCurrentUser,),
+            Text(
+              data['senderEmail'],
+              style: const TextStyle(color: TColors.primaryColor),
+            ),
+            const SizedBox(
+              height: 5,
+            ),
+            ChatBubble(
+              message: data['message'],
+              isCurrentUser: isCurrentUser,
+            ),
           ],
         ),
       ),
@@ -178,38 +230,24 @@ class _ChatScreenState extends State<ChatScreen> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Expanded(
-                    child: TextField(
-                  controller: _messageController,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(
-                      vertical: 10,
-                      horizontal: 20,
-                    ),
-                    hintText: "Type a message ...",
-                    hintStyle: const TextStyle(color: Colors.grey),
-                    prefixIcon: IconButton(
-                        onPressed: () {},
-                        icon: const Icon(
-                          Icons.emoji_emotions_outlined,
-                          color: TColors.primaryColor,
-                        )),
-                    // icon: IconButton(onPressed: (){}, icon: Icon(Icons.attach_file_rounded,color: TColors.primaryColor,)),
-                    border: InputBorder.none,
-                  ),
-                )),
-
+                    child: MyTextField(
+                      focusNode: myFocusNode,
+                        messageController: _messageController)),
               ],
             ),
           ),
         ),
-        const SizedBox(width: TSizes.spaceBtwItems/2,),
+        const SizedBox(
+          width: TSizes.spaceBtwItems / 2,
+        ),
+
         /// send button
         TCircularContainer(
           backgroundColor: TColors.primaryColor,
           radius: 30,
           child: IconButton(
               onPressed: sendMessage,
-              icon:  Icon(
+              icon: Icon(
                 Icons.send_rounded,
                 color: TColors.backgroundColor.withOpacity(0.8),
               )),
@@ -218,3 +256,5 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
+
+

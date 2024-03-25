@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
+import 'package:neat/Screens/Task%20template%20Screen.dart';
 import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
@@ -150,7 +151,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const ChatScreen(receiverUserEmail: '', receiverUserID: '',));
+                  navigateTo(context, const TaskTemplateScreen());
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
