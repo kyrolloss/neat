@@ -16,6 +16,7 @@ import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/Text.dart';
@@ -33,13 +34,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
   /// Sign user out
   void signOut(){
     /// get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
+    final _firebaseAuth = AuthService();
 
-    authService.signOut();
+    _firebaseAuth.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context,listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -72,10 +75,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 /// -- Account Settings
-                const TSectionHeading(
+                 TSectionHeading(
                   title: "Account Settings",
                   showActionButton: false,
-                  textColor: TColors.primaryColor,
+                  textColor: isDarkMode ? TColors.secondaryColor :  TColors.primaryColor,
                 ),
 
                 const SizedBox(height: TSizes.spaceBtwItems,),
