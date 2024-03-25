@@ -12,6 +12,7 @@ import '../../../../../cubit/app_cubit.dart';
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
+import '../../../../../utlis/constants/themes/theme_provider.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -55,6 +56,8 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return Form(
         child: Padding(
       padding: const EdgeInsets.symmetric(
@@ -78,6 +81,9 @@ class _LoginFormState extends State<LoginForm> {
             children: [
               /// Email
               TextFormField(
+                style: TextStyle(
+                    color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor
+                ),
                 controller: email,
                 expands: false,
                 keyboardType: TextInputType.emailAddress,
@@ -87,7 +93,7 @@ class _LoginFormState extends State<LoginForm> {
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     prefixIcon: const Icon(Iconsax.direct_right),
-                    prefixIconColor: TColors.primaryColor,
+                    prefixIconColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -98,9 +104,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     labelText: TText.email,
                     filled: true,
-                    fillColor: TColors.secondaryColor,
-                    labelStyle: const TextStyle(
-                      color: TColors.primaryColor,
+                    fillColor:isDarkMode?TColors.primaryColor.withOpacity(0.7)  : TColors.secondaryColor ,
+                    labelStyle:  TextStyle(
+                      color:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
                     )),
               ),
               const SizedBox(
@@ -109,6 +115,9 @@ class _LoginFormState extends State<LoginForm> {
 
               /// -- Password
               TextFormField(
+                style: TextStyle(
+                  color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor
+                ),
                 controller: password,
                 obscureText: true,
                 expands: false,
@@ -118,7 +127,7 @@ class _LoginFormState extends State<LoginForm> {
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     prefixIcon: const Icon(Iconsax.password_check),
-                    prefixIconColor: TColors.primaryColor,
+                    prefixIconColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -129,9 +138,9 @@ class _LoginFormState extends State<LoginForm> {
                     ),
                     labelText: TText.password,
                     filled: true,
-                    fillColor: TColors.secondaryColor,
-                    labelStyle: const TextStyle(
-                      color: TColors.primaryColor,
+                    fillColor:isDarkMode?TColors.primaryColor.withOpacity(0.7)  : TColors.secondaryColor ,
+                    labelStyle: TextStyle(
+                      color:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
                     )),
               ),
               const SizedBox(
@@ -146,16 +155,16 @@ class _LoginFormState extends State<LoginForm> {
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    backgroundColor: TColors.primaryColor,
+                    backgroundColor:  isDarkMode ? TColors.secondaryColor: TColors.primaryColor,
                     side: const BorderSide(color: Colors.transparent),
                   ),
                   onPressed: () async {
                     await cubit.Login(
                         email: email.text, password: password.text);
                   },
-                  child: const Text(
+                  child:  Text(
                     "Log in",
-                    style: TextStyle(fontSize: 18, color: Colors.white),
+                    style: TextStyle(fontSize: 18, color: isDarkMode? TColors.primaryColor : TColors.secondaryColor),
                   ),
                 ),
               ),
@@ -186,7 +195,7 @@ class _LoginFormState extends State<LoginForm> {
                       },
                       child: const Text(
                         TText.createAccount,
-                        style: TextStyle(color: TColors.primaryColor),
+                        style: TextStyle(color:  TColors.primaryColor),
                       )),
                 ],
               ),

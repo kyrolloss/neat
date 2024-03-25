@@ -8,6 +8,9 @@ import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
+import 'package:provider/provider.dart';
+
+import '../../utlis/constants/themes/theme_provider.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key});
@@ -83,17 +86,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
-      appBar: const TAppBar(
-        backgroundColor: TColors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
+      appBar:  TAppBar(
+        backgroundColor: Colors.transparent,
+        showBackArrow: true,
+        iconColor: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
         title: Text(
           "Notifications",
           style: TextStyle(
-              color: TColors.primaryColor, fontWeight: FontWeight.bold),
+              color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor, fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(

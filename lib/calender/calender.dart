@@ -1,9 +1,12 @@
 import 'package:easy_date_timeline/easy_date_timeline.dart';
 import 'package:flutter/material.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
+import 'package:provider/provider.dart';
 
 import '../components/color.dart';
 
 EasyDateTimeLine changeTodyHighlightColorExample() {
+
   return EasyDateTimeLine(
     initialDate: DateTime.now(),
     onDateChange: (selectedDate) {
@@ -12,7 +15,7 @@ EasyDateTimeLine changeTodyHighlightColorExample() {
     activeColor: AppColor.primeColor,
     dayProps:  EasyDayProps(
       todayHighlightStyle: TodayHighlightStyle.withBackground,
-      todayHighlightColor: AppColor.secondColor,
+      todayHighlightColor:  AppColor.secondColor,
     ),
   );
 }
@@ -33,6 +36,8 @@ class _EasyInfiniteDateTimeLineExampleState
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context,listen: false).isDarkMode;
     return Column(
       children: [
         EasyInfiniteDateTimeLine(

@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
+import '../../../../../utlis/constants/themes/theme_provider.dart';
 import '../../../../chat/services/auth_services.dart';
 
 class SignupForm extends StatefulWidget {
@@ -23,6 +24,7 @@ class SignupForm extends StatefulWidget {
 }
 
 class _SignupFormState extends State<SignupForm> {
+
   /// text controllers
 
   TextEditingController firstName = TextEditingController();
@@ -94,6 +96,8 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -115,7 +119,7 @@ class _SignupFormState extends State<SignupForm> {
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                         borderSide:
-                            const BorderSide(color: TColors.primaryColor),
+                             BorderSide(color:  TColors.primaryColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -123,8 +127,8 @@ class _SignupFormState extends State<SignupForm> {
                             const BorderSide(color: TColors.secondaryColor),
                       ),
                       labelText: TText.firstName,
-                      labelStyle: const TextStyle(color: TColors.primaryColor),
-                      prefixIcon: const Icon(Iconsax.user),
+                      labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                      prefixIcon:  Icon(Iconsax.user),
                       prefixIconColor: TColors.primaryColor,
                     ),
                   ),
@@ -143,7 +147,7 @@ class _SignupFormState extends State<SignupForm> {
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
                           borderSide:
-                              const BorderSide(color: TColors.primaryColor),
+                               BorderSide(color:  TColors.primaryColor),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -151,10 +155,10 @@ class _SignupFormState extends State<SignupForm> {
                               const BorderSide(color: TColors.secondaryColor),
                         ),
                         labelText: TText.lastName,
-                        labelStyle:
-                            const TextStyle(color: TColors.primaryColor),
-                        prefixIcon: const Icon(Iconsax.user),
-                        prefixIconColor: TColors.primaryColor),
+                        labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+
+                        prefixIcon:  Icon(Iconsax.user),
+                        prefixIconColor:TColors.primaryColor),
                   ),
                 ),
               ],
@@ -178,7 +182,7 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.title,
-                  labelStyle: const TextStyle(color: TColors.primaryColor),
+                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.note),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -201,7 +205,7 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.email,
-                  labelStyle: const TextStyle(color: TColors.primaryColor),
+                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.direct),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -225,7 +229,7 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.phoneNo,
-                  labelStyle: const TextStyle(color: TColors.primaryColor),
+                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.call),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -248,7 +252,7 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: const BorderSide(color: TColors.secondaryColor),
                 ),
                 labelText: TText.password,
-                labelStyle: const TextStyle(color: TColors.primaryColor),
+                labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
                 prefixIcon: const Icon(Iconsax.password_check),
                 prefixIconColor: TColors.primaryColor,
                 suffixIcon: const Icon(Iconsax.eye_slash),
@@ -274,7 +278,7 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: const BorderSide(color: TColors.secondaryColor),
                 ),
                 labelText: TText.confirmPassword,
-                labelStyle: const TextStyle(color: TColors.primaryColor),
+                labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
                 prefixIcon: const Icon(Iconsax.password_check),
                 prefixIconColor: TColors.primaryColor,
                 suffixIcon: const Icon(Iconsax.eye_slash),
@@ -298,7 +302,7 @@ class _SignupFormState extends State<SignupForm> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: TColors.primaryColor,
+                    backgroundColor: isDarkMode ? TColors.primaryColor.withOpacity(0.7) : TColors.primaryColor,
                     side: const BorderSide(color: Colors.transparent),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
@@ -324,9 +328,9 @@ class _SignupFormState extends State<SignupForm> {
                     navigateToToFinish(context, const VerifyEmailScreen());
                   }
                 },
-                child: const Text(
+                child: Text(
                   TText.createAccount,
-                  style: TextStyle(color: Colors.white),
+                  style: TextStyle(color: isDarkMode ? TColors.secondaryColor : Colors.white),
                 ),
               ),
             ),

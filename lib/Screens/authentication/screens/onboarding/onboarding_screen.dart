@@ -11,9 +11,9 @@ class OnboardingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: TColors.backgroundColor,
-      body: Stack(
+    return  Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.background,
+      body: const Stack(
         children: [
           /// Image & title
           OnBoardingPage(image: TImages.onboardingImage, title: TText.onBoardingTitle1,),

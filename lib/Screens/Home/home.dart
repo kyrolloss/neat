@@ -1,8 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/users_screen.dart';
+import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
@@ -11,7 +16,9 @@ import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:provider/provider.dart';
 
 import '../../cubit/app_cubit.dart';
 import '../Task Details Screen/Task Details Screen.dart';
@@ -33,6 +40,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode=
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -44,24 +53,42 @@ class _HomeScreenState extends State<HomeScreen> {
         var cubit = AppCubit.get(context);
 
         return Scaffold(
-          backgroundColor: TColors.backgroundColor,
-          // appBar: AppBar(
-          //   backgroundColor: TColors.backgroundColor,
-          //   automaticallyImplyLeading: false,
-          //   actions: [
-          //
-          //   ],
-          // ),
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: TAppBar(
+            backgroundColor: Colors.transparent,
+            actions: [
+              IconButton(
+                  onPressed: () {
+                    navigateTo(context, const UsersScreen());
+                  },
+                  icon:  Icon(
+                    Icons.chat,
+                    color: isDarkMode ? TColors.secondaryColor: TColors.primaryColor,
+                  )),
+            ],
+          ),
+
           body: Padding(
             padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        top: 15.0, right: 15, left: 15, bottom: 8),
-                    child: Column(
+                  Stack(
+                    children:[
+                      // Positioned(
+                      //   right: 0,
+                      //   top: 10,
+                      //   child: IconButton(
+                      //       onPressed: () {
+                      //         navigateTo(context, const UsersScreen());
+                      //       },
+                      //       icon: const Icon(
+                      //         Icons.chat,
+                      //         color: TColors.primaryColor,
+                      //       )),
+                      // ),
+                      Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
@@ -71,54 +98,48 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    TCircularImage(
-                                      image: TImages.user,
-                                      width: 90,
-                                      height: 90,
-                                    ),
-                                    SizedBox(
-                                      width: width * .025,
-                                    ),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        BuildText(
-                                          text: 'Hello,',
-                                          color: AppColor.primeColor,
-                                          size: 20,
-                                        ),
-                                        BuildText(
-                                          text: cubit.name,
-                                          color: AppColor.primeColor,
-                                          size: 20,
-                                          bold: true,
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(width: width * 0.1),
-                                    /// Chats
-                                    IconButton(
-                                        onPressed: () {
-                                          navigateTo(context, const UsersScreen());
-                                        },
-                                        icon: const Icon(
-                                          Icons.chat,
-                                          color: TColors.primaryColor,
-                                        ))
-                                  ],
-                                ),
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TCircularImage(
+                                    image: TImages.user,
+                                    width: 90,
+                                    height: 90,
+                                  ),
+                                  SizedBox(
+                                    width: width * .025,
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                    children: [
+                                      BuildText(
+                                        text: 'Hello,',
+                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                                        size: 20,
+                                      ),
+                                      BuildText(
+                                        text: cubit.name,
+                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                                        size: 20,
+                                        bold: true,
+                                      ),
+                                    ],
+                                  ),
+
+                                  /// Chats
+
+                                ],
+                                                                  ),
                                 SizedBox(
                                   height: height * .045,
                                 ),
                                 BuildText(
                                   text: "Let's Check Out Your Tasks",
-                                  color: AppColor.primeColor,
-                                  size: 15,
+                                  color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+
+                                  size: 20,
                                   bold: true,
                                 ),
                                 SizedBox(
@@ -214,6 +235,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
+                    ]
                   ),
                   SizedBox(
                     height: height * .01,
@@ -235,11 +257,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   DottedBorder(
                     dashPattern: const [8, 6],
                     strokeWidth: 2,
-                    color: AppColor.primeColor,
+                    color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
                     child: SizedBox(
                         height: height * .5,
                         width: width * .875,
-                        child: BuilderTasksList()),
+                        child: Padding(
+                          padding: const EdgeInsets.all(TSizes.defaultSpace/2),
+                          child: BuilderTasksList(),
+                        )),
                   )
                 ],
               ),
@@ -253,12 +278,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
   Widget BuilderTasksList() {
+    String senderId = AppCubit.get(context).getCurrentUser()!.uid;
 
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream( widget.receiverId),
+      stream: AppCubit.get(context).getTasksStream(senderId, widget.receiverId),
       builder: (context, snapshot) {
         AppCubit.get(context)
-            .getTasksStream( widget.receiverId)
+            .getTasksStream(senderId, widget.receiverId)
             .listen((event) {
           AppCubit.get(context).numberOfTodoTasks = event.docs.length;
         });

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
+import 'package:neat/Screens/Task%20template%20Screen.dart';
 import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
@@ -10,10 +11,12 @@ import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:neat/common/widgets/list_tiles/settings_menu_tile.dart';
 import 'package:neat/common/widgets/list_tiles/user_profile_tile.dart';
+import 'package:neat/common/widgets/settings_screen/settings_screen.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../components/Text.dart';
@@ -38,11 +41,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context,listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: TColors.backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -70,10 +75,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             child: Column(
               children: [
                 /// -- Account Settings
-                const TSectionHeading(
+                 TSectionHeading(
                   title: "Account Settings",
                   showActionButton: false,
-                  textColor: TColors.primaryColor,
+                  textColor: isDarkMode ? TColors.secondaryColor :  TColors.primaryColor,
                 ),
 
                 const SizedBox(height: TSizes.spaceBtwItems,),
@@ -149,12 +154,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const ChatScreen(receiverUserEmail: '', receiverUserID: '',));
+                  navigateTo(context, const TaskTemplateScreen());
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),
                 const SizedBox(height: TSizes.spaceBtwItems,),
-                const TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings",  ),
+                 TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings", onTap: (){
+                  navigateTo(context, const SettingsScreen());
+                },  ),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                  TSettingsMenuTile(icon: Icons.logout_sharp,
                    title: "Logout",
