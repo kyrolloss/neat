@@ -13,7 +13,7 @@ class TCircularImage extends StatelessWidget {
      this.width =56,
      this.height = 56,
      this.padding = TSizes.sm,
-    this.icon,
+    this.icon, this.radius,
   });
 
   final BoxFit? fit;
@@ -22,6 +22,7 @@ class TCircularImage extends StatelessWidget {
   final Color? overlayColor;
   final Color? backgroundColor;
   final double width, height, padding;
+  final double? radius;
   final IconData? icon;
 
   @override

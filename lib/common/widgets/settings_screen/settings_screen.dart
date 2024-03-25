@@ -53,7 +53,7 @@ class SettingsScreen extends StatelessWidget {
                       size: 27,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: TSizes.spaceBtwItems,
                   ),
                   Text(

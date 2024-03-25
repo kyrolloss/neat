@@ -76,17 +76,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         Stack(children: [
                           _image != null
                               ? CircleAvatar(
-                                  radius: 64,
+                                  radius: 100,
                                   backgroundImage: MemoryImage(_image!),
                                 )
-                              : const TCircularImage(
+                              :  TCircularImage(
+
                                   image: TImages.user,
-                                  width: 80,
-                                  height: 80,
+                                  width: 120,
+                                  height: 120,
+
                                 ),
                           Positioned(
-                            bottom: -10,
-                            left: 45,
+                            bottom: -2,
+                            right: -5,
                             child: IconButton(
                               onPressed: selectImage,
                               icon: const Icon(
