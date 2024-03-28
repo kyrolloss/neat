@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
+import 'package:neat/Screens/Profile/widgets/resources/add_data.dart';
 import 'package:neat/utils.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
@@ -33,6 +34,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() {
       _image = img;
     });
+  }
+
+  void saveProfile () async {
+    String resp = await StoreData().saveData(file: _image!);
   }
 
   @override

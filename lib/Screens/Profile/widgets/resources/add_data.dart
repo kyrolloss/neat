@@ -11,7 +11,7 @@ class StoreData{
 
   Future<String> uploadImageToStorage(String childName, Uint8List file) async {
 
-  Reference ref =  _storage.ref().child(childName);
+  Reference ref =  _storage.ref().child(childName).child('id');
   UploadTask uploadTask = ref.putData(file);
   TaskSnapshot snapshot = await uploadTask;
   String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -24,6 +24,7 @@ class StoreData{
 }) async {
     String resp = " Some Error Occurred ";
     try {
+
     String imageUrl =  await uploadImageToStorage('profileImage', file);
     await _firestore.collection('Users').add({
       'image link' : imageUrl,
