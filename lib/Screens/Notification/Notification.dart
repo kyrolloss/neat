@@ -25,6 +25,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
+  late Stream<QuerySnapshot> _deadlineStream;
+
   @override
   void initState() {
     super.initState();
@@ -49,6 +51,49 @@ class _NotificationScreenState extends State<NotificationScreen> {
             .where('receiverId', isEqualTo: AppCubit.get(context).id)
             .snapshots();
 
+    Stream<QuerySnapshot<Map<String, dynamic>>> deadlineStream =
+    FirebaseFirestore.instance
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: AppCubit.get(context).id)
+        .snapshots();
+
+
+    deadlineStream.listen((event) async{
+      if (event.docs.isEmpty) {
+        return;
+      }
+      for (var doc in event.docs) {
+        DateTime? date = DateTime.tryParse('yyyy-MM-dd');
+        int year=0;
+        int month = 0;
+        int day=0;
+
+        if (date!= null) {
+          year = date.year;
+          month = date.month;
+          day = date.day;
+        }
+
+        print(date);
+
+
+        if (doc['deadline'] ==date){
+          print('sh8aaalaaaa');
+        }
+
+
+        // var deadline = doc['deadline'].toDate();
+        // var timeDifference = deadline.difference(DateTime.now()).inDays;
+        // if (timeDifference == 1) {
+        //    showNotification(deadline.docs.last);
+        // }
+      }
+    });
+
+
+
     notificationStream.listen((event) async {
       if (event.docs.isEmpty) {
         return;
@@ -61,6 +106,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
       await showNotification(event.docs.last);
     });
   }
+
+
+
 
   String channelId = '1';
 
@@ -86,6 +134,8 @@ class _NotificationScreenState extends State<NotificationScreen> {
     );
   }
 
+
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode =
@@ -110,12 +160,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
         child: Padding(
           padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
+
               stream: FirebaseFirestore.instance
                   .collection('Notification')
                   .doc(AppCubit.get(context).id)
                   .collection('notification')
                   .snapshots(),
               builder: (context, snapshot) {
+
+
                 if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -123,9 +176,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 }
 
                 return SizedBox(
-                  height: height * .45,
+                  height: height,
                   child: ListView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
+
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var notification = snapshot.data!.docs[index];
@@ -146,12 +199,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 BuildText(
-                                  text: notification['title'],
+                                  text: notification['name'],
                                   color: AppColor.primeColor,
                                   size: 15,
                                 ),
                                 BuildText(
-                                  text: notification['body'],
+                                  text: notification['deadline'],
                                   color: AppColor.primeColor,
                                   size: 17.5,
                                   bold: true,

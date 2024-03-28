@@ -31,28 +31,8 @@ class _LoginFormState extends State<LoginForm> {
 
 
 
-  /// Sign in user
-  void signIn(BuildContext context) async {
-    /// get the auth service
-    final authService = AuthService();
-    /// try login
-    try {
-      await authService.signInWithEmailandPassword(
-          email.text,
-          password.text
-      );
-    }
-    /// catch any error
-    catch (e) {
-      showDialog(
-          context: context,
-          builder: (context)=> AlertDialog(
-            title: Text("Error", style: TextStyle(color: Colors.white),),
-            backgroundColor: Colors.red,
-          ),
-      );
-    }
-  }
+
+
 
   @override
   Widget build(BuildContext context) {

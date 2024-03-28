@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -10,7 +12,6 @@ import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/Notification/Notification.dart';
 import '../Screens/Profile/profile_screen.dart';
-import '../main.dart';
 
 part 'app_state.dart';
 
@@ -35,6 +36,8 @@ class AppCubit extends Cubit<AppState> {
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
   var user = FirebaseAuth.instance.currentUser;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
+
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final CollectionReference tasksRoomsCollection =
@@ -44,8 +47,6 @@ class AppCubit extends Cubit<AppState> {
   User? getCurrentUser() {
     return auth.currentUser;
   }
-
-
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -62,7 +63,7 @@ class AppCubit extends Cubit<AppState> {
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
-        final String image = data['image link'] as String;
+         String? image = data['image link'] ?? '';
 
         name = userName;
         id = userUid;
@@ -70,8 +71,7 @@ class AppCubit extends Cubit<AppState> {
         phone = userPhone;
         title = Title;
         uid = userUid;
-        userImage = image;
-
+        userImage = image!;
 
         emit(GetUserInfoSuccess());
       }
@@ -96,8 +96,6 @@ class AppCubit extends Cubit<AppState> {
       } else if (valueName == 'phone') {
         phone = newValue;
       }
-
-
 
       emit(UpdateUserInfoSuccess());
     } catch (e) {
@@ -161,9 +159,11 @@ class AppCubit extends Cubit<AppState> {
           email: email, password: password);
 
       emit(LoginSuccess());
-      getUserInfo(user!.uid);
+        id = user!.uid;
 
-      id =userCredential.user!.uid;
+
+      getUserInfo(id);
+
       print(id);
       return userCredential;
     } on FirebaseAuthException catch (e) {
@@ -181,6 +181,7 @@ class AppCubit extends Cubit<AppState> {
         .where('receiverId', isEqualTo: id)
         .snapshots();
   }
+
 
   Future<void> sendTask({
     required String receiverID,
@@ -213,9 +214,6 @@ class AppCubit extends Cubit<AppState> {
         status: status,
         priority: priority);
 
-    // List<String> ids = [currentUserId, receiverID];
-    // ids.sort();
-    // String taskRoomId = ids.join('_');
     await database
         .collection("tasks_rooms")
         .doc('taskRoomId')
@@ -254,7 +252,36 @@ class AppCubit extends Cubit<AppState> {
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
       FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
-  List<Widget> pagesNames =  [
+  // chat
+
+  Future<String> uploadImageToStorage(String childName, Uint8List file) async {
+    Reference ref = _storage.ref().child(childName);
+    UploadTask uploadTask = ref.putData(file);
+    TaskSnapshot snapshot = await uploadTask;
+    String downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
+  }
+
+  Future<void> saveData({
+    required Uint8List file,
+  }) async {
+    emit(AddDataLoading());
+
+    try {
+      String imageUrl = await uploadImageToStorage('profileImage', file);
+      await database.collection('Users').add({
+        'image link': imageUrl,
+      });
+      emit(AddDataSuccess());
+    } catch (err) {
+      print(err.toString());
+      emit(AddDataFailed());
+    }
+  }
+
+  //chat
+
+  List<Widget> pagesNames = const [
     HomeScreen(
       receiverId: '',
     ),
