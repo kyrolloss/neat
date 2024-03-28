@@ -43,7 +43,7 @@ class TDrawer extends StatelessWidget {
               title: Text("S E T T I N G S"),
               leading: Icon(Icons.settings),
               onTap: (){
-                navigateTo(context, ProfileScreen());
+                navigateTo(context, ProfileScreen(uid: '',));
               },
             ),
           ),

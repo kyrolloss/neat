@@ -139,8 +139,7 @@ class AppCubit extends Cubit<AppState> {
         'uid': userCredential.user!.uid,
         'title': title,
         'phone': phone,
-        'image link': image
-
+        'image link': image ?? 'null',
       });
       getUserInfo(userCredential.user!.uid);
       emit(RegisterSuccess());

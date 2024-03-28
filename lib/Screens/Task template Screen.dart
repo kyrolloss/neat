@@ -206,7 +206,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                   onTap: () {
                     var uuid = Uuid();
                     cubit.sendTask(
-                      receiverID: 'L3WpJirKigReDoH3vqyF13RuY7M2',
+                      receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
                       senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
                       title: 'Hr',
                       description: """
@@ -230,8 +230,8 @@ Produce high-quality graphic assets such as icons, buttons, illustrations, and a
                       senderPhone: '01205708870',
                       taskName: 'newTask',
                       taskId: uuid.v1(),
-                      priority: 'important', status: 'inProgress',
-
+                      priority: 'important',
+                      status: 'inProgress',
                     );
                   },
                   child: Container(
