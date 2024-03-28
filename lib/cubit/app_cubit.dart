@@ -30,6 +30,7 @@ class AppCubit extends Cubit<AppState> {
   String email = '';
   String phone = '';
   String title = '';
+  String userImage = '';
 
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
@@ -44,48 +45,7 @@ class AppCubit extends Cubit<AppState> {
     return auth.currentUser;
   }
 
-  // Future<void> initialize() async {
-  //   // Request permission for notifications
-  //   await _firebaseMessaging.requestPermission();
-  //
-  //   // Get the device's FCM token
-  //   String? token = await _firebaseMessaging.getToken();
-  //   print('FCM Token: $token');
-  //
-  //   // Set up a listener for incoming notifications
-  //   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-  //     if (message.notification != null) {
-  //       showDialog(
-  //         context: navigatorKey.currentContext!,
-  //         builder: (context) {
-  //           return AlertDialog(
-  //             title: Text(message.notification!.title!),
-  //             content: Text(message.notification!.body!),
-  //             actions: [
-  //               TextButton(
-  //                 onPressed: () {
-  //                   Navigator.pop(context);
-  //                 },
-  //                 child: Text('OK'),
-  //               ),
-  //             ],
-  //           );
-  //         },
-  //       );
-  //     }
-  //   });
-  //
-  //   // Set up a background message handler
-  //   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  // }
 
-  // Future<void> _firebaseMessagingBackgroundHandler(
-  //     RemoteMessage message) async {
-  //   if (message.notification != null) {
-  //     print(
-  //         'Background notification received: ${message.notification!.title}/${message.notification!.body}');
-  //   }
-  // }
 
   Future<void> getUserInfo(String uid) async {
     try {
@@ -102,6 +62,7 @@ class AppCubit extends Cubit<AppState> {
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
+        final String image = data['image link'] as String;
 
         name = userName;
         id = userUid;
@@ -109,6 +70,8 @@ class AppCubit extends Cubit<AppState> {
         phone = userPhone;
         title = Title;
         uid = userUid;
+        userImage = image;
+
 
         emit(GetUserInfoSuccess());
       }
@@ -133,6 +96,9 @@ class AppCubit extends Cubit<AppState> {
       } else if (valueName == 'phone') {
         phone = newValue;
       }
+
+
+
       emit(UpdateUserInfoSuccess());
     } catch (e) {
       emit(UpdateUserInfoFailed());
@@ -173,7 +139,9 @@ class AppCubit extends Cubit<AppState> {
         'uid': userCredential.user!.uid,
         'title': title,
         'phone': phone,
+        'image link': image ?? 'null',
       });
+      getUserInfo(userCredential.user!.uid);
       emit(RegisterSuccess());
 
       return userCredential;
@@ -213,20 +181,6 @@ class AppCubit extends Cubit<AppState> {
         .where('receiverId', isEqualTo: id)
         .snapshots();
   }
-
-  // Stream<QuerySnapshot> getUserInfoStream(String UserId, otherUserId) {
-  //   List<String> ids = [ UserId , otherUserId];
-  //
-  //
-  //   ids.sort();
-  //   String taskRoomId = ids.join('_');
-  //
-  //   return database
-  //       .collection('tasks_rooms')
-  //       .doc(taskRoomId)
-  //       .collection('tasks')
-  //       .snapshots();
-  // }
 
   Future<void> sendTask({
     required String receiverID,

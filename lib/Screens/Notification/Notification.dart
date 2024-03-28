@@ -14,6 +14,7 @@ import '../../utlis/constants/themes/theme_provider.dart';
 
 class NotificationScreen extends StatefulWidget {
   const NotificationScreen({super.key, required this.uid});
+
   final String uid;
 
   @override
@@ -21,10 +22,8 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-
 
   @override
   void initState() {
@@ -44,20 +43,21 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
         FirebaseFirestore.instance
-            .collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('receiverId' ,isEqualTo: AppCubit.get(context).id)
-
+            .collection('tasks_rooms')
+            .doc('taskRoomId')
+            .collection('tasks')
+            .where('receiverId', isEqualTo: AppCubit.get(context).id)
             .snapshots();
 
-
-
-
-
-    notificationStream.listen((event) async{
+    notificationStream.listen((event) async {
       if (event.docs.isEmpty) {
         return;
       }
       await FirebaseFirestore.instance
-          .collection('Notification').doc(AppCubit.get(context).id).collection('notification').add(event.docs.last.data());
+          .collection('Notification')
+          .doc(AppCubit.get(context).id)
+          .collection('notification')
+          .add(event.docs.last.data());
       await showNotification(event.docs.last);
     });
   }
@@ -95,14 +95,15 @@ class _NotificationScreenState extends State<NotificationScreen> {
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
-      appBar:  TAppBar(
+      appBar: TAppBar(
         backgroundColor: Colors.transparent,
         showBackArrow: true,
         iconColor: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
         title: Text(
           "Notifications",
           style: TextStyle(
-              color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor, fontWeight: FontWeight.bold),
+              color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+              fontWeight: FontWeight.bold),
         ),
       ),
       body: SingleChildScrollView(
@@ -110,7 +111,9 @@ class _NotificationScreenState extends State<NotificationScreen> {
           padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
-                  .collection('Notification').doc(AppCubit.get(context).id).collection('notification')
+                  .collection('Notification')
+                  .doc(AppCubit.get(context).id)
+                  .collection('notification')
                   .snapshots(),
               builder: (context, snapshot) {
                 if (!snapshot.hasData) {
