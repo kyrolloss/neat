@@ -8,9 +8,11 @@ class Tasks {
   final String receiverId;
   final String description;
   final String date;
-  final String deadline;
   String status = 'todo';
   final String priority;
+  final String year;
+  final String month;
+  final String day;
 
   Tasks({
     required this.name,
@@ -22,9 +24,11 @@ class Tasks {
     required this.receiverId,
     required this.description,
     required this.date,
-    required this.deadline,
     required this.status,
-     required this.priority,
+    required this.priority,
+    required this.year,
+    required this.month,
+    required this.day,
   });
 
   Map<String, dynamic> task() {
@@ -38,8 +42,10 @@ class Tasks {
       'receiverId': receiverId,
       'description': description,
       'date': date,
-      'deadline': deadline,
       'status': status,
+      'priority': priority,
+      'year': year,
+     'month': month,
     };
   }
 }

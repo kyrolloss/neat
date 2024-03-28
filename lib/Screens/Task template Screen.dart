@@ -232,6 +232,9 @@ Produce high-quality graphic assets such as icons, buttons, illustrations, and a
                       taskId: uuid.v1(),
                       priority: 'important',
                       status: 'inProgress',
+                      day: '29',
+                      month: '3',
+                      year: '2024',
                     );
                   },
                   child: Container(

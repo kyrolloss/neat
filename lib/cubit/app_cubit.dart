@@ -63,7 +63,7 @@ class AppCubit extends Cubit<AppState> {
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
-         String? image = data['image link'] ?? '';
+        String? image = data['image link'] ?? '';
 
         name = userName;
         id = userUid;
@@ -159,8 +159,7 @@ class AppCubit extends Cubit<AppState> {
           email: email, password: password);
 
       emit(LoginSuccess());
-        id = user!.uid;
-
+      id = user!.uid;
 
       getUserInfo(id);
 
@@ -182,7 +181,6 @@ class AppCubit extends Cubit<AppState> {
         .snapshots();
   }
 
-
   Future<void> sendTask({
     required String receiverID,
     required String senderID,
@@ -195,6 +193,9 @@ class AppCubit extends Cubit<AppState> {
     required String taskId,
     required String status,
     required String priority,
+    required String day,
+    required String month,
+    required String year,
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
@@ -210,9 +211,11 @@ class AppCubit extends Cubit<AppState> {
         receiverId: receiverID,
         description: description,
         date: timeStamp.toString(),
-        deadline: deadline,
         status: status,
-        priority: priority);
+        priority: priority,
+        year: year,
+        month: month,
+        day: day);
 
     await database
         .collection("tasks_rooms")
