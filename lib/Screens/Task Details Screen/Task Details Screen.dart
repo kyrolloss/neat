@@ -6,8 +6,9 @@ import '../../components/Text.dart';
 class taskDetailsScreen extends StatefulWidget {
   String? senderID;
   String? description;
-
-  String? deadline;
+  String? year;
+  String? month;
+  String? day;
   String? senderName;
   String? senderPhone;
   String? taskId;
@@ -23,10 +24,12 @@ class taskDetailsScreen extends StatefulWidget {
   taskDetailsScreen({
     this.senderID,
     this.description,
-    this.deadline,
     this.senderName,
     this.senderPhone,
     this.taskId,
+    this.year,
+    this.month,
+    this.day,
     //  this.status,
     this.name,
     //  // this.priority,
@@ -160,8 +163,13 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                     text: widget.senderEmail!,
                                     color: Colors.white,
                                     size: 17.5,
-                                    bold: true)                              ,IconButton(onPressed: (){}, icon:const  Icon(Icons.copy , color: Colors.white,))
-
+                                    bold: true),
+                                IconButton(
+                                    onPressed: () {},
+                                    icon: const Icon(
+                                      Icons.copy,
+                                      color: Colors.white,
+                                    ))
                               ],
                             ),
                             Row(
@@ -216,7 +224,9 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       ],
                     ),
                   ),
-                  SizedBox(height: height*.02,),
+                  SizedBox(
+                    height: height * .02,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -252,7 +262,9 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       )
                     ],
                   ),
-                  SizedBox(height: height*.02,),
+                  SizedBox(
+                    height: height * .02,
+                  ),
                   Row(
                     children: [
                       BuildText(
@@ -263,7 +275,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                         center: true,
                       ),
                       BuildText(
-                        text: widget.deadline!,
+                        text: '${widget.year}+${widget.month}+${widget.day}',
                         bold: true,
                         color: Colors.black,
                         size: 20,
@@ -277,16 +289,19 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Container(
-                          height: height*.075,
-                          width: width*.75,
+                          height: height * .075,
+                          width: width * .75,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(25),
                             color: AppColor.primeColor,
-
-
                           ),
                           child: Center(
-                            child: BuildText(text: 'Send Task' , color: Colors.white,bold: true,size: 25,),
+                            child: BuildText(
+                              text: 'Send Task',
+                              color: Colors.white,
+                              bold: true,
+                              size: 25,
+                            ),
                           ),
                         ),
                         Container(
@@ -300,7 +315,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                 Icon(
+                                Icon(
                                   Icons.send,
                                   size: 25,
                                   color: AppColor.primeColor,
@@ -315,11 +330,9 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                             ),
                           ),
                         )
-
                       ],
                     ),
                   ),
-                  
                 ],
               ),
             ),

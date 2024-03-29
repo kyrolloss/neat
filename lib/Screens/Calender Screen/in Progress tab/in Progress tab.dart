@@ -70,7 +70,9 @@ class _toDoTabState extends State<inProgress> {
           navigateTo(context, taskDetailsScreen(
             name: taskData['name'],
             description: taskData['description'],
-            deadline: taskData['deadline'],
+            day: taskData['day'],
+            month: taskData['month'],
+            year: taskData['year'],
             // status: taskData['status'],
             senderID: taskData['senderId'],
             senderName: taskData['senderName'],

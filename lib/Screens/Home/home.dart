@@ -316,6 +316,11 @@ class _HomeScreenState extends State<HomeScreen> {
             taskDetailsScreen(
               name: taskData['name'],
               description: taskData['description'],
+              day: taskData['day'],
+              year: taskData['year'],
+              month: taskData['month'],
+
+
 
               senderID: taskData['senderId'],
               senderName: taskData['senderName'],

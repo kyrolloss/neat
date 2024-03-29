@@ -22,118 +22,6 @@ class NotificationScreen extends StatefulWidget {
 }
 
 class _NotificationScreenState extends State<NotificationScreen> {
-  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
-
-  late Stream<QuerySnapshot> _deadlineStream;
-
-  @override
-  void initState() {
-    super.initState();
-    const AndroidInitializationSettings androidInitializationSettings =
-        AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    InitializationSettings initializationSettings =
-        const InitializationSettings(
-      android: androidInitializationSettings,
-      iOS: null,
-    );
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-    );
-
-    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-        FirebaseFirestore.instance
-            .collection('tasks_rooms')
-            .doc('taskRoomId')
-            .collection('tasks')
-            .where('receiverId', isEqualTo: AppCubit.get(context).id)
-            .snapshots();
-
-    Stream<QuerySnapshot<Map<String, dynamic>>> deadlineStream =
-    FirebaseFirestore.instance
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('receiverId', isEqualTo: AppCubit.get(context).id)
-        .snapshots();
-
-
-    deadlineStream.listen((event) async{
-      if (event.docs.isEmpty) {
-        return;
-      }
-      for (var doc in event.docs) {
-        DateTime? date = DateTime.tryParse('yyyy-MM-dd');
-        int year=0;
-        int month = 0;
-        int day=0;
-
-        if (date!= null) {
-          year = date.year;
-          month = date.month;
-          day = date.day;
-        }
-
-        print(date);
-
-
-        if (doc['deadline'] ==date){
-          print('sh8aaalaaaa');
-        }
-
-
-        // var deadline = doc['deadline'].toDate();
-        // var timeDifference = deadline.difference(DateTime.now()).inDays;
-        // if (timeDifference == 1) {
-        //    showNotification(deadline.docs.last);
-        // }
-      }
-    });
-
-
-
-    notificationStream.listen((event) async {
-      if (event.docs.isEmpty) {
-        return;
-      }
-      await FirebaseFirestore.instance
-          .collection('Notification')
-          .doc(AppCubit.get(context).id)
-          .collection('notification')
-          .add(event.docs.last.data());
-      await showNotification(event.docs.last);
-    });
-  }
-
-
-
-
-  String channelId = '1';
-
-  showNotification(QueryDocumentSnapshot<Map<String, dynamic>> event) {
-    print('get nof');
-    AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(channelId, 'Notify my',
-            channelDescription: 'to send Local Notification',
-            importance: Importance.high);
-
-    NotificationDetails notificationDetails = NotificationDetails(
-        android: androidNotificationDetails,
-        iOS: null,
-        macOS: null,
-        linux: null);
-
-    flutterLocalNotificationsPlugin.show(
-      01, // id للإشعار
-      event.get('name'),
-      event.get('deadline'),
-
-      notificationDetails,
-    );
-  }
-
 
 
   @override
@@ -160,15 +48,12 @@ class _NotificationScreenState extends State<NotificationScreen> {
         child: Padding(
           padding: const EdgeInsets.only(top: 30.0, right: 22.5, left: 22.5),
           child: StreamBuilder<QuerySnapshot>(
-
               stream: FirebaseFirestore.instance
                   .collection('Notification')
                   .doc(AppCubit.get(context).id)
                   .collection('notification')
                   .snapshots(),
               builder: (context, snapshot) {
-
-
                 if (!snapshot.hasData) {
                   return const Center(
                     child: CircularProgressIndicator(),
@@ -178,7 +63,6 @@ class _NotificationScreenState extends State<NotificationScreen> {
                 return SizedBox(
                   height: height,
                   child: ListView.builder(
-
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder: (context, index) {
                       var notification = snapshot.data!.docs[index];
