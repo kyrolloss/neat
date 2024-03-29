@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -38,7 +37,6 @@ class AppCubit extends Cubit<AppState> {
   var user = FirebaseAuth.instance.currentUser;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final CollectionReference tasksRoomsCollection =
       FirebaseFirestore.instance.collection('tasks_rooms');
@@ -172,30 +170,22 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Stream<QuerySnapshot> getTasksStream() {
-    return database
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('receiverId', isEqualTo: id)
-        .snapshots();
-  }
+
 
   Future<void> sendTask({
     required String receiverID,
     required String senderID,
     required String title,
     required String description,
-    required String deadline,
     required String senderName,
     required String senderPhone,
     required String taskName,
     required String taskId,
     required String status,
     required String priority,
-    required String day,
-    required String month,
-    required String year,
+    required int day,
+    required int month,
+    required int year,
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
@@ -213,9 +203,11 @@ class AppCubit extends Cubit<AppState> {
         date: timeStamp.toString(),
         status: status,
         priority: priority,
+
+      day: day,
         year: year,
         month: month,
-        day: day);
+        );
 
     await database
         .collection("tasks_rooms")
@@ -230,6 +222,42 @@ class AppCubit extends Cubit<AppState> {
       emit(SendTaskFailed());
       print('error');
       print(onError.toString());
+    });
+  }
+  Stream<QuerySnapshot> getTasksStream() {
+    return database
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: id)
+        .snapshots();
+  }
+  List<Tasks> tasksCalendar = [];
+  Future<void> getTasksInCalender(int day, int month, int year) async{
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+    FirebaseFirestore.instance
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: id)
+        .snapshots();
+    emit(GetCalenderTasks());
+
+     notificationStream.listen((snapshot) {
+      List<Tasks> tasks = [];
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        Tasks task = Tasks.fromJson(data);
+
+        if (task.year == year && task.month == month && task.day == day) {
+          tasks.add(task);
+          emit(AddToCalenderTasksList());
+        }
+      }
+
+      tasksCalendar = tasks;
+      emit(EqualityBetweenTheTwoLists());
+
     });
   }
 

@@ -10,9 +10,9 @@ class Tasks {
   final String date;
   String status = 'todo';
   final String priority;
-  final String year;
-  final String month;
-  final String day;
+  final int year;
+  final int month;
+  final int day;
 
   Tasks({
     required this.name,
@@ -24,12 +24,32 @@ class Tasks {
     required this.receiverId,
     required this.description,
     required this.date,
+    required this.day,
     required this.status,
     required this.priority,
     required this.year,
     required this.month,
-    required this.day,
+
   });
+  factory Tasks.fromJson(Map<String, dynamic> json) {
+    return Tasks(
+      name: json['name'],
+      id: json['id'],
+      senderId: json['senderId'],
+      senderEmail: json['senderEmail'],
+      senderName: json['senderName'],
+      senderPhoneNumber: json['senderPhoneNumber'],
+      receiverId: json['receiverId'],
+      description: json['description'],
+      date: json['date'],
+      status: json['status'],
+      priority: json['priority'],
+      year: json['year'],
+      month: json['month'],
+      day: json['day'],
+
+    );
+  }
 
   Map<String, dynamic> task() {
     return {
@@ -46,6 +66,7 @@ class Tasks {
       'priority': priority,
       'year': year,
      'month': month,
+      'day': day,
     };
   }
 }

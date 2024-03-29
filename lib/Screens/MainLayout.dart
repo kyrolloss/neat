@@ -65,8 +65,8 @@ class _MainLayoutState extends State<MainLayout> {
       }
       for (var doc in event.docs) {
         DateTime? date = DateTime.tryParse('yyyy-MM-dd');
-        String year = date!.year.toString();
-        String month = date.month.toString();
+        int year = date!.year;
+        int month = date.month;
         int day = date.day;
 
         if (doc['year'] == year &&
@@ -138,8 +138,8 @@ class _MainLayoutState extends State<MainLayout> {
 
   showDeadlineNotification(
       QueryDocumentSnapshot<Map<String, dynamic>> event,
-      String year,
-      String month,
+      int year,
+      int month,
       int day,
       ) {
     print('get nof');

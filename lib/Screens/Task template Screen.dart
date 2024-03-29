@@ -225,16 +225,16 @@ Graphic Assets Production:
 
 Produce high-quality graphic assets such as icons, buttons, illustrations, and animations to complement the UI design.
                         """,
-                      deadline: 'next friday',
                       senderName: 'kerollos',
                       senderPhone: '01205708870',
-                      taskName: 'newTask',
+                      taskName: 'facebook',
                       taskId: uuid.v1(),
                       priority: 'important',
-                      status: 'inProgress',
-                      day: '29',
-                      month: '3',
-                      year: '2024',
+                      status: 'to do',
+                        year:2024,
+                        day: 30,
+                      month: 3,
+
                     );
                   },
                   child: Container(
