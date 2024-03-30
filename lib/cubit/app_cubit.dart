@@ -7,10 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Models/task%20Model.dart';
-import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
-import 'package:neat/Screens/Home/home.dart';
-import 'package:neat/Screens/Notification/Notification.dart';
-import '../Screens/Profile/profile_screen.dart';
+import 'package:neat/User%20Screens/Screens/Home/home.dart';
+
+import '../User Screens/Screens/Calender Screen/Calender Screen.dart';
+import '../User Screens/Screens/Notification/Notification.dart';
+import '../User Screens/Screens/Profile/profile_screen.dart';
 
 part 'app_state.dart';
 
