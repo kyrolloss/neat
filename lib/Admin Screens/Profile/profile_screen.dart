@@ -16,8 +16,8 @@ import 'package:provider/provider.dart';
 
 import '../../../components/Text.dart';
 import '../../../components/color.dart';
-import '../../../Admin Screens/Task template Screen.dart';
-import '../chat/services/auth_services.dart';
+import '../Task template Screen.dart';
+import '../../User Screens/Screens/chat/services/auth_services.dart';
 import 'edit_profile_screen.dart';
 
 

@@ -8,6 +8,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/User%20Screens/Screens/Home/home.dart';
+import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 
 import '../User Screens/Screens/Calender Screen/Calender Screen.dart';
 import '../User Screens/Screens/Notification/Notification.dart';
@@ -315,16 +316,32 @@ class AppCubit extends Cubit<AppState> {
 
   List<Widget> pagesNames = const [
     HomeScreen(
-      receiverId: '',
+      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     CalenderScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     NotificationScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     ProfileScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+  ];
+
+  List<Widget> adminPagesNames = const [
+    HomeScreen(
+      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    CalenderScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    TaskTemplateScreen(senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',),
+    NotificationScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    ProfileScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
   ];
 }

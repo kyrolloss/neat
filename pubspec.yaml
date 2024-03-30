@@ -53,6 +53,7 @@ dependencies:
   firebase_analytics: ^10.8.10
   provider: ^6.1.2
   flutter_local_notifications: ^17.0.0
+  curved_labeled_navigation_bar: ^2.0.2
 
 dev_dependencies:
   flutter_test:

@@ -4,10 +4,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:neat/User%20Screens/Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/try.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'Admin Screens/Main Layout.dart';
 import 'User Screens/Screens/Notification/notification services/notification services.dart';
 import 'User Screens/Screens/Task Details Screen/Task Details Screen.dart';
 import 'firebase_options.dart';
@@ -91,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: taskDetailsScreen(),
+        home: AdminMainLayout(uid: 'fiyT0flMHFdXHuotIjgREGNczkP2',),
         theme: Provider.of<ThemeProvider>(context).themeData,
       ),
     );
