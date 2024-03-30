@@ -10,13 +10,15 @@ import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
 
+import 'Home/home.dart';
+
 class AdminMainLayout extends StatefulWidget {
   int buttomIndex = 0;
   final String uid;
   Widget? widget;
 
   AdminMainLayout({super.key, required this.uid}) {
-    widget = HomeScreen(receiverId: uid);
+    widget = adminHomeScreen(receiverId: uid);
   }
 
   @override

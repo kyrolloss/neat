@@ -10,6 +10,7 @@ import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/User%20Screens/Screens/Home/home.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 
+import '../Admin Screens/Home/home.dart';
 import '../User Screens/Screens/Calender Screen/Calender Screen.dart';
 import '../User Screens/Screens/Notification/Notification.dart';
 import '../User Screens/Screens/Profile/profile_screen.dart';
@@ -330,7 +331,7 @@ class AppCubit extends Cubit<AppState> {
   ];
 
   List<Widget> adminPagesNames = const [
-    HomeScreen(
+    adminHomeScreen(
       receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     CalenderScreen(
