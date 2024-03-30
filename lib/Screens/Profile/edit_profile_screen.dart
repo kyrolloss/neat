@@ -3,8 +3,8 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:neat/Screens/Profile/resources/add_data.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
-import 'package:neat/Screens/Profile/widgets/resources/add_data.dart';
 import 'package:neat/utils.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
@@ -204,10 +204,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
 
                   /// Heading Personal Info
-                  const TSectionHeading(
+                   TSectionHeading(
                     title: "Personal Information",
                     showActionButton: false,
-                    textColor: TColors.primaryColor,
+                    textColor: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
                   ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
