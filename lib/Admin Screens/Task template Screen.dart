@@ -1,3 +1,4 @@
+import 'package:iconsax/iconsax.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -6,19 +7,25 @@ import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 
 class TaskTemplateScreen extends StatefulWidget {
-  const TaskTemplateScreen({super.key});
+  final String senderID;
+
+  const TaskTemplateScreen({super.key , required this.senderID});
 
   @override
   State<TaskTemplateScreen> createState() => _TaskTemplateScreenState();
 }
 
 class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
+  String selectedPriority = 'Low';
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
     TextEditingController taskNameController = TextEditingController();
     TextEditingController taskDescriptionController = TextEditingController();
+    TextEditingController receiverID = TextEditingController();
+
 
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {},
@@ -31,7 +38,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: SizedBox(
+                  child: SingleChildScrollView(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -41,7 +48,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         BuildText(
                           text: 'Task Name',
                           color: AppColor.primeColor,
-                          size: 25,
+                          size: 20,
                           bold: true,
                         ),
                         SizedBox(
@@ -58,9 +65,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                 fillColor: AppColor.primeColor.withOpacity(.6),
                                 filled: true,
                                 hintText: 'Name ...',
-                                hintStyle: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 17.5),
+                                hintStyle:  const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15 ,),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     gapPadding: 20,
@@ -82,7 +89,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         BuildText(
                           text: 'Task Description',
                           color: AppColor.primeColor,
-                          size: 25,
+                          size: 20,
                           bold: true,
                         ),
                         SizedBox(
@@ -102,7 +109,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                 hintText: 'Description ...',
                                 hintStyle: const TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    fontSize: 17.5),
+                                    fontSize: 15),
                                 border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(30),
                                     gapPadding: 20,
@@ -123,25 +130,73 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           height: height * .01,
                         ),
 
+
+                        BuildText(
+                          text: 'Receiver ID',
+                          color: AppColor.primeColor,
+                          size: 20,
+                          bold: true,
+                        ),
+                        SizedBox(
+                          height: height * .01,
+                        ),
+                        SizedBox(
+                          height: height * .065,
+                          width: width * .975,
+                          child: TextFormField(
+                            controller: receiverID,
+                            cursorColor: Colors.black,
+                            decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                fillColor: AppColor.primeColor.withOpacity(.6),
+                                filled: true,
+                                hintText: 'ID ...',
+                                hintStyle:  const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15 ,),
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                    gapPadding: 20,
+                                    borderSide: BorderSide.none),
+                                counterStyle: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 25,
+                                    fontWeight: FontWeight.bold)),
+                          ),
+                        ),
+
+                        //
+
+                        SizedBox(
+                          height: height * .01,
+                        ),
+                        const Divider(),
+
                         Row(
                           children: [
                             BuildText(
-                              text: 'Start Day ...',
+                              text: 'Priority ...',
                               color: AppColor.primeColor,
-                              size: 25,
+                              size: 20,
                               bold: true,
                             ),
                             const Spacer(),
-                            IconButton(
-                              onPressed: () async {
-                                await cubit.showCalendar(context);
+                            DropdownButton<String>(
+                              value: selectedPriority,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectedPriority = newValue!;
+                                });
                               },
-                              icon: const Icon(
-                                Icons.calendar_month_outlined,
-                                // Use a more appropriate calendar icon
-                                size: 30,
-                              ),
-                              color: AppColor.primeColor,
+                              items: <String>['Low', 'Medium', 'High']
+                                  .map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value , style: TextStyle(
+                                      color: AppColor.primeColor,fontWeight: FontWeight.bold
+                                  ),),
+                                );
+                              }).toList(),
                             ),
                           ],
                         ),
@@ -154,7 +209,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                             BuildText(
                               text: 'DeadLine ...',
                               color: AppColor.primeColor,
-                              size: 25,
+                              size: 20,
                               bold: true,
                             ),
                             const Spacer(),
@@ -172,7 +227,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: height * .02,
+                          height: height * .01,
                         ),
 
                         Row(
@@ -180,7 +235,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                             BuildText(
                               text: 'Attachment ...',
                               color: AppColor.primeColor,
-                              size: 25,
+                              size: 20,
                               bold: true,
                             ),
                             const Spacer(),
@@ -202,56 +257,70 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    var uuid = Uuid();
-                    cubit.sendTask(
-                      receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-                      senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
-                      title: 'Hr',
-                      description: """
-                        UI Design:
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    GestureDetector(
+                      onTap: () {
+                        var uuid = Uuid();
+                        cubit.sendTask(
+                          receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+                          senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
+                          title: 'Hr',
+                          description: """
+                            UI Design:
+                    
+                    Develop visually appealing UI designs for various screens of the gaming application, including home screens, game menus, settings pages, and in-game interfaces.
+                    UX Enhancement:
+                    
+                    Analyze user feedback and gaming trends to identify areas for UX improvement.
+                    Streamline user flows, optimize navigation paths, and enhance overall usability to increase user engagement.
+                    Wireframing and Prototyping:
+                    
+                    Create wireframes and interactive prototypes to visualize design concepts and gather feedback from stakeholders.
+                    Iterate on designs based on feedback and usability testing results.
+                    Graphic Assets Production:
+                    
+                    Produce high-quality graphic assets such as icons, buttons, illustrations, and animations to complement the UI design.
+                            """,
+                          senderName: 'kerollos',
+                          senderPhone: '01205708870',
+                          taskName: 'facebook',
+                          taskId: uuid.v1(),
+                          priority: 'important',
+                          status: 'to do',
+                          year:2024,
+                          day: 30,
+                          month: 3,
 
-Develop visually appealing UI designs for various screens of the gaming application, including home screens, game menus, settings pages, and in-game interfaces.
-UX Enhancement:
-
-Analyze user feedback and gaming trends to identify areas for UX improvement.
-Streamline user flows, optimize navigation paths, and enhance overall usability to increase user engagement.
-Wireframing and Prototyping:
-
-Create wireframes and interactive prototypes to visualize design concepts and gather feedback from stakeholders.
-Iterate on designs based on feedback and usability testing results.
-Graphic Assets Production:
-
-Produce high-quality graphic assets such as icons, buttons, illustrations, and animations to complement the UI design.
-                        """,
-                      deadline: 'next friday',
-                      senderName: 'kerollos',
-                      senderPhone: '01205708870',
-                      taskName: 'newTask',
-                      taskId: uuid.v1(),
-                      priority: 'important',
-                      status: 'inProgress',
-                      day: '29',
-                      month: '3',
-                      year: '2024',
-                    );
-                  },
-                  child: Container(
-                    height: height * .075,
-                    width: width * .975,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(25),
-                      color: AppColor.primeColor,
+                        );
+                      },
+                      child: Container(
+                        height: height * .075,
+                        width: width * .725,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: AppColor.primeColor,
+                        ),
+                        child: Center(
+                            child: BuildText(
+                              text: 'Send Now',
+                              size: 25,
+                              color: Colors.white,
+                              bold: true,
+                            )),
+                      ),
                     ),
-                    child: Center(
-                        child: BuildText(
-                      text: 'done',
-                      size: 25,
-                      color: Colors.white,
-                      bold: true,
-                    )),
-                  ),
+                    Container(
+                        height: height * .075,
+                        width: width * .13,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(25),
+                          color: AppColor.primeColor,
+                        ),
+                        child:const Icon(Iconsax.message_time5 , color: Colors.white,size: 25,)
+                    ),
+                  ],
                 )
               ],
             ),

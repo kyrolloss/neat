@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:neat/Screens/Calender%20Screen/completed%20tab/completed%20tab.dart';
-import 'package:neat/Screens/Calender%20Screen/in%20Progress%20tab/in%20Progress%20tab.dart';
-import 'package:neat/Screens/Calender%20Screen/to%20do%20tab/to%20do%20tap.dart';
+import 'package:neat/Admin%20Screens/Calender%20Screen/to%20do%20tab/to%20do%20tap.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import '../../calender/calender.dart';
 import '../../cubit/app_cubit.dart';
-import '../../utlis/constants/colors.dart';
+import 'completed tab/completed tab.dart';
+import 'in Progress tab/in Progress tab.dart';
 
 class adminCalenderScreen extends StatefulWidget {
   final String uid;
@@ -94,9 +93,9 @@ class _adminCalenderScreen extends State<adminCalenderScreen>
 
                   controller: controller,
                     children:  const [
-                      toDoTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
-                      inProgress(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
-                      completedTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
+                      admintoDoTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
+                     admininProgress(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2'),
+                      admincompletedTab(receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2')
 
                     ]
                 ),

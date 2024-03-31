@@ -7,16 +7,16 @@ import 'package:neat/components/components.dart';
 import '../../../Screens/Task Details Screen/Task Details Screen.dart';
 import '../../../cubit/app_cubit.dart';
 
-class inProgress extends StatefulWidget {
+class admininProgress extends StatefulWidget {
   final String receiverId;
 
-  const inProgress({super.key, required this.receiverId});
+  const admininProgress({super.key, required this.receiverId});
 
   @override
-  State<inProgress> createState() => _toDoTabState();
+  State<admininProgress> createState() => _admininProgress();
 }
 
-class _toDoTabState extends State<inProgress> {
+class _admininProgress extends State<admininProgress> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

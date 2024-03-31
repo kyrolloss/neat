@@ -155,7 +155,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const TaskTemplateScreen());
+                  navigateTo(context, const TaskTemplateScreen(senderID: '',));
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                 const TSettingsMenuTile(icon: Icons.language, title: "Language"),

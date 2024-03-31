@@ -7,16 +7,16 @@ import 'package:neat/components/components.dart';
 
 import '../../../cubit/app_cubit.dart';
 
-class toDoTab extends StatefulWidget {
+class admintoDoTab extends StatefulWidget {
   final String receiverId;
 
-  const toDoTab({super.key, required this.receiverId});
+  const admintoDoTab({super.key, required this.receiverId});
 
   @override
-  State<toDoTab> createState() => _toDoTabState();
+  State<admintoDoTab> createState() => _admintoDoTab();
 }
 
-class _toDoTabState extends State<toDoTab> {
+class _admintoDoTab extends State<admintoDoTab> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

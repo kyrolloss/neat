@@ -7,16 +7,16 @@ import '../../../Screens/Task Details Screen/Task Details Screen.dart';
 import '../../../components/components.dart';
 import '../../../cubit/app_cubit.dart';
 
-class completedTab extends StatefulWidget {
+class admincompletedTab extends StatefulWidget {
   final String receiverId;
 
-  const completedTab({super.key, required this.receiverId});
+  const admincompletedTab({super.key, required this.receiverId});
 
   @override
-  State<completedTab> createState() => _toDoTabState();
+  State<admincompletedTab> createState() => _admincompletedTab();
 }
 
-class _toDoTabState extends State<completedTab> {
+class _admincompletedTab extends State<admincompletedTab> {
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

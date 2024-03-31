@@ -108,7 +108,7 @@ class _HomeScreenState extends State<adminHomeScreen> {
                     height: height * .045,
                   ),
                   BuildText(
-                    text: "Let's Check Out Your Tasks",
+                    text: "Let's Check the performance",
                     color: isDarkMode
                         ? TColors.secondaryColor
                         : TColors.primaryColor,

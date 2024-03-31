@@ -58,6 +58,7 @@ dependencies:
   firebase_app_check: ^0.2.1+19
   curved_labeled_navigation_bar: ^2.0.2
 
+
 dev_dependencies:
   flutter_test:
     sdk: flutter
