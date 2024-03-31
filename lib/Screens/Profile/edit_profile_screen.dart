@@ -1,11 +1,15 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../../common/widgets/images/circular_image.dart';
 import '../../common/widgets/texts/section_heading.dart';
@@ -27,6 +31,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController titleController = TextEditingController();
 
   File? file;
+  String? url;
 
   getImageGallery() async {
     final ImagePicker picker = ImagePicker();
@@ -34,8 +39,66 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     /// Pick an image.
     final XFile? imageGallery =
         await picker.pickImage(source: ImageSource.gallery);
-    file = File(imageGallery!.path);
+    if (imageGallery != null) {
+      // if (kDebugMode) {
+      //   print('******');
+      // }
+      // if (kDebugMode) {
+      //   print(imageGallery.path);
+      // }
+
+      file = File(imageGallery!.path);
+      if (kDebugMode) {
+        print(imageGallery.path);
+      }
+      var imageName = basename(imageGallery!.path);
+
+      /// start upload
+      var random = Random().nextInt(10000000);
+
+      imageName = "$random$imageName";
+
+      if (kDebugMode) {
+        print(imageName);
+      }
+      // if (kDebugMode) {
+      //   print('************************************************');
+      // }
+      // if (kDebugMode) {
+      //   print(imageName);
+      // }
+      var refStorage = FirebaseStorage.instance.ref("ProfileImg/$imageName");
+      await refStorage.putFile(file!);
+      url = await refStorage.getDownloadURL();
+      // if (kDebugMode) {
+      //   print('url : $url');
+      // }
+      /// end upload
+    } else {
+      if (kDebugMode) {
+        print("Please choose Image");
+      }
+    }
+
     setState(() {});
+
+    getImagesAndFolderName() async{
+      var ref = await FirebaseStorage.instance.ref("ProfileImg").list();
+      for (var element in ref.items) {
+        if (kDebugMode) {
+          print("**********");
+        }
+        if (kDebugMode) {
+          print(element.name);
+        }
+      }
+    }
+
+    @override
+    void initState(){
+      getImagesAndFolderName();
+      super.initState();
+    }
   }
 
   @override
@@ -74,6 +137,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
                 children: [
+                  /// Profile Picture
+
                   SizedBox(
                     width: double.infinity,
                     child: Column(
@@ -84,7 +149,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           // CircleAvatar(
                           //   radius: 50,
                           // ),
-                          if (file != null)
+                          if (url != null)
                             Container(
                               height: 120,
                               width: 120,
@@ -92,8 +157,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 shape: BoxShape.circle,
                               ),
                               child: ClipOval(
-                                  child: Image.file(
-                                file!,
+                                  child: Image.network(
+                                url!,
                                 fit: BoxFit.cover,
                               )),
                             )
@@ -133,7 +198,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                   ),
 
-                  /// Details
+                  /// Profile Information
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
                   ),
@@ -224,7 +289,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: TSizes.spaceBtwItems,
                   ),
 
-                  /// Heading Personal Info
+                  /// Heading Personal Information
                   TSectionHeading(
                     title: "Personal Information",
                     showActionButton: false,
