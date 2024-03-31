@@ -28,20 +28,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File? file;
 
-  getImageGallery() async{
+  getImageGallery() async {
     final ImagePicker picker = ImagePicker();
 
     /// Pick an image.
-    final XFile? imageGallery = await picker.pickImage(source: ImageSource.gallery);
-    file =File(imageGallery!.path);
-    setState(() {
-    });
-
-
-
+    final XFile? imageGallery =
+        await picker.pickImage(source: ImageSource.gallery);
+    file = File(imageGallery!.path);
+    setState(() {});
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -89,19 +84,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           // CircleAvatar(
                           //   radius: 50,
                           // ),
-                          if(file!= null) Container(
+                          if (file != null)
+                            Container(
                               height: 120,
                               width: 120,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(200),
+                              decoration: const BoxDecoration(
+                                shape: BoxShape.circle,
                               ),
-                              child: Image.file(file!, fit: BoxFit.cover,),)
+                              child: ClipOval(
+                                  child: Image.file(
+                                file!,
+                                fit: BoxFit.cover,
+                              )),
+                            )
                           else
-                          const TCircularImage(
-                            image: TImages.user,
-                            width: 120,
-                            height: 120,
-                          ),
+                            const TCircularImage(
+                              image: TImages.user,
+                              width: 120,
+                              height: 120,
+                            ),
                           Positioned(
                             bottom: -10,
                             right: -6,
@@ -114,10 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 color: TColors.primaryColor,
                               ),
                             ),
-                            
                           ),
-
-
                         ]),
                         TextButton(
                           onPressed: () {
