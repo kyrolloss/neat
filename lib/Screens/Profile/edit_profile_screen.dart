@@ -37,46 +37,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() {
     });
 
-    // /// Capture a photo.
-    // final XFile? imageCamera = await picker.pickImage(source: ImageSource.camera);
-
-
-    // file=File(imageCamera!.path);
 
 
   }
 
-  // Uint8List? _image;
-  //
-  //
-  // void selectImage() async {
-  //   Uint8List img = await pickImage(ImageSource.gallery);
-  //   setState(() {
-  //     _image = img;
-  //   });
-  // }
-  //
-  // void saveProfile() async {
-  //   String resp = await StoreData().saveData(file: _image!);
-  // }
 
-//   Future<void> _uploadImage() async {
-//     final picker = ImagePicker();
-//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
-//     if (pickedFile != null) {
-//       Reference ref =
-//           FirebaseStorage.instance.ref().child('profileImage').child('User');
-//       UploadTask uploadTask = ref.putFile(File(pickedFile.path));
-//       TaskSnapshot taskSnapshot = await uploadTask;
-//       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-//       /// Store the download URL in firebase database or firestore
-// DatabaseReference userRef = FirebaseDatabase.instance.reference().child('User').child('user1');
-// userRef.update({'profileImageUrl' : downloadUrl});
-// setState(() {
-//   _imageUrl =downloadUrl;
-// });
-//     }
-//   }
 
   @override
   Widget build(BuildContext context) {
