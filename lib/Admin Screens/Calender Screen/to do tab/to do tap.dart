@@ -17,6 +17,26 @@ class admintoDoTab extends StatefulWidget {
 }
 
 class _admintoDoTab extends State<admintoDoTab> {
+  Color box1Color = Colors.blue;
+  Color box2Color = Colors.blue;
+  Color box3Color = Colors.blue;
+  void _toggleBoxColor(int boxNumber) {
+    setState(() {
+      if (boxNumber == 1) {
+        box1Color = Colors.blue;
+        box2Color = Colors.blue;
+        box3Color = Colors.blue;
+      } else if (boxNumber == 2) {
+        box1Color = Colors.grey;
+        box2Color = Colors.yellow;
+        box3Color = Colors.grey;
+      } else if (boxNumber == 3) {
+        box1Color = Colors.grey;
+        box2Color = Colors.grey;
+        box3Color = Colors.green;
+      }
+    });
+  }
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;

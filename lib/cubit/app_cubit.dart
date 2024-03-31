@@ -25,9 +25,9 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
 
   DateTime? selectedDate = DateTime.tryParse('yyyy-MM-dd');
-  int? year;
-  int? month;
-  int? day;
+  int year = 0;
+  int month=0;
+  int day=0;
   List tasksList = [];
   int numberOfTodoTasks = 0;
   String id = '';

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Admin%20Screens/Main%20Layout.dart';
+import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/try.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
@@ -92,7 +93,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: AdminMainLayout(uid: ''),
+        home: TaskTemplateScreen(senderID: ''),
         theme: Provider.of<ThemeProvider>(context).themeData,
       ),
     );

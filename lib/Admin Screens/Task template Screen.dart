@@ -16,15 +16,54 @@ class TaskTemplateScreen extends StatefulWidget {
 }
 
 class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
-  String selectedPriority = 'Low';
+  String priority = 'Low';
+  Color box1Color = AppColor.primeColor;
+  Color box2Color = AppColor.secondColor;
+  Color box3Color = AppColor.secondColor;
+
+  TextEditingController taskNameController = TextEditingController();
+  TextEditingController taskDescriptionController = TextEditingController();
+  TextEditingController receiverID = TextEditingController();
+
+
+  void _toggleBoxColor(int boxNumber) {
+    setState(() {
+      if (boxNumber == 1) {
+        box1Color = AppColor.primeColor;
+        box2Color = AppColor.secondColor;
+        box3Color = AppColor.secondColor;
+
+      } else if (boxNumber == 2) {
+        box1Color = AppColor.secondColor;
+        box2Color = AppColor.primeColor;
+        box3Color = AppColor.secondColor;
+        priority = 'medium';
+      } else if (boxNumber == 3) {
+        box1Color = AppColor.secondColor;
+        box2Color = AppColor.secondColor;
+        box3Color = AppColor.primeColor;
+        priority = 'high';
+
+      }
+
+      setState(() {
+        // Save the current taskName and taskDescription values
+        _taskName = taskNameController.text;
+        _taskDescription = taskDescriptionController.text;
+
+        // TODO: Show the priority picker
+      });
+    });
+  }
+  String _taskName = '';
+  String _taskDescription = '';
+  String _receiverId = '';
 
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-    TextEditingController taskNameController = TextEditingController();
-    TextEditingController taskDescriptionController = TextEditingController();
-    TextEditingController receiverID = TextEditingController();
+
 
 
     return BlocConsumer<AppCubit, AppState>(
@@ -58,6 +97,11 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           height: height * .065,
                           width: width * .975,
                           child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                _taskName = value;
+                              });
+                            },
                             controller: taskNameController,
                             cursorColor: Colors.black,
                             decoration: InputDecoration(
@@ -100,6 +144,11 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           height: height * .065,
                           width: width * .975,
                           child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                _taskDescription = value;
+                              });
+                            },
                             controller: taskDescriptionController,
                             cursorColor: Colors.black,
                             decoration: InputDecoration(
@@ -144,6 +193,11 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           height: height * .065,
                           width: width * .975,
                           child: TextFormField(
+                            onChanged: (value) {
+                              setState(() {
+                                _receiverId = value;
+                              });
+                            },
                             controller: receiverID,
                             cursorColor: Colors.black,
                             decoration: InputDecoration(
@@ -172,31 +226,89 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         ),
                         const Divider(),
 
+                        // Row(
+                        //   children: [
+                        //     BuildText(
+                        //       text: 'Priority ...',
+                        //       color: AppColor.primeColor,
+                        //       size: 20,
+                        //       bold: true,
+                        //     ),
+                        //     const Spacer(),
+                        //     DropdownButton<String>(
+                        //       value: selectedPriority,
+                        //       onChanged: (newValue) {
+                        //         setState(() {
+                        //           selectedPriority = newValue!;
+                        //         });
+                        //       },
+                        //       items: <String>['Low', 'Medium', 'High']
+                        //           .map<DropdownMenuItem<String>>((String value) {
+                        //         return DropdownMenuItem<String>(
+                        //           value: value,
+                        //           child: Text(value , style: TextStyle(
+                        //               color: AppColor.primeColor,fontWeight: FontWeight.bold
+                        //           ),),
+                        //         );
+                        //       }).toList(),
+                        //     ),
+                        //   ],
+                        // ),
+                        SizedBox(
+                          height: height * .01,
+                        ),
+                        BuildText(
+                          text: 'Priority ...',
+                          color: AppColor.primeColor,
+                          size: 20,
+                          bold: true,
+                        ),
+                        SizedBox(
+                          height: height * .01,
+                        ),
+
+
                         Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
-                            BuildText(
-                              text: 'Priority ...',
-                              color: AppColor.primeColor,
-                              size: 20,
-                              bold: true,
+                            GestureDetector(
+                              onTap: () => _toggleBoxColor(1),
+                              child: Container(
+                                width: width*.3,
+                                height: height*.075,
+                                decoration: BoxDecoration(
+                                    color: box1Color,
+
+                                    borderRadius: BorderRadius.circular(25)
+                                ),
+                                child: const Center(child: Text('Low')),
+                              ),
                             ),
-                            const Spacer(),
-                            DropdownButton<String>(
-                              value: selectedPriority,
-                              onChanged: (newValue) {
-                                setState(() {
-                                  selectedPriority = newValue!;
-                                });
-                              },
-                              items: <String>['Low', 'Medium', 'High']
-                                  .map<DropdownMenuItem<String>>((String value) {
-                                return DropdownMenuItem<String>(
-                                  value: value,
-                                  child: Text(value , style: TextStyle(
-                                      color: AppColor.primeColor,fontWeight: FontWeight.bold
-                                  ),),
-                                );
-                              }).toList(),
+                            GestureDetector(
+                              onTap: () => _toggleBoxColor(2),
+                              child: Container(
+                                width: width*.3,
+                                height: height*.075,
+                                decoration: BoxDecoration(
+                                    color: box2Color,
+
+                                    borderRadius: BorderRadius.circular(25)
+                                ),
+                                child: const Center(child: Text('medium')),
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () => _toggleBoxColor(3),
+                              child: Container(
+                                width: width*.3,
+                                height: height*.075,
+                                decoration: BoxDecoration(
+                                    color: box3Color,
+
+                                    borderRadius: BorderRadius.circular(25)
+                                ),
+                                child: const Center(child: Text('high')),
+                              ),
                             ),
                           ],
                         ),
@@ -262,36 +374,21 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        var uuid = Uuid();
+                        var uuid = const Uuid();
                         cubit.sendTask(
-                          receiverID: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-                          senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
-                          title: 'Hr',
-                          description: """
-                            UI Design:
-                    
-                    Develop visually appealing UI designs for various screens of the gaming application, including home screens, game menus, settings pages, and in-game interfaces.
-                    UX Enhancement:
-                    
-                    Analyze user feedback and gaming trends to identify areas for UX improvement.
-                    Streamline user flows, optimize navigation paths, and enhance overall usability to increase user engagement.
-                    Wireframing and Prototyping:
-                    
-                    Create wireframes and interactive prototypes to visualize design concepts and gather feedback from stakeholders.
-                    Iterate on designs based on feedback and usability testing results.
-                    Graphic Assets Production:
-                    
-                    Produce high-quality graphic assets such as icons, buttons, illustrations, and animations to complement the UI design.
-                            """,
-                          senderName: 'kerollos',
-                          senderPhone: '01205708870',
-                          taskName: 'facebook',
+                          receiverID: receiverID.text.toString(),
+                          senderID: cubit.id ,
+                          title: cubit.title,
+                          description: taskDescriptionController.text.toString(),
+                          senderName: cubit.name,
+                          senderPhone: cubit.phone,
+                          taskName: taskNameController.text.toString(),
                           taskId: uuid.v1(),
-                          priority: 'important',
+                          priority: priority  ,
                           status: 'to do',
-                          year:2024,
-                          day: 30,
-                          month: 3,
+                          year:cubit.year,
+                          day: cubit.day,
+                          month: cubit.month,
 
                         );
                       },
