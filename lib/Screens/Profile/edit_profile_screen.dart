@@ -1,11 +1,9 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:neat/Screens/Profile/resources/add_data.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
-import 'package:neat/utils.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -27,18 +25,58 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController emailController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController titleController = TextEditingController();
-  Uint8List? _image;
 
-  void selectImage() async {
-    Uint8List img = await pickImage(ImageSource.gallery);
+  File? file;
+
+  getImageGallery() async{
+    final ImagePicker picker = ImagePicker();
+
+    /// Pick an image.
+    final XFile? imageGallery = await picker.pickImage(source: ImageSource.gallery);
+    file =File(imageGallery!.path);
     setState(() {
-      _image = img;
     });
+
+    // /// Capture a photo.
+    // final XFile? imageCamera = await picker.pickImage(source: ImageSource.camera);
+
+
+    // file=File(imageCamera!.path);
+
+
   }
 
-  void saveProfile () async {
-    String resp = await StoreData().saveData(file: _image!);
-  }
+  // Uint8List? _image;
+  //
+  //
+  // void selectImage() async {
+  //   Uint8List img = await pickImage(ImageSource.gallery);
+  //   setState(() {
+  //     _image = img;
+  //   });
+  // }
+  //
+  // void saveProfile() async {
+  //   String resp = await StoreData().saveData(file: _image!);
+  // }
+
+//   Future<void> _uploadImage() async {
+//     final picker = ImagePicker();
+//     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+//     if (pickedFile != null) {
+//       Reference ref =
+//           FirebaseStorage.instance.ref().child('profileImage').child('User');
+//       UploadTask uploadTask = ref.putFile(File(pickedFile.path));
+//       TaskSnapshot taskSnapshot = await uploadTask;
+//       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+//       /// Store the download URL in firebase database or firestore
+// DatabaseReference userRef = FirebaseDatabase.instance.reference().child('User').child('user1');
+// userRef.update({'profileImageUrl' : downloadUrl});
+// setState(() {
+//   _imageUrl =downloadUrl;
+// });
+//     }
+//   }
 
   @override
   Widget build(BuildContext context) {
@@ -59,12 +97,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 },
                 icon: Icon(
                   Icons.arrow_back_ios,
-                  color:isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                  color: isDarkMode
+                      ? TColors.secondaryColor
+                      : TColors.primaryColor,
                 )),
-            iconTheme: IconThemeData(
+            iconTheme: const IconThemeData(
               color: TColors.primaryColor,
             ),
-            title: Text("Profile"),
+            title: const Text("Profile"),
             titleTextStyle: Theme.of(context).textTheme.headlineMedium!.apply(
                 color:
                     isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
@@ -79,35 +119,51 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                       children: [
                         Stack(children: [
-                          _image != null
-                              ? CircleAvatar(
-                                  radius: 100,
-                                  backgroundImage: MemoryImage(_image!),
-                                )
-                              :  TCircularImage(
-
-                                  image: TImages.user,
-                                  width: 120,
-                                  height: 120,
-
-                                ),
+                          // _image != null
+                          //     ?
+                          // CircleAvatar(
+                          //   radius: 50,
+                          // ),
+                          if(file!= null) Container(
+                              height: 120,
+                              width: 120,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(200),
+                              ),
+                              child: Image.file(file!, fit: BoxFit.cover,),)
+                          else
+                          const TCircularImage(
+                            image: TImages.user,
+                            width: 120,
+                            height: 120,
+                          ),
                           Positioned(
-                            bottom: -2,
-                            right: -5,
+                            bottom: -10,
+                            right: -6,
                             child: IconButton(
-                              onPressed: selectImage,
+                              onPressed: () {
+                                getImageGallery();
+                              },
                               icon: const Icon(
                                 Icons.add_a_photo_outlined,
-                                color:  TColors.primaryColor,
+                                color: TColors.primaryColor,
                               ),
                             ),
+                            
                           ),
+
+
                         ]),
                         TextButton(
-                          onPressed: () {},
-                          child:  Text(
+                          onPressed: () {
+                            getImageGallery();
+                          },
+                          child: Text(
                             "Change Profile Picture",
-                            style: TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                            style: TextStyle(
+                                color: isDarkMode
+                                    ? TColors.secondaryColor
+                                    : TColors.primaryColor),
                           ),
                         ),
                       ],
@@ -126,10 +182,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
 
                   /// Heading Profile Info
-                   TSectionHeading(
+                  TSectionHeading(
                     title: "Profile Information",
                     showActionButton: false,
-                    textColor: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                    textColor: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                   ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
@@ -204,10 +262,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
 
                   /// Heading Personal Info
-                   TSectionHeading(
+                  TSectionHeading(
                     title: "Personal Information",
                     showActionButton: false,
-                    textColor: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                    textColor: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                   ),
                   const SizedBox(
                     height: TSizes.spaceBtwItems,
