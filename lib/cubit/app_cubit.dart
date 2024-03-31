@@ -11,6 +11,9 @@ import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Screens/Home/home.dart';
 import 'package:neat/Screens/Notification/Notification.dart';
+import '../Admin Screens/Calender Screen/Calender Screen.dart';
+import '../Admin Screens/Home/home Screen.dart';
+import '../Admin Screens/notification/notification Screen.dart';
 import '../Screens/Profile/profile_screen.dart';
 
 part 'app_state.dart';
@@ -292,6 +295,20 @@ class AppCubit extends Cubit<AppState> {
       uid: '',
     ),
     NotificationScreen(
+      uid: '',
+    ),
+    ProfileScreen(
+      uid: '',
+    ),
+  ];
+  List<Widget> adminPagesNames = const [
+    adminHomeScreen(
+      receiverId: '',
+    ),
+    adminCalenderScreen(
+      uid: '',
+    ),
+    adminNotificationScreen(
       uid: '',
     ),
     ProfileScreen(
