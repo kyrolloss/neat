@@ -1,17 +1,21 @@
+
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:neat/Admin%20Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Models/task%20Model.dart';
-import 'package:neat/Screens/Calender%20Screen/Calender%20Screen.dart';
-import 'package:neat/Screens/Home/home.dart';
-import 'package:neat/Screens/Notification/Notification.dart';
-import '../Screens/Profile/profile_screen.dart';
+import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
+
+import '../Admin Screens/Home/home Screen.dart';
+import '../Admin Screens/Profile/profile_screen.dart';
+import '../Screens/Calender Screen/Calender Screen.dart';
+import '../Screens/Home/home.dart';
+import '../Screens/Notification/Notification.dart';
 
 part 'app_state.dart';
 
@@ -21,9 +25,9 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
 
   DateTime? selectedDate = DateTime.tryParse('yyyy-MM-dd');
-  int? year;
-  int? month;
-  int? day;
+  int year = 0;
+  int month=0;
+  int day=0;
   List tasksList = [];
   int numberOfTodoTasks = 0;
   String id = '';
@@ -38,10 +42,9 @@ class AppCubit extends Cubit<AppState> {
   var user = FirebaseAuth.instance.currentUser;
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   final CollectionReference tasksRoomsCollection =
-      FirebaseFirestore.instance.collection('tasks_rooms');
+  FirebaseFirestore.instance.collection('tasks_rooms');
   var auth = FirebaseAuth.instance;
 
   User? getCurrentUser() {
@@ -111,22 +114,21 @@ class AppCubit extends Cubit<AppState> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != selectedDate) {
       selectedDate = picked;
       year = selectedDate!.year;
       month = selectedDate!.month;
       day = selectedDate!.day;
-    }
+
     emit(DatePickedSuccessfully());
   }
 
   Future<UserCredential> Register(
       {required String email,
-      required String password,
-      required String name,
-      required String phone,
-      String? image,
-      required String title}) async {
+        required String password,
+        required String name,
+        required String phone,
+        String? image,
+        required String title}) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -172,50 +174,44 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Stream<QuerySnapshot> getTasksStream() {
-    return database
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('receiverId', isEqualTo: id)
-        .snapshots();
-  }
+
 
   Future<void> sendTask({
     required String receiverID,
     required String senderID,
     required String title,
     required String description,
-    required String deadline,
     required String senderName,
     required String senderPhone,
     required String taskName,
     required String taskId,
     required String status,
     required String priority,
-    required String day,
-    required String month,
-    required String year,
+    required int day,
+    required int month,
+    required int year,
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
     final String email = auth.currentUser!.email!;
     final Timestamp timeStamp = Timestamp.now();
     Tasks tasks = Tasks(
-        name: taskName,
-        id: taskId,
-        senderId: senderID,
-        senderEmail: email,
-        senderName: senderName,
-        senderPhoneNumber: senderPhone,
-        receiverId: receiverID,
-        description: description,
-        date: timeStamp.toString(),
-        status: status,
-        priority: priority,
-        year: year,
-        month: month,
-        day: day);
+      name: taskName,
+      id: taskId,
+      senderId: senderID,
+      senderEmail: email,
+      senderName: senderName,
+      senderPhoneNumber: senderPhone,
+      receiverId: receiverID,
+      description: description,
+      date: timeStamp.toString(),
+      status: status,
+      priority: priority,
+
+      day: day,
+      year: year,
+      month: month,
+    );
 
     await database
         .collection("tasks_rooms")
@@ -232,16 +228,52 @@ class AppCubit extends Cubit<AppState> {
       print(onError.toString());
     });
   }
+  Stream<QuerySnapshot> getTasksStream() {
+    return database
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: id)
+        .snapshots();
+  }
+  List<Tasks> tasksCalendar = [];
+  Future<void> getTasksInCalender(int day, int month, int year) async{
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+    FirebaseFirestore.instance
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: id)
+        .snapshots();
+    emit(GetCalenderTasks());
+
+    notificationStream.listen((snapshot) {
+      List<Tasks> tasks = [];
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        Tasks task = Tasks.fromJson(data);
+
+        if (task.year == year && task.month == month && task.day == day) {
+          tasks.add(task);
+          emit(AddToCalenderTasksList());
+        }
+      }
+
+      tasksCalendar = tasks;
+      emit(EqualityBetweenTheTwoLists());
+
+    });
+  }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
 
   String channelId = 'your_channel_id';
 
   showNotification({required String title, required String body}) {
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(channelId, 'Notify my',
-            importance: Importance.high);
+    AndroidNotificationDetails(channelId, 'Notify my',
+        importance: Importance.high);
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
@@ -253,7 +285,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-      FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
+  FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
   // chat
 
@@ -286,16 +318,32 @@ class AppCubit extends Cubit<AppState> {
 
   List<Widget> pagesNames = const [
     HomeScreen(
-      receiverId: '',
+      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     CalenderScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     NotificationScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     ProfileScreen(
-      uid: '',
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+  ];
+
+  List<Widget> adminPagesNames = const [
+    adminHomeScreen(
+      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    adminCalenderScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    TaskTemplateScreen(senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',),
+    NotificationScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
+    ),
+    ProfileScreen(
+      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
   ];
 }
