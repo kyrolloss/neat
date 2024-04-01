@@ -35,7 +35,7 @@ class AppCubit extends Cubit<AppState> {
   String email = '';
   String phone = '';
   String title = '';
-  String userImage = '';
+  String? url;
 
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
@@ -66,7 +66,7 @@ class AppCubit extends Cubit<AppState> {
         final String userPhone = data['phone'] as String;
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
-        String? image = data['image link'] ?? '';
+        String? image = data['url'] ?? '';
 
         name = userName;
         id = userUid;
@@ -74,7 +74,7 @@ class AppCubit extends Cubit<AppState> {
         phone = userPhone;
         title = Title;
         uid = userUid;
-        userImage = image!;
+        url = image!;
 
         emit(GetUserInfoSuccess());
       }
@@ -139,7 +139,7 @@ class AppCubit extends Cubit<AppState> {
         'uid': userCredential.user!.uid,
         'title': title,
         'phone': phone,
-        'image link': image ?? 'null',
+        'url': image ?? '',
       });
       getUserInfo(userCredential.user!.uid);
       emit(RegisterSuccess());

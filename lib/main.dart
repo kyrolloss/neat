@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Admin%20Screens/Main%20Layout.dart';
+import 'package:neat/Screens/MainLayout.dart';
+import 'package:neat/Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
@@ -90,7 +92,9 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: AdminMainLayout(uid: ''),
+        home: const OnboardingScreen(
+
+        ),
         theme: Provider.of<ThemeProvider>(context).themeData,
       ),
     );

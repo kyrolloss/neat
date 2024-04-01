@@ -21,7 +21,7 @@ class TUserProfileTile extends StatelessWidget {
   builder: (context, state) {
     var cubit = AppCubit.get(context);
     return ListTile(
-      leading: const TCircularImage(image: TImages.user, width: 50, height: 50, padding: 0,),
+      leading:  TCircularImage(image: cubit.url!, width: 50, height: 50, padding: 0,),
       title: Text(cubit.name, style: Theme.of(context).textTheme.headlineSmall!.apply(color: Colors.white)),
       subtitle: Text(cubit.title, style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.secondaryColor),),
       trailing: IconButton(onPressed: onPressed, icon: const Icon(Iconsax.edit, color: TColors.backgroundColor,)),

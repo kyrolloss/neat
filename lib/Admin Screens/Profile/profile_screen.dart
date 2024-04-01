@@ -1,6 +1,7 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
@@ -14,11 +15,13 @@ import 'package:neat/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:neat/common/widgets/settings_screen/settings_screen.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
+import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../common/widgets/images/circular_image.dart';
 import '../../components/Text.dart';
 import '../../components/color.dart';
 
@@ -47,6 +50,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
+    return BlocConsumer<AppCubit, AppState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    var cubit = AppCubit.get(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
@@ -64,9 +73,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 /// User Profile Card
-                TUserProfileTile(onPressed: (){
+              ListTile(
+                leading:  TCircularImage(image: cubit.url!, width: 50, height: 50, padding: 0,),
+                title: Text(cubit.name, style: Theme.of(context).textTheme.headlineSmall!.apply(color: Colors.white)),
+                subtitle: Text(cubit.title, style: Theme.of(context).textTheme.bodyMedium!.apply(color: TColors.secondaryColor),),
+                trailing: IconButton(onPressed: (){
                   navigateTo(context, const EditProfileScreen());
-                },),
+                }, icon: const Icon(Iconsax.edit, color: TColors.backgroundColor,)),
+              ),
                 const SizedBox(height: TSizes.spaceBtwSections,),
               ],
             )),
@@ -175,5 +189,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  },
+);
   }
 }

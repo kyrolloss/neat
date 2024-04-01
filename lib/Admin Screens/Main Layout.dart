@@ -179,33 +179,50 @@ class _MainLayoutState extends State<AdminMainLayout> {
           bottomNavigationBar: CurvedNavigationBar(
             key: bottomNavigationKey,
             index: 0,
-            items: const [
+
+            items:  const [
               CurvedNavigationBarItem(
-                child: Icon(Icons.home_outlined),
+                child: Icon(Icons.home_outlined , color: Colors.white,),
                 label: 'Home',
+                  labelStyle: TextStyle(
+                      color: Colors.white
+                  )
               ),
               CurvedNavigationBarItem(
-                child: Icon(Icons.calendar_month_outlined),
+                child: Icon(Icons.calendar_month_outlined,color: Colors.white),
                 label: 'Calendar',
+                  labelStyle: TextStyle(
+                      color: Colors.white
+                  )
+
               ),
               CurvedNavigationBarItem(
-                child: Icon(Icons.add_circle_outline_sharp),
+                child: Icon(Icons.add_circle_outline_sharp,color: Colors.white),
                 label: 'Send Task',
+                  labelStyle: TextStyle(
+                      color: Colors.white
+                  )
               ),
 
               CurvedNavigationBarItem(
-                child: Icon(Icons.notifications_none),
+                child: Icon(Icons.notifications_none,color: Colors.white),
                 label: 'Notifications',
+                  labelStyle: TextStyle(
+                      color: Colors.white
+                  )
               ),
               CurvedNavigationBarItem(
-                child: Icon(Icons.perm_identity),
+                child: Icon(Icons.perm_identity , color: Colors.white,),
                 label: 'Personal',
+                labelStyle: TextStyle(
+                  color: Colors.white
+                )
               ),
 
             ],
-            color: Colors.white,
-            buttonBackgroundColor: Colors.white,
-            backgroundColor: AppColor.primeColor,
+            color: AppColor.primeColor,
+            buttonBackgroundColor: AppColor.primeColor,
+            backgroundColor: TColors.backgroundColor,
             animationCurve: Curves.easeInOut,
             animationDuration: const Duration(milliseconds: 450),
             onTap: (index) {

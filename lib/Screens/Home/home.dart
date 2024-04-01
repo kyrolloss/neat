@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   TCircularImage(
-                                    image: TImages.user,
+                                    image: cubit.url == null ?'':cubit.url!,
                                     width: 90,
                                     height: 90,
                                   ),
