@@ -26,10 +26,15 @@ class adminHomeScreen extends StatefulWidget {
   });
 
   @override
-  State<adminHomeScreen> createState() => _HomeScreenState();
+  State<adminHomeScreen> createState() => _adminHomeScreenState();
 }
 
-class _HomeScreenState extends State<adminHomeScreen> {
+class _adminHomeScreenState extends State<adminHomeScreen> {
+  TextEditingController idController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  String selectedValue = 'Email';
+  List<String> values = ['ID', 'Email'];
+
   @override
   Widget build(BuildContext context) {
     bool isDarkMode =
@@ -62,10 +67,8 @@ class _HomeScreenState extends State<adminHomeScreen> {
                         width: width * .025,
                       ),
                       Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        mainAxisAlignment:
-                        MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           BuildText(
                             text: 'Hello,',
@@ -87,8 +90,7 @@ class _HomeScreenState extends State<adminHomeScreen> {
                       const Spacer(),
                       IconButton(
                           onPressed: () {
-                            navigateTo(
-                                context, const UsersScreen());
+                            navigateTo(context, const UsersScreen());
                           },
                           icon: Icon(
                             Icons.chat,
@@ -96,10 +98,6 @@ class _HomeScreenState extends State<adminHomeScreen> {
                                 ? TColors.secondaryColor
                                 : TColors.primaryColor,
                           )),
-
-
-
-
 
                       /// Chats
                     ],
@@ -125,10 +123,8 @@ class _HomeScreenState extends State<adminHomeScreen> {
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
                       child: Column(
-                        mainAxisAlignment:
-                        MainAxisAlignment.spaceEvenly,
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
                             height: TSizes.lg * 3.5,
@@ -136,7 +132,7 @@ class _HomeScreenState extends State<adminHomeScreen> {
                             child: Center(
                               child: BuildText(
                                 text:
-                                'U have 3 Individuals Under Your Supervision',
+                                    'U have 3 Individuals Under Your Supervision',
                                 color: AppColor.secondColor,
                                 size: 20,
                                 bold: true,
@@ -148,14 +144,217 @@ class _HomeScreenState extends State<adminHomeScreen> {
                             height: height * .01,
                           ),
                           GestureDetector(
-                            onTap: () async {},
+                            onTap: () async {
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return StatefulBuilder(
+                                    builder: (context, setState) {
+                                      return Dialog(
+                                        child: Container(
+                                          height: height * .3,
+                                          decoration: BoxDecoration(
+                                              color: Colors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(25)),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Center(
+                                                child: DropdownButton<String>(
+                                                  value: selectedValue,
+                                                  onChanged: (newValue) {
+                                                    setState(() {
+                                                      // تحديث القيمة المختارة
+                                                      selectedValue = newValue!;
+                                                    });
+                                                  },
+                                                  items: values.map((value) {
+                                                    return DropdownMenuItem<
+                                                        String>(
+                                                      value: value,
+                                                      child: Text(value),
+                                                    );
+                                                  }).toList(),
+                                                ),
+                                              ),
+                                              selectedValue == 'ID'
+                                                  ? Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12.0),
+                                                      child: TextFormField(
+                                                        controller:
+                                                            idController,
+                                                        cursorColor:
+                                                            Colors.black,
+                                                        decoration:
+                                                            InputDecoration(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10),
+                                                                fillColor: AppColor
+                                                                    .secondColor,
+                                                                filled: true,
+                                                                hintText:
+                                                                    'ID ...',
+                                                                hintStyle:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 15,
+                                                                ),
+                                                                border: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                    gapPadding:
+                                                                        20,
+                                                                    borderSide:
+                                                                        BorderSide
+                                                                            .none),
+                                                                counterStyle: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        25,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                      ),
+                                                    )
+                                                  : Padding(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              12.0),
+                                                      child: TextFormField(
+                                                        controller:
+                                                            emailController,
+                                                        cursorColor:
+                                                            Colors.black,
+                                                        decoration:
+                                                            InputDecoration(
+                                                                contentPadding:
+                                                                    const EdgeInsets
+                                                                        .all(
+                                                                        10),
+                                                                fillColor: AppColor
+                                                                    .secondColor,
+                                                                filled: true,
+                                                                hintText:
+                                                                    'Email ...',
+                                                                hintStyle:
+                                                                    const TextStyle(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  fontSize: 15,
+                                                                ),
+                                                                border: OutlineInputBorder(
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            30),
+                                                                    gapPadding:
+                                                                        20,
+                                                                    borderSide:
+                                                                        BorderSide
+                                                                            .none),
+                                                                counterStyle: const TextStyle(
+                                                                    color: Colors
+                                                                        .white,
+                                                                    fontSize:
+                                                                        25,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold)),
+                                                      ),
+                                                    ),
+                                              selectedValue == 'ID'
+                                                  ? GestureDetector(
+                                                      child: GestureDetector(
+                                                        onTap: () async {
+                                                          cubit.addMemberToGroup(
+                                                              idController.text
+                                                                  .toString());
+                                                          idController.clear();
+                                                          Navigator.pop(
+                                                              context);
+                                                        },
+                                                        child: Container(
+                                                          height: height * .04,
+                                                          width: width * .3,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: AppColor
+                                                                .primeColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        25),
+                                                          ),
+                                                          child: Center(
+                                                            child: BuildText(
+                                                              text: "Add ",
+                                                              color: AppColor
+                                                                  .secondColor,
+                                                              size: 17.5,
+                                                              bold: true,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : GestureDetector(
+                                                onTap: () async {
+                                                  cubit.addMemberToGroupByEmail(
+                                                      emailController.text
+                                                          .toString());
+                                                  emailController.clear();
+                                                  Navigator.pop(
+                                                      context);
+                                                },
+                                                child: Container(
+                                                  height: height * .04,
+                                                  width: width * .3,
+                                                  decoration:
+                                                  BoxDecoration(
+                                                    color: AppColor
+                                                        .primeColor,
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(
+                                                        25),
+                                                  ),
+                                                  child: Center(
+                                                    child: BuildText(
+                                                      text: "Add ",
+                                                      color: AppColor
+                                                          .secondColor,
+                                                      size: 17.5,
+                                                      bold: true,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  );
+                                },
+                              );
+                            },
                             child: Container(
                               height: height * .04,
                               width: width * .5,
                               decoration: BoxDecoration(
                                 color: AppColor.secondColor,
-                                borderRadius:
-                                BorderRadius.circular(25),
+                                borderRadius: BorderRadius.circular(25),
                               ),
                               child: Center(
                                 child: BuildText(
@@ -174,9 +373,9 @@ class _HomeScreenState extends State<adminHomeScreen> {
                   SizedBox(
                     height: height * .02,
                   ),
+
                   BuildText(
-                    text:
-                    'Your Team Performance',
+                    text: 'Your Team Performance',
                     color: AppColor.primeColor,
                     size: 20,
                     bold: true,
