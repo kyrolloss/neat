@@ -114,12 +114,11 @@ class AppCubit extends Cubit<AppState> {
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
     );
-    if (picked != null && picked != selectedDate) {
       selectedDate = picked;
       year = selectedDate!.year;
       month = selectedDate!.month;
       day = selectedDate!.day;
-    }
+
     emit(DatePickedSuccessfully());
   }
 
