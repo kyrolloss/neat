@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/MainLayout.dart';
+import 'package:neat/Screens/authentication/screens/signup/admin_or_user_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
 import 'package:neat/components/components.dart';
@@ -51,7 +52,18 @@ class _SignupFormState extends State<SignupForm> {
       listener: (context, state) {
         if (state is RegisterSuccess) {
           navigateToToFinish(
-              context, MainLayout(uid: AppCubit.get(context).id));
+              context, AdminOrUserScreen());
+        } else  if (state is RegisterFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'error',
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+          ));
+
         }
         // TODO: implement listener
       },
@@ -303,23 +315,15 @@ class _SignupFormState extends State<SignupForm> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () {
+
                   cubit.Register(
                       email: email.text,
                       password: password.text,
                       name: '${firstName.text} ${lastName.text}',
                       phone: phone.text,
                       title: titleController.text);
-                  if (state is RegisterFailed) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                      content: Text(
-                        'error',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                      backgroundColor: Colors.red,
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25))),
-                    ));
-                  }
+
+
                 },
                 child: Text(
                   TText.createAccount,

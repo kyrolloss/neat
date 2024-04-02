@@ -152,7 +152,7 @@ bool isObsecured = true;
                   },
                   child:  Text(
                     "Log in",
-                    style: TextStyle(fontSize: 18, color: isDarkMode? TColors.primaryColor : TColors.secondaryColor),
+                    style: TextStyle(fontSize: 18, color: isDarkMode? TColors.primaryColor : TColors.backgroundColor),
                   ),
                 ),
               ),
