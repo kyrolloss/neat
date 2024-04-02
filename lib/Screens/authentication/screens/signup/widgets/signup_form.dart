@@ -6,6 +6,7 @@ import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/admin_or_user_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
+import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:provider/provider.dart';
@@ -49,24 +50,7 @@ class _SignupFormState extends State<SignupForm> {
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return BlocConsumer<AppCubit, AppState>(
-      listener: (context, state) {
-        if (state is RegisterSuccess) {
-          navigateToToFinish(
-              context, AdminOrUserScreen());
-        } else  if (state is RegisterFailed) {
-          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              'error',
-              style: TextStyle(color: Colors.white),
-            ),
-            backgroundColor: Colors.red,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.all(Radius.circular(25))),
-          ));
-
-        }
-        // TODO: implement listener
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Form(
@@ -222,7 +206,7 @@ class _SignupFormState extends State<SignupForm> {
             /// Password
             TextFormField(
               style: TextStyle(color: TColors.primaryColor),
-              obscureText:isObsecuredText,
+              obscureText: isObsecuredText,
               controller: password,
               expands: false,
               decoration: InputDecoration(
@@ -242,14 +226,13 @@ class _SignupFormState extends State<SignupForm> {
                 prefixIcon: const Icon(Iconsax.password_check),
                 prefixIconColor: TColors.primaryColor,
                 suffixIcon: GestureDetector(
-                  onTap:(){
-                    setState(() {
-                      isObsecuredText = !isObsecuredText;
-                    });
-                  } ,
-                    child: Icon(isObsecuredText
-                        ? Iconsax.eye_slash
-                        : Iconsax.eye)),
+                    onTap: () {
+                      setState(() {
+                        isObsecuredText = !isObsecuredText;
+                      });
+                    },
+                    child: Icon(
+                        isObsecuredText ? Iconsax.eye_slash : Iconsax.eye)),
                 suffixIconColor: TColors.primaryColor,
               ),
             ),
@@ -285,9 +268,8 @@ class _SignupFormState extends State<SignupForm> {
                         isObsecuredText = !isObsecuredText;
                       });
                     },
-                    child: Icon(isObsecuredText
-                        ? Iconsax.eye_slash
-                        : Iconsax.eye)),
+                    child: Icon(
+                        isObsecuredText ? Iconsax.eye_slash : Iconsax.eye)),
                 suffixIconColor: TColors.primaryColor,
               ),
             ),
@@ -315,15 +297,32 @@ class _SignupFormState extends State<SignupForm> {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
                 onPressed: () {
-
-                  cubit.Register(
-                      email: email.text,
-                      password: password.text,
-                      name: '${firstName.text} ${lastName.text}',
-                      phone: phone.text,
-                      title: titleController.text);
-
-
+                  if (titleController.text.isEmpty ||
+                      email.text.isEmpty ||
+                      phone.text.isEmpty ||
+                      password.text.isEmpty ||
+                      confirmPassword.text.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                      content: const Text(
+                        'please enter your information completely',
+                        style: TextStyle(color: Colors.black),
+                      ),
+                      backgroundColor: AppColor.secondColor,
+                      shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.all(Radius.circular(25))),
+                    ));
+                  } else {
+                    navigateToToFinish(
+                        context,
+                        AdminOrUserScreen(
+                          email: email.text.toString(),
+                          password: password.text.toString(),
+                          name:
+                              '${firstName.text.toString()} ${lastName.text.toString()}',
+                          phone: phone.text.toString(),
+                          title: titleController.text.toString(),
+                        ));
+                  }
                 },
                 child: Text(
                   TText.createAccount,

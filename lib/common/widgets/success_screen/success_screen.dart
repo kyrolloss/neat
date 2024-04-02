@@ -6,12 +6,14 @@ import 'package:neat/utlis/constants/text_strings.dart';
 import '../../../utlis/constants/sizes.dart';
 
 class SuccessScreen extends StatelessWidget {
+  final String type;
   const SuccessScreen(
-      {super.key,
+      {
+        super.key,
       required this.image,
       required this.title,
       required this.subTitle,
-      required this.onPressed});
+      required this.onPressed, required this.type});
 
   final String image, title, subTitle;
   final VoidCallback onPressed;

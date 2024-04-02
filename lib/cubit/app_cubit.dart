@@ -126,7 +126,9 @@ class AppCubit extends Cubit<AppState> {
       required String name,
       required String phone,
       String? image,
-      required String title}) async {
+      required String title ,
+        required String type
+      }) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -138,6 +140,7 @@ class AppCubit extends Cubit<AppState> {
         'title': title,
         'phone': phone,
         'url': image ?? '',
+        'type': type
       });
       getUserInfo(userCredential.user!.uid);
       emit(RegisterSuccess());

@@ -7,7 +7,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
+import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/enum/user_role.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
@@ -15,23 +17,29 @@ import 'package:neat/common/widgets/success_screen/success_screen.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:path/path.dart';
+import '../../../../Admin Screens/Main Layout.dart';
 import '../../../../cubit/app_cubit.dart';
 import '../../../../utlis/constants/colors.dart';
 import '../../../../utlis/constants/sizes.dart';
 import '../../../../utlis/constants/text_strings.dart';
 
 class AdminOrUserScreen extends StatefulWidget {
-  const AdminOrUserScreen({super.key});
+  const AdminOrUserScreen({super.key, required this.email, required this.password, required this.name, required this.phone, required this.title});
+  final String email;
+  final String password;
+  final String name;
+  final String phone;
+  final String title;
 
   @override
   State<AdminOrUserScreen> createState() => _AdminOrUserScreenState();
 }
 
 class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
+  String type = 'User';
   File? file;
   String? url;
   var database = FirebaseFirestore.instance;
-  UserRole selectedRole = UserRole.User;
 
   @override
   void initState() {
@@ -40,7 +48,9 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
     //  _loadPhotoUrl();
   }
 
+
   getImageGallery(BuildContext context) async {
+
     final ImagePicker picker = ImagePicker();
 
     /// Pick an image.
@@ -53,7 +63,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
       // if (kDebugMode) {
       //   print(imageGallery.path);
       // }
-      file = File(imageGallery!.path);
+      file = File(imageGallery.path);
       // if (kDebugMode) {
       //   print(imageGallery.path);
       // }
@@ -105,7 +115,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
         content: Text(snackText),
         duration: d,
       );
-      ScaffoldMessenger.of(context as BuildContext).showSnackBar(snackBar);
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
     }
 
     setState(() {
@@ -119,20 +129,35 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-        // TODO: implement listener
-      },
+        if (state is RegisterSuccess) {
+
+        } else  if (state is RegisterFailed) {
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text(
+              'error',
+              style: TextStyle(color: Colors.white),
+            ),
+            backgroundColor: Colors.red,
+            shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.all(Radius.circular(25))),
+          ));
+          navigateToToFinish(context, const SignupScreen());
+
+        }      },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
           backgroundColor: TColors.backgroundColor,
-          appBar: TAppBar(
+          appBar: const TAppBar(
             backgroundColor: TColors.backgroundColor,
           ),
           body: SingleChildScrollView(
             child: Padding(
-              padding: EdgeInsets.all(TSizes.defaultSpace),
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
                 children: [
                   SizedBox(
@@ -153,7 +178,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                                         fit: BoxFit.cover,
                                       ),
                                     )
-                                  : ClipOval(
+                                  : const ClipOval(
                                       child: Image(
                                         image: AssetImage(
                                             'assets/images/user/user.png'),
@@ -194,7 +219,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                             style: TextStyle(color: TColors.primaryColor),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           height: TSizes.spaceBtwSections * 3,
                         ),
                         Row(
@@ -205,28 +230,29 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    selectedRole = UserRole.User;
+
+                                    type = 'User';
 
                                   });
                                 },
                                 child: Text(
                                   "User",
                                   style: TextStyle(
-                                      color: selectedRole == UserRole.User
+                                      color: type == 'User'
                                           ? TColors.backgroundColor
                                           : TColors.primaryColor),
                                 ),
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                    selectedRole == UserRole.User
+                                        type == 'User'
                                         ? TColors.primaryColor
                                         : TColors.backgroundColor,
                                   ),
                                 ),
                               ),
                             ),
-                            SizedBox(
+                            const SizedBox(
                               width: TSizes.spaceBtwItems,
                             ),
                             SizedBox(
@@ -234,24 +260,24 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                               child: ElevatedButton(
                                 onPressed: () {
                                   setState(() {
-                                    selectedRole = UserRole.Admin;
+                                    type = 'Admin';
 
                                   });
                                 },
-                                child: Text(
-                                  "Admin",
-                                  style: TextStyle(
-                                      color: selectedRole == UserRole.Admin
-                                          ? TColors.backgroundColor
-                                          : TColors.primaryColor),
-                                ),
                                 style: ButtonStyle(
                                   backgroundColor:
                                       MaterialStateProperty.all<Color>(
-                                    selectedRole == UserRole.Admin
+                                        type == 'Admin'
                                         ? TColors.primaryColor
                                         : TColors.backgroundColor,
                                   ),
+                                ),
+                                child: Text(
+                                  "Admin",
+                                  style: TextStyle(
+                                      color: type == 'Admin'
+                                          ? TColors.backgroundColor
+                                          : TColors.primaryColor),
                                 ),
                               ),
                             ),
@@ -259,7 +285,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
 
                           ],
                         ),
-                        SizedBox(height: TSizes.spaceBtwSections,),
+                        const SizedBox(height: TSizes.spaceBtwSections,),
                         Column(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: [
@@ -267,20 +293,22 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                               width: double.infinity,
                               child: ElevatedButton(
                                 onPressed: () {
-                                  setState(() {
-                                    _navigateToSuccessScreen(context);
+                                  setState(() async{
+
+                                    await AppCubit.get(context).Register(email: widget.email, password: widget.password, name: widget.name, phone: widget.phone, title: widget.title, type: type);
+                                    _navigateToSuccessScreen(context , type);
                                   });
                                 },
-                                child: Text(
-                                  "Done",
-                                  style: TextStyle(
-                                      color:TColors.backgroundColor),
-                                ),
                                 style: ButtonStyle(
                                   backgroundColor:
                                   MaterialStateProperty.all<Color>(
                                       TColors.primaryColor
                                   ),
+                                ),
+                                child:  const Text(
+                                  "Done",
+                                  style: TextStyle(
+                                      color:TColors.backgroundColor),
                                 ),
                               ),
                             ),
@@ -298,14 +326,21 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
     );
   }
 
-  void _navigateToSuccessScreen(BuildContext context) {
+  void _navigateToSuccessScreen(BuildContext context , String type) {
     Navigator.of(context).push(MaterialPageRoute(
         builder: (context) => SuccessScreen(
               image: TImages.staticSuccessIllustration2,
               title: TText.yourAccountCreatedTitle,
               subTitle: TText.yourAccountCreatedSubTitle,
+          type: type,
               onPressed: () {
-                navigateTo(context, LoginScreen());
+                if (type == 'User')
+                  {navigateToToFinish(context,  MainLayout(uid: AppCubit.get(context).id));}
+                else if (type =='Admin')
+                  {
+                    navigateToToFinish(context,  AdminMainLayout(uid: AppCubit.get(context).id));
+                  }
+
               },
             )));
   }
