@@ -90,7 +90,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: AdminMainLayout(uid: ''),
+        home: AdminMainLayout(uid: 'psjqo94XMoVnY3wMiYbW49H9oTq2'),
         theme: Provider.of<ThemeProvider>(context).themeData,
       ),
     );

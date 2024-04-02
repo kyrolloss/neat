@@ -354,10 +354,11 @@ class AppCubit extends Cubit<AppState> {
         .where('receiverId', isEqualTo: id)
         .snapshots();
   }
-  Stream<DocumentSnapshot<Map<String, dynamic>>>performanceStream (){
-    return database.collection('groups').doc(id).snapshots();
+  Stream<QuerySnapshot<Map<String, dynamic>>>performanceStream (){
+    return database.collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('senderId' ,isEqualTo: id).snapshots();
 
   }
+
   
   
 
