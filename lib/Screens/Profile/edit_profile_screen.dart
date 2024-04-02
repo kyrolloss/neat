@@ -62,7 +62,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   //   _photoUrl =photoUrl;
   // }
 
-  getImageGallery() async {
+  getImageGallery(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
     /// Pick an image.
@@ -187,31 +187,32 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                       children: [
                         Stack(children: [
-                          if (cubit.url != null)
-                            Container(
+                          Container(
                               height: 120,
                               width: 120,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
                               ),
-                              child: ClipOval(
-                                  child: Image.network(
-                                cubit.url!,
-                                fit: BoxFit.cover,
-                              )),
-                            )
-                          else
-                            const TCircularImage(
-                              image: TImages.user,
-                              width: 120,
-                              height: 120,
-                            ),
+                              child: cubit.url != null && cubit.url!.isNotEmpty
+                                  ? ClipOval(
+                                      child: Image.network(
+                                        cubit.url!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : ClipOval(
+                                      child: Image(
+                                        image: AssetImage(
+                                            'assets/images/user/user.png'),
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
                           Positioned(
                             bottom: -10,
                             right: -6,
                             child: IconButton(
                               onPressed: () async {
-                                final imageUrl = await getImageGallery();
+                                final imageUrl = await getImageGallery(context);
                                 if (imageUrl != null) {
                                   setState(() {
                                     url = imageUrl;

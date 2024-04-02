@@ -18,6 +18,7 @@ import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/Text.dart';
 import '../../components/color.dart';
@@ -66,7 +67,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 /// User Profile Card
                 TUserProfileTile(onPressed: (){
                   navigateTo(context, const EditProfileScreen());
-                },),
+                },
+
+
+                ),
                 const SizedBox(height: TSizes.spaceBtwSections,),
               ],
             )),

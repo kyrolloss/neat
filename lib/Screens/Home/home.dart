@@ -96,11 +96,26 @@ class _HomeScreenState extends State<HomeScreen> {
                                 Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
-                                  TCircularImage(
-                                    image: cubit.url == null ?'':cubit.url!,
-                                    width: 90,
-                                    height: 90,
-                                  ),
+                                  Container(
+                                      height: 120,
+                                      width: 120,
+                                      decoration: const BoxDecoration(
+                                        shape: BoxShape.circle,
+                                      ),
+                                      child: cubit.url != null && cubit.url!.isNotEmpty
+                                          ? ClipOval(
+                                        child: Image.network(
+                                          cubit.url!,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )
+                                          : ClipOval(
+                                        child: Image(
+                                          image: AssetImage(
+                                              'assets/images/user/user.png'),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      )),
                                   SizedBox(
                                     width: width * .025,
                                   ),
