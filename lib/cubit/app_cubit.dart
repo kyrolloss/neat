@@ -29,12 +29,16 @@ class AppCubit extends Cubit<AppState> {
   int day = 0;
   List tasksList = [];
   int numberOfTodoTasks = 0;
+  int numberOfInProgressTasks = 0;
+  int numberOfCompletedTasks = 0;
   String id = '';
   String name = '';
   String email = '';
   String phone = '';
   String title = '';
   String? url;
+  String? typee = '';
+
 
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
@@ -65,6 +69,7 @@ class AppCubit extends Cubit<AppState> {
         final String userUid = data['uid'] as String;
         final String Title = data['title'] as String;
         String? image = data['url'] ?? '';
+        String? type = data['type'] ?? '';
 
         name = userName;
         id = userUid;
@@ -73,6 +78,7 @@ class AppCubit extends Cubit<AppState> {
         title = Title;
         uid = userUid;
         url = image!;
+        typee = type;
 
         emit(GetUserInfoSuccess());
       }
@@ -358,9 +364,10 @@ class AppCubit extends Cubit<AppState> {
         .snapshots();
   }
   Stream<QuerySnapshot<Map<String, dynamic>>>performanceStream (){
-    return database.collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('senderId' ,isEqualTo: id).snapshots();
+    return database.collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('senderId' ,isEqualTo: 'VLCOlKkUE5TcnPUnRFZSqIb7Os02').snapshots();
 
   }
+
 
   
   

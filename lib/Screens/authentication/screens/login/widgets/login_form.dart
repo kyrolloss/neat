@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'package:iconsax/iconsax.dart';
+import 'package:neat/Admin%20Screens/Main%20Layout.dart';
 import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
@@ -29,10 +30,7 @@ class _LoginFormState extends State<LoginForm> {
 
   TextEditingController password = TextEditingController();
 
-bool isObsecured = true;
-
-
-
+  bool isObsecured = true;
 
   @override
   Widget build(BuildContext context) {
@@ -47,13 +45,7 @@ bool isObsecured = true;
         listener: (context, state) {
           var cubit = AppCubit.get(context);
 
-          if (state is LoginSuccess) {
-            navigateTo(
-                context,
-                MainLayout(
-                  uid: cubit.id,
-                ));
-          }
+
         },
         builder: (context, state) {
           var cubit = AppCubit.get(context);
@@ -62,8 +54,9 @@ bool isObsecured = true;
               /// Email
               TextFormField(
                 style: TextStyle(
-                    color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor
-                ),
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor),
                 controller: email,
                 expands: false,
                 keyboardType: TextInputType.emailAddress,
@@ -73,7 +66,9 @@ bool isObsecured = true;
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     prefixIcon: const Icon(Iconsax.direct_right),
-                    prefixIconColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                    prefixIconColor: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -84,9 +79,13 @@ bool isObsecured = true;
                     ),
                     labelText: TText.email,
                     filled: true,
-                    fillColor:isDarkMode?TColors.primaryColor.withOpacity(0.7)  : TColors.secondaryColor ,
-                    labelStyle:  TextStyle(
-                      color:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                    fillColor: isDarkMode
+                        ? TColors.primaryColor.withOpacity(0.7)
+                        : TColors.secondaryColor,
+                    labelStyle: TextStyle(
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor,
                     )),
               ),
               const SizedBox(
@@ -96,8 +95,9 @@ bool isObsecured = true;
               /// -- Password
               TextFormField(
                 style: TextStyle(
-                  color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor
-                ),
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor),
                 controller: password,
                 obscureText: isObsecured,
                 expands: false,
@@ -107,7 +107,9 @@ bool isObsecured = true;
                       borderSide: const BorderSide(color: Colors.transparent),
                     ),
                     prefixIcon: const Icon(Iconsax.password_check),
-                    prefixIconColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                    prefixIconColor: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(40),
                       borderSide: const BorderSide(color: Colors.transparent),
@@ -118,18 +120,24 @@ bool isObsecured = true;
                     ),
                     labelText: TText.password,
                     filled: true,
-                    fillColor:isDarkMode?TColors.primaryColor.withOpacity(0.7)  : TColors.secondaryColor ,
+                    fillColor: isDarkMode
+                        ? TColors.primaryColor.withOpacity(0.7)
+                        : TColors.secondaryColor,
                     suffixIcon: GestureDetector(
-                      onTap: (){
-                        setState(() {
-                          isObsecured = !isObsecured;
-                        });
-                      },
-                        child: Icon(isObsecured ? Iconsax.eye_slash : Iconsax.eye, color: TColors.primaryColor,)),
+                        onTap: () {
+                          setState(() {
+                            isObsecured = !isObsecured;
+                          });
+                        },
+                        child: Icon(
+                          isObsecured ? Iconsax.eye_slash : Iconsax.eye,
+                          color: TColors.primaryColor,
+                        )),
                     labelStyle: TextStyle(
-                      color:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor,
                     )),
-
               ),
               const SizedBox(
                 height: TSizes.spaceBtwSections,
@@ -143,16 +151,28 @@ bool isObsecured = true;
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20)),
-                    backgroundColor:  isDarkMode ? TColors.secondaryColor: TColors.primaryColor,
+                    backgroundColor: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                     side: const BorderSide(color: Colors.transparent),
                   ),
                   onPressed: () async {
                     await cubit.Login(
                         email: email.text, password: password.text);
+                    if (cubit.typee == 'Admin') {
+                      navigateToToFinish(
+                          context, AdminMainLayout(uid: cubit.id));
+                    } else if (cubit.typee == 'User') {
+                      navigateTo(context, MainLayout(uid: cubit.id));
+                    }
                   },
-                  child:  Text(
+                  child: Text(
                     "Log in",
-                    style: TextStyle(fontSize: 18, color: isDarkMode? TColors.primaryColor : TColors.backgroundColor),
+                    style: TextStyle(
+                        fontSize: 18,
+                        color: isDarkMode
+                            ? TColors.primaryColor
+                            : TColors.backgroundColor),
                   ),
                 ),
               ),
@@ -183,7 +203,7 @@ bool isObsecured = true;
                       },
                       child: const Text(
                         TText.createAccount,
-                        style: TextStyle(color:  TColors.primaryColor),
+                        style: TextStyle(color: TColors.primaryColor),
                       )),
                 ],
               ),

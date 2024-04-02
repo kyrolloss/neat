@@ -60,7 +60,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       const TCircularImage(
-                        image: TImages.user,
+                        image: "assets/images/user/user.png",
                         width: 90,
                         height: 90,
                       ),
@@ -383,7 +383,22 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                     maxLines: 3,
                   ),
 
-                  BuilderTasksList()
+                  SizedBox(height: height*.175,
+                      width: width*.9,
+                      child: Center(child: BuilderTodo())),
+
+
+                  SizedBox(height: height*.175,
+                      width: width*.9,
+                      child: Center(child: BuilderProgress())),
+
+                  SizedBox(height: height*.175,
+                      width: width*.9,
+                      child: Center(child: BuilderCompleted()))
+
+
+
+
 
 
                 ],
@@ -395,15 +410,22 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
     );
   }
 
-  Widget BuilderTasksList() {
+  Widget BuilderTodo() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
 
     return StreamBuilder(
       stream: AppCubit.get(context).performanceStream( ),
       builder: (context, snapshot) {
         AppCubit.get(context)
-            .getTasksStream( )
+            .performanceStream( )
             .listen((event) {
-          AppCubit.get(context).numberOfTodoTasks = event.docs.length;
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'to do') {
+              AppCubit.get(context).numberOfTodoTasks=event.docs.length;
+            }
+          }
         });
         if (snapshot.hasError) {
           return const Text('error');
@@ -416,88 +438,113 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
             color: AppColor.primeColor,
           );
         }
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1, childAspectRatio: 1.5),
-          children:
-          snapshot.data!.docs.map((doc) => BuildtaskListItem(doc)).toList(),
+        return Container(
+          height: height*.15,
+          width: width*.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color:AppColor.secondColor,
+          ),
+          child: SizedBox(height: height*.1,width: width*.4,
+            child: Center(child:
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+          ),
         );
+
       },
     );
   }
 
-  Widget BuildtaskListItem(DocumentSnapshot doc) {
-    Map<String, dynamic> taskData = doc.data() as Map<String, dynamic>;
+  Widget BuilderProgress() {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return GestureDetector(
-      onTap: () async {
-        navigateTo(
-            context,
-            taskDetailsScreen(
-              name: taskData['name'],
-              description: taskData['description'],
-              day: taskData['day'],
-              year: taskData['year'],
-              month: taskData['month'],
+    return StreamBuilder(
+      stream: AppCubit.get(context).performanceStream( ),
+      builder: (context, snapshot) {
+        AppCubit.get(context)
+            .performanceStream( )
+            .listen((event) {
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'inProgress') {
+              AppCubit.get(context).numberOfInProgressTasks=event.docs.length;
+            }
+          }
+        });
+        if (snapshot.hasError) {
+          return const Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState) {
+          return const Text('Loading');
+        }
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(
+            color: AppColor.primeColor,
+          );
+        }
+        return Container(
+          height: height*.15,
+          width: width*.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color:AppColor.secondColor,
+          ),
+          child: SizedBox(height: height*.1,width: width*.4,
+            child: Center(child:
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+          ),
+        );
 
-
-
-              senderID: taskData['senderId'],
-              senderName: taskData['senderName'],
-              senderEmail: taskData['senderEmail'],
-              senderPhone: taskData['senderPhoneNumber'],
-              taskId: taskData['id'],
-            ));
       },
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: width * .2,
-            minWidth: width * .05,
-          ),
-          child: Container(
-            height: height * .1,
-            decoration: BoxDecoration(
-                color: AppColor.secondColor,
-                borderRadius: BorderRadius.circular(25)),
-            child:Center(
-              child: BuildText(text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent'),
-
-            )
-            //
-          ),
-        ),
-      ),
     );
   }
+
+  Widget BuilderCompleted() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
+    return StreamBuilder(
+      stream: AppCubit.get(context).performanceStream( ),
+      builder: (context, snapshot) {
+        AppCubit.get(context)
+            .performanceStream( )
+            .listen((event) {
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'completed') {
+              AppCubit.get(context).numberOfCompletedTasks=event.docs.length;
+            }
+          }
+        });
+        if (snapshot.hasError) {
+          return const Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState) {
+          return const Text('Loading');
+        }
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(
+            color: AppColor.primeColor,
+          );
+        }
+        return Container(
+          height: height*.15,
+          width: width*.9,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(25),
+            color:AppColor.secondColor,
+          ),
+          child: SizedBox(height: height*.1,width: width*.4,
+            child: Center(child:
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+          ),
+        );
+
+      },
+    );
+  }
+
 }
 
 
-// Row(
-//
-//   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//   children: [
-//     Icon(
-//       Icons.note_sharp,
-//       color: AppColor.primeColor,
-//     ),
-//     Column(
-//       crossAxisAlignment: CrossAxisAlignment.start,
-//       mainAxisAlignment: MainAxisAlignment.center,
-//       children: [
-//         SizedBox(
-//             width: width * .2,
-//             child: BuildText(
-//               text: taskData['name'],
-//               size: 17.5,
-//               bold: true,
-//               color: AppColor.primeColor,
-//               maxLines: 2,
-//             )),
-//       ],
-//     ),
-//   ],
-// ),
