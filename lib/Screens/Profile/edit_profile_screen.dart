@@ -34,16 +34,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   File? file;
   String? url;
+
   // late SharedPreferences _prefs;
   // late String _photoUrl;
   var database = FirebaseFirestore.instance;
 
   @override
-  void initState(){
-   super.initState();
-   // _initPrefs();
-   //  _loadPhotoUrl();
+  void initState() {
+    super.initState();
+    // _initPrefs();
+    //  _loadPhotoUrl();
   }
+
   // _initPrefs() async{
   //   _prefs = await SharedPreferences.getInstance();
   // }
@@ -62,9 +64,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   getImageGallery() async {
     final ImagePicker picker = ImagePicker();
+
     /// Pick an image.
     final XFile? imageGallery =
-        await picker.pickImage(source: ImageSource.camera);
+        await picker.pickImage(source: ImageSource.gallery);
     if (imageGallery != null) {
       // if (kDebugMode) {
       //   print('******');
@@ -94,10 +97,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       var refStorage = FirebaseStorage.instance.ref("ProfileImg/$imageName");
       await refStorage.putFile(file!);
       url = await refStorage.getDownloadURL();
-      await database.collection('Users').doc('f1xQHnHVneTjbxT9wMqTlAQutS63').update(
-          {
-            'url': url,
-          });
+      await database
+          .collection('Users')
+          .doc('f1xQHnHVneTjbxT9wMqTlAQutS63')
+          .update({
+        'url': url,
+      });
       AppCubit.get(context).url = url;
       // if (kDebugMode) {
       //   print('url : $url');
@@ -112,13 +117,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     setState(() {
       if (imageGallery != null) {
         file = File(imageGallery.path);
-      } else{
-        showSnackBar("No profile Selected",const  Duration(milliseconds:400));
+      } else {
+        showSnackBar("No profile Selected", const Duration(milliseconds: 400));
       }
     });
 
-
-    getImagesAndFolderName() async{
+    getImagesAndFolderName() async {
       var ref = await FirebaseStorage.instance.ref("ProfileImg").list();
       for (var element in ref.items) {
         if (kDebugMode) {
@@ -129,11 +133,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         }
       }
     }
-
-
   }
-  showSnackBar(String snackText, Duration d ){
-    final snackBar = SnackBar(content: Text(snackText), duration: d,);
+
+  showSnackBar(String snackText, Duration d) {
+    final snackBar = SnackBar(
+      content: Text(snackText),
+      duration: d,
+    );
     ScaffoldMessenger.of(context as BuildContext).showSnackBar(snackBar);
   }
 
@@ -169,7 +175,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 color:
                     isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
           ),
-
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -205,14 +210,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             bottom: -10,
                             right: -6,
                             child: IconButton(
-                              onPressed: () async{
+                              onPressed: () async {
                                 final imageUrl = await getImageGallery();
-                                if(imageUrl != null){
+                                if (imageUrl != null) {
                                   setState(() {
                                     url = imageUrl;
                                   });
                                   // _savePhotoUrl(imageUrl);
                                 }
+                                TCircularImage(
+                                  image: TImages.user,
+                                  height: 120,
+                                  width: 120,
+                                );
                               },
                               icon: const Icon(
                                 Icons.add_a_photo_outlined,
@@ -223,8 +233,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                         TextButton(
                           onPressed: () {
-                            if (url!.isNotEmpty)
-                              Image.network(cubit.url!);
+                            if (url!.isNotEmpty) Image.network(cubit.url!);
                           },
                           child: Text(
                             "Change Profile Picture",

@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -24,7 +25,6 @@ class SignupForm extends StatefulWidget {
 }
 
 class _SignupFormState extends State<SignupForm> {
-
   /// text controllers
 
   TextEditingController firstName = TextEditingController();
@@ -40,9 +40,8 @@ class _SignupFormState extends State<SignupForm> {
 
   TextEditingController phone = TextEditingController();
 
-
   /// sign up user
-
+  bool isObsecuredText = true;
 
   @override
   Widget build(BuildContext context) {
@@ -50,8 +49,9 @@ class _SignupFormState extends State<SignupForm> {
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-         if (state is RegisterSuccess) {
-        navigateToToFinish(context,  MainLayout(uid: AppCubit.get(context).id));
+        if (state is RegisterSuccess) {
+          navigateToToFinish(
+              context, MainLayout(uid: AppCubit.get(context).id));
         }
         // TODO: implement listener
       },
@@ -65,14 +65,14 @@ class _SignupFormState extends State<SignupForm> {
                 /// First name
                 Expanded(
                   child: TextFormField(
+                    style: TextStyle(color: TColors.primaryColor),
                     keyboardType: TextInputType.name,
                     controller: firstName,
                     expands: false,
                     decoration: InputDecoration(
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
-                        borderSide:
-                             BorderSide(color:  TColors.primaryColor),
+                        borderSide: BorderSide(color: TColors.primaryColor),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
@@ -80,8 +80,11 @@ class _SignupFormState extends State<SignupForm> {
                             const BorderSide(color: TColors.secondaryColor),
                       ),
                       labelText: TText.firstName,
-                      labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
-                      prefixIcon:  Icon(Iconsax.user),
+                      labelStyle: TextStyle(
+                          color: isDarkMode
+                              ? TColors.secondaryColor
+                              : TColors.primaryColor),
+                      prefixIcon: Icon(Iconsax.user),
                       prefixIconColor: TColors.primaryColor,
                     ),
                   ),
@@ -93,14 +96,14 @@ class _SignupFormState extends State<SignupForm> {
                 /// Last name
                 Expanded(
                   child: TextFormField(
+                    style: TextStyle(color: TColors.primaryColor),
                     keyboardType: TextInputType.name,
                     controller: lastName,
                     expands: false,
                     decoration: InputDecoration(
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
-                          borderSide:
-                               BorderSide(color:  TColors.primaryColor),
+                          borderSide: BorderSide(color: TColors.primaryColor),
                         ),
                         focusedBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(15),
@@ -108,10 +111,12 @@ class _SignupFormState extends State<SignupForm> {
                               const BorderSide(color: TColors.secondaryColor),
                         ),
                         labelText: TText.lastName,
-                        labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
-
-                        prefixIcon:  Icon(Iconsax.user),
-                        prefixIconColor:TColors.primaryColor),
+                        labelStyle: TextStyle(
+                            color: isDarkMode
+                                ? TColors.secondaryColor
+                                : TColors.primaryColor),
+                        prefixIcon: Icon(Iconsax.user),
+                        prefixIconColor: TColors.primaryColor),
                   ),
                 ),
               ],
@@ -122,6 +127,7 @@ class _SignupFormState extends State<SignupForm> {
 
             ///Title
             TextFormField(
+              style: TextStyle(color: TColors.primaryColor),
               keyboardType: TextInputType.text,
               controller: titleController,
               expands: false,
@@ -135,7 +141,10 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.title,
-                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                  labelStyle: TextStyle(
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.note),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -145,6 +154,7 @@ class _SignupFormState extends State<SignupForm> {
 
             /// Email
             TextFormField(
+              style: TextStyle(color: TColors.primaryColor),
               keyboardType: TextInputType.emailAddress,
               controller: email,
               expands: false,
@@ -158,7 +168,10 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.email,
-                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                  labelStyle: TextStyle(
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.direct),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -169,6 +182,7 @@ class _SignupFormState extends State<SignupForm> {
 
             /// Phone Number
             TextFormField(
+              style: TextStyle(color: TColors.primaryColor),
               keyboardType: TextInputType.phone,
               controller: phone,
               expands: false,
@@ -182,7 +196,10 @@ class _SignupFormState extends State<SignupForm> {
                     borderSide: const BorderSide(color: TColors.secondaryColor),
                   ),
                   labelText: TText.phoneNo,
-                  labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                  labelStyle: TextStyle(
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor),
                   prefixIcon: const Icon(Iconsax.call),
                   prefixIconColor: TColors.primaryColor),
             ),
@@ -192,7 +209,8 @@ class _SignupFormState extends State<SignupForm> {
 
             /// Password
             TextFormField(
-              obscureText: true,
+              style: TextStyle(color: TColors.primaryColor),
+              obscureText:isObsecuredText,
               controller: password,
               expands: false,
               decoration: InputDecoration(
@@ -205,10 +223,21 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: const BorderSide(color: TColors.secondaryColor),
                 ),
                 labelText: TText.password,
-                labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                labelStyle: TextStyle(
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor),
                 prefixIcon: const Icon(Iconsax.password_check),
                 prefixIconColor: TColors.primaryColor,
-                suffixIcon: const Icon(Iconsax.eye_slash),
+                suffixIcon: GestureDetector(
+                  onTap:(){
+                    setState(() {
+                      isObsecuredText = !isObsecuredText;
+                    });
+                  } ,
+                    child: Icon(isObsecuredText
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye)),
                 suffixIconColor: TColors.primaryColor,
               ),
             ),
@@ -218,7 +247,8 @@ class _SignupFormState extends State<SignupForm> {
 
             /// Confirm password
             TextFormField(
-              obscureText: true,
+              style: TextStyle(color: TColors.primaryColor),
+              obscureText: isObsecuredText,
               controller: confirmPassword,
               expands: false,
               decoration: InputDecoration(
@@ -231,10 +261,21 @@ class _SignupFormState extends State<SignupForm> {
                   borderSide: const BorderSide(color: TColors.secondaryColor),
                 ),
                 labelText: TText.confirmPassword,
-                labelStyle:  TextStyle(color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor),
+                labelStyle: TextStyle(
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor),
                 prefixIcon: const Icon(Iconsax.password_check),
                 prefixIconColor: TColors.primaryColor,
-                suffixIcon: const Icon(Iconsax.eye_slash),
+                suffixIcon: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        isObsecuredText = !isObsecuredText;
+                      });
+                    },
+                    child: Icon(isObsecuredText
+                        ? Iconsax.eye_slash
+                        : Iconsax.eye)),
                 suffixIconColor: TColors.primaryColor,
               ),
             ),
@@ -243,7 +284,7 @@ class _SignupFormState extends State<SignupForm> {
               height: TSizes.spaceBtwSections,
             ),
 
-            const TermsAndConditionsCheckbox(),
+            TermsAndConditionsCheckbox(),
 
             const SizedBox(
               height: TSizes.spaceBtwSections,
@@ -255,7 +296,9 @@ class _SignupFormState extends State<SignupForm> {
               width: double.infinity,
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                    backgroundColor: isDarkMode ? TColors.primaryColor.withOpacity(0.7) : TColors.primaryColor,
+                    backgroundColor: isDarkMode
+                        ? TColors.primaryColor.withOpacity(0.7)
+                        : TColors.primaryColor,
                     side: const BorderSide(color: Colors.transparent),
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10))),
@@ -277,11 +320,12 @@ class _SignupFormState extends State<SignupForm> {
                           borderRadius: BorderRadius.all(Radius.circular(25))),
                     ));
                   }
-
                 },
                 child: Text(
                   TText.createAccount,
-                  style: TextStyle(color: isDarkMode ? TColors.secondaryColor : Colors.white),
+                  style: TextStyle(
+                      color:
+                          isDarkMode ? TColors.secondaryColor : Colors.white),
                 ),
               ),
             ),

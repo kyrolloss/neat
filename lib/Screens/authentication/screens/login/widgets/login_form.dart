@@ -29,7 +29,7 @@ class _LoginFormState extends State<LoginForm> {
 
   TextEditingController password = TextEditingController();
 
-
+bool isObsecured = true;
 
 
 
@@ -99,7 +99,7 @@ class _LoginFormState extends State<LoginForm> {
                   color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor
                 ),
                 controller: password,
-                obscureText: true,
+                obscureText: isObsecured,
                 expands: false,
                 decoration: InputDecoration(
                     enabledBorder: OutlineInputBorder(
@@ -119,9 +119,17 @@ class _LoginFormState extends State<LoginForm> {
                     labelText: TText.password,
                     filled: true,
                     fillColor:isDarkMode?TColors.primaryColor.withOpacity(0.7)  : TColors.secondaryColor ,
+                    suffixIcon: GestureDetector(
+                      onTap: (){
+                        setState(() {
+                          isObsecured = !isObsecured;
+                        });
+                      },
+                        child: Icon(isObsecured ? Iconsax.eye_slash : Iconsax.eye, color: TColors.primaryColor,)),
                     labelStyle: TextStyle(
                       color:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
                     )),
+
               ),
               const SizedBox(
                 height: TSizes.spaceBtwSections,
