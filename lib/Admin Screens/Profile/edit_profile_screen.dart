@@ -1,11 +1,16 @@
 import 'dart:io';
+import 'dart:math';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import '../../common/widgets/images/circular_image.dart';
 import '../../common/widgets/texts/section_heading.dart';
@@ -27,15 +32,109 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   TextEditingController titleController = TextEditingController();
 
   File? file;
+  String? url;
 
-  getImageGallery() async {
+  // late SharedPreferences _prefs;
+  // late String _photoUrl;
+  var database = FirebaseFirestore.instance;
+
+  @override
+  void initState() {
+    super.initState();
+    // _initPrefs();
+    //  _loadPhotoUrl();
+  }
+  getImageGallery(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
 
     /// Pick an image.
     final XFile? imageGallery =
-        await picker.pickImage(source: ImageSource.gallery);
-    file = File(imageGallery!.path);
-    setState(() {});
+    await picker.pickImage(source: ImageSource.gallery);
+    if (imageGallery != null) {
+      // if (kDebugMode) {
+      //   print('******');
+      // }
+      // if (kDebugMode) {
+      //   print(imageGallery.path);
+      // }
+      file = File(imageGallery!.path);
+      // if (kDebugMode) {
+      //   print(imageGallery.path);
+      // }
+      var imageName = basename(imageGallery!.path);
+
+      /// start upload
+      var random = Random().nextInt(10000000);
+      imageName = "$random$imageName";
+
+      // if (kDebugMode) {
+      //   print(imageName);
+      // }
+      // if (kDebugMode) {
+      //   print('************************************************');
+      // }
+      // if (kDebugMode) {
+      //   print(imageName);
+      // }
+
+      /// Upload the image to Firebase Storage
+      var refStorage = FirebaseStorage.instance.ref("ProfileImg/$imageName");
+      await refStorage.putFile(file!);
+
+      /// Get the download URL of the uploaded image
+      url = await refStorage.getDownloadURL();
+
+      /// Update the profile picture URL in Firestore
+      var docRef =
+      database.collection('Users').doc(AppCubit.get(context).id);
+      var docSnapshot = await docRef.get();
+
+      if (docSnapshot.exists) {
+        await docRef.update({
+          'url': url,
+        });
+        // setState(() {
+        //   var cubit = AppCubit();
+        //   cubit.url = url;
+        // });
+      } else {
+        // Handle the case where the document does not exist
+        if (kDebugMode) {
+          print('Document does not exist');
+        }
+      }
+
+      /// Update the profile picture URL in the app state
+      AppCubit.get(context).url = url;
+      // if (kDebugMode) {
+      //   print('url : $url');
+      // }
+      /// end upload
+    } else {
+      if (kDebugMode) {
+        print("Please choose Image");
+      }
+    }
+
+    setState(() {
+      if (imageGallery != null) {
+        file = File(imageGallery.path);
+      } else {
+        showSnackBar("No profile Selected", const Duration(milliseconds: 400));
+      }
+    });
+
+    getImagesAndFolderName() async {
+      var ref = await FirebaseStorage.instance.ref("ProfileImg").list();
+      for (var element in ref.items) {
+        if (kDebugMode) {
+          print("**********");
+        }
+        if (kDebugMode) {
+          print(element.name);
+        }
+      }
+    }
   }
 
   @override
@@ -107,8 +206,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             bottom: -10,
                             right: -6,
                             child: IconButton(
-                              onPressed: () {
-                                getImageGallery();
+                              onPressed: () async{
+                                await getImageGallery(context);
                               },
                               icon: const Icon(
                                 Icons.add_a_photo_outlined,
@@ -119,7 +218,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                         TextButton(
                           onPressed: () {
-                            getImageGallery();
+                            if (url != null && url!.isNotEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: Image.network(url!),
+                                    );
+                                  });
+                            } else {
+                              showSnackBar("No Profile Picture selected",
+                                  Duration(milliseconds: 400));
+                            }
                           },
                           child: Text(
                             "Change Profile Picture",
@@ -338,5 +448,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         );
       },
     );
+  }
+
+  showSnackBar(String snackText, Duration d) {
+    final snackBar = SnackBar(
+      content: Text(snackText),
+      duration: d,
+    );
+    ScaffoldMessenger.of(context as BuildContext).showSnackBar(snackBar);
   }
 }
