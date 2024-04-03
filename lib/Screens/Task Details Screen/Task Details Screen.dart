@@ -1,3 +1,9 @@
+import 'dart:ffi';
+
+import 'dart:ffi';
+
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'package:neat/components/color.dart';
 
@@ -6,9 +12,9 @@ import '../../components/Text.dart';
 class taskDetailsScreen extends StatefulWidget {
   String? senderID;
   String? description;
-  String? year;
-  String? month;
-  String? day;
+  Int? year;
+  Int? month;
+  Int? day;
   String? senderName;
   String? senderPhone;
   String? taskId;

@@ -2,6 +2,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Admin%20Screens/Home/Completed%20Tasks/Completed%20Task.dart';
+import 'package:neat/Admin%20Screens/Home/In%20progress%20tasks/in%20Progress%20tasks.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
@@ -20,6 +22,7 @@ import '../../Screens/Task Details Screen/Task Details Screen.dart';
 import '../../Screens/chat/chat_screen.dart';
 import '../../Screens/chat/users_screen.dart';
 import '../../Screens/chat/widgets/user_tile.dart';
+import 'To do Tasks/to do tasks.dart';
 
 class adminHomeScreen extends StatefulWidget {
   final String receiverId;
@@ -506,17 +509,21 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
             color: AppColor.primeColor,
           );
         }
-        return Container(
-          height: height*.15,
-          width: width*.9,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color:AppColor.secondColor,
-          ),
-          child: SizedBox(height: height*.1,width: width*.4,
-            child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent',
-              color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+        return GestureDetector(
+          onTap: (){navigateTo(context, const ToDoTasks());},
+
+          child: Container(
+            height: height*.15,
+            width: width*.9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color:AppColor.secondColor,
+            ),
+            child: SizedBox(height: height*.1,width: width*.4,
+              child: Center(child:
+              BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent',
+                color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+            ),
           ),
         );
 
@@ -552,17 +559,20 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
             color: AppColor.primeColor,
           );
         }
-        return Container(
-          height: height*.15,
-          width: width*.9,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color:AppColor.secondColor,
-          ),
-          child: SizedBox(height: height*.1,width: width*.4,
-            child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent',
-              color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+        return GestureDetector(
+          onTap: (){navigateTo(context, const inProgressTasks());},
+          child: Container(
+            height: height*.15,
+            width: width*.9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color:AppColor.secondColor,
+            ),
+            child: SizedBox(height: height*.1,width: width*.4,
+              child: Center(child:
+              BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent',
+                color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+            ),
           ),
         );
 
@@ -598,17 +608,21 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
             color: AppColor.primeColor,
           );
         }
-        return Container(
-          height: height*.15,
-          width: width*.9,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(25),
-            color:AppColor.secondColor,
-          ),
-          child: SizedBox(height: height*.1,width: width*.4,
-            child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent',
-              color:  TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+        return GestureDetector(
+          onTap: (){navigateTo(context, const CompletedTask());},
+
+          child: Container(
+            height: height*.15,
+            width: width*.9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color:AppColor.secondColor,
+            ),
+            child: SizedBox(height: height*.1,width: width*.4,
+              child: Center(child:
+              BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent',
+                color:  TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
+            ),
           ),
         );
 
