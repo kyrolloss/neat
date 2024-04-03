@@ -79,7 +79,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                             size: 20,
                           ),
                           BuildText(
-                            text: 'cubit.name',
+                            text: cubit.name,
                             color: isDarkMode
                                 ? TColors.secondaryColor
                                 : TColors.primaryColor,
@@ -377,7 +377,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
 
                   BuildText(
                     text: 'Your Team Performance',
-                    color: AppColor.primeColor,
+                    color: isDarkMode ? TColors.backgroundColor : TColors.primaryColor,
                     size: 20,
                     bold: true,
                     maxLines: 3,
@@ -413,7 +413,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
   Widget BuilderTodo() {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
+    final Color textColor;
     return StreamBuilder(
       stream: AppCubit.get(context).performanceStream( ),
       builder: (context, snapshot) {
@@ -447,7 +447,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
           ),
           child: SizedBox(height: height*.1,width: width*.4,
             child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent',
+              color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
           ),
         );
 
@@ -492,7 +493,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
           ),
           child: SizedBox(height: height*.1,width: width*.4,
             child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent',
+              color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
           ),
         );
 
@@ -537,7 +539,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
           ),
           child: SizedBox(height: height*.1,width: width*.4,
             child: Center(child:
-            BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent', color: Colors.black,size: 17.50,bold: true,maxLines: 3,) ,),
+            BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent',
+              color:  TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
           ),
         );
 
