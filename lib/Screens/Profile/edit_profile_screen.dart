@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/Profile/widgets/profile_menu.dart';
+import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:path/path.dart';
@@ -67,7 +68,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     /// Pick an image.
     final XFile? imageGallery =
-        await picker.pickImage(source: ImageSource.camera);
+        await picker.pickImage(source: ImageSource.gallery);
     if (imageGallery != null) {
       // if (kDebugMode) {
       //   print('******');
@@ -187,43 +188,31 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     child: Column(
                       children: [
                         Stack(children: [
-                          Container(
-                              height: 120,
-                              width: 120,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: cubit.url != null && cubit.url!.isNotEmpty
-                                  ? ClipOval(
-                                      child: Image.network(
-                                        cubit.url!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : ClipOval(
-                                      child: Image(
-                                        image: AssetImage(
-                                            'assets/images/user/user.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
+                          /// Profile picture
+                          ProfilePicture(
+                            cubit: cubit,
+                            width: 120,
+                            height: 120,
+                          ),
                           Positioned(
                             bottom: -10,
                             right: -6,
                             child: IconButton(
                               onPressed: () async {
-                                final imageUrl = await getImageGallery(context);
-                                if (imageUrl != null) {
-                                  setState(() {
-                                    url = imageUrl;
-                                  });
-                                  // _savePhotoUrl(imageUrl);
-                                }
-                                TCircularImage(
-                                  image: TImages.user,
-                                  height: 120,
-                                  width: 120,
-                                );
+                                await getImageGallery(context);
+                                // final imageUrl = await getImageGallery(context);
+                                // if (imageUrl != null) {
+                                //   setState(() {
+                                //     url = imageUrl;
+                                //
+                                //   });
+                                //   // _savePhotoUrl(imageUrl);
+                                // }
+                                // TCircularImage(
+                                //   image: TImages.user,
+                                //   height: 120,
+                                //   width: 120,
+                                // );
                               },
                               icon: const Icon(
                                 Icons.add_a_photo_outlined,
@@ -234,7 +223,19 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ]),
                         TextButton(
                           onPressed: () {
-                            if (url!.isNotEmpty) Image.network(cubit.url!);
+                            if (url != null && url!.isNotEmpty) {
+                              showDialog(
+                                  context: context,
+                                  builder: (context) {
+                                    return Dialog(
+                                      child: Image.network(url!),
+                                    );
+                                  });
+                            } else {
+                              showSnackBar("No Profile Picture selected",
+                                  Duration(milliseconds: 400));
+                            }
+                            // if (url!.isNotEmpty) Image.network(cubit.url!);
                           },
                           child: Text(
                             "Change Profile Picture",

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
 import 'package:neat/Screens/chat/users_screen.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
@@ -32,11 +33,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
-
   @override
   Widget build(BuildContext context) {
-    bool isDarkMode=
+    bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
@@ -57,34 +56,34 @@ class _HomeScreenState extends State<HomeScreen> {
                   onPressed: () {
                     navigateTo(context, const UsersScreen());
                   },
-                  icon:  Icon(
+                  icon: Icon(
                     Icons.chat,
-                    color: isDarkMode ? TColors.secondaryColor: TColors.primaryColor,
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                   )),
             ],
           ),
-
           body: Padding(
             padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: SingleChildScrollView(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Stack(
-                    children:[
-                      // Positioned(
-                      //   right: 0,
-                      //   top: 10,
-                      //   child: IconButton(
-                      //       onPressed: () {
-                      //         navigateTo(context, const UsersScreen());
-                      //       },
-                      //       icon: const Icon(
-                      //         Icons.chat,
-                      //         color: TColors.primaryColor,
-                      //       )),
-                      // ),
-                      Column(
+                  Stack(children: [
+                    // Positioned(
+                    //   right: 0,
+                    //   top: 10,
+                    //   child: IconButton(
+                    //       onPressed: () {
+                    //         navigateTo(context, const UsersScreen());
+                    //       },
+                    //       icon: const Icon(
+                    //         Icons.chat,
+                    //         color: TColors.primaryColor,
+                    //       )),
+                    // ),
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Row(
@@ -94,62 +93,49 @@ class _HomeScreenState extends State<HomeScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Container(
-                                      height: 120,
-                                      width: 120,
-                                      decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                      ),
-                                      child: cubit.url != null && cubit.url!.isNotEmpty
-                                          ? ClipOval(
-                                        child: Image.network(
-                                          cubit.url!,
-                                          fit: BoxFit.cover,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    /// Profile picture
+                                    ProfilePicture(cubit: cubit, width: 120, height: 120),
+                                    SizedBox(
+                                      width: width * .025,
+                                    ),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        BuildText(
+                                          text: 'Hello,',
+                                          color: isDarkMode
+                                              ? TColors.secondaryColor
+                                              : TColors.primaryColor,
+                                          size: 20,
                                         ),
-                                      )
-                                          : ClipOval(
-                                        child: Image(
-                                          image: AssetImage(
-                                              'assets/images/user/user.png'),
-                                          fit: BoxFit.cover,
+                                        BuildText(
+                                          text: cubit.name,
+                                          color: isDarkMode
+                                              ? TColors.secondaryColor
+                                              : TColors.primaryColor,
+                                          size: 20,
+                                          bold: true,
                                         ),
-                                      )),
-                                  SizedBox(
-                                    width: width * .025,
-                                  ),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                    children: [
-                                      BuildText(
-                                        text: 'Hello,',
-                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
-                                        size: 20,
-                                      ),
-                                      BuildText(
-                                        text: cubit.name,
-                                        color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
-                                        size: 20,
-                                        bold: true,
-                                      ),
-                                    ],
-                                  ),
+                                      ],
+                                    ),
 
-                                  /// Chats
-
-                                ],
-                                                                  ),
+                                    /// Chats
+                                  ],
+                                ),
                                 SizedBox(
                                   height: height * .045,
                                 ),
                                 BuildText(
                                   text: "Let's Check Out Your Tasks",
-                                  color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
-
+                                  color: isDarkMode
+                                      ? TColors.secondaryColor
+                                      : TColors.primaryColor,
                                   size: 20,
                                   bold: true,
                                 ),
@@ -246,8 +232,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                       ],
                     ),
-                    ]
-                  ),
+                  ]),
                   SizedBox(
                     height: height * .01,
                   ),
@@ -268,12 +253,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   DottedBorder(
                     dashPattern: const [8, 6],
                     strokeWidth: 2,
-                    color: isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
+                    color: isDarkMode
+                        ? TColors.secondaryColor
+                        : TColors.primaryColor,
                     child: SizedBox(
                         height: height * .5,
                         width: width * .875,
                         child: Padding(
-                          padding: const EdgeInsets.all(TSizes.defaultSpace/2),
+                          padding:
+                              const EdgeInsets.all(TSizes.defaultSpace / 2),
                           child: BuilderTasksList(),
                         )),
                   )
@@ -286,16 +274,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-
-
   Widget BuilderTasksList() {
-
     return StreamBuilder(
-      stream: AppCubit.get(context).getTasksStream( ),
+      stream: AppCubit.get(context).getTasksStream(),
       builder: (context, snapshot) {
-        AppCubit.get(context)
-            .getTasksStream( )
-            .listen((event) {
+        AppCubit.get(context).getTasksStream().listen((event) {
           AppCubit.get(context).numberOfTodoTasks = event.docs.length;
         });
         if (snapshot.hasError) {
@@ -334,9 +317,6 @@ class _HomeScreenState extends State<HomeScreen> {
               day: taskData['day'],
               year: taskData['year'],
               month: taskData['month'],
-
-
-
               senderID: taskData['senderId'],
               senderName: taskData['senderName'],
               senderEmail: taskData['senderEmail'],
