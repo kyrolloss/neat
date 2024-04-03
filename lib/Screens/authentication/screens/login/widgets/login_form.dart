@@ -158,13 +158,8 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                   onPressed: () async {
                     await cubit.Login(
-                        email: email.text, password: password.text);
-                    if (cubit.typee == 'Admin') {
-                      navigateToToFinish(
-                          context, AdminMainLayout(uid: cubit.id));
-                    } else if (cubit.typee == 'User') {
-                      navigateTo(context, MainLayout(uid: cubit.id));
-                    }
+                        email: email.text, password: password.text , context: context);
+
                   },
                   child: Text(
                     "Log in",

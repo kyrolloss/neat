@@ -11,10 +11,13 @@ import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 
 import '../Admin Screens/Home/home Screen.dart';
+import '../Admin Screens/Main Layout.dart';
 import '../Admin Screens/Profile/profile_screen.dart';
 import '../Screens/Calender Screen/Calender Screen.dart';
 import '../Screens/Home/home.dart';
+import '../Screens/MainLayout.dart';
 import '../Screens/Notification/Notification.dart';
+import '../components/components.dart';
 
 part 'app_state.dart';
 
@@ -37,8 +40,8 @@ class AppCubit extends Cubit<AppState> {
   String phone = '';
   String title = '';
   String? url;
-  String? typee = '';
 
+  String typee = '';
 
   var database = FirebaseFirestore.instance;
   var storge = FirebaseStorage.instance;
@@ -46,11 +49,35 @@ class AppCubit extends Cubit<AppState> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   final CollectionReference tasksRoomsCollection =
-      FirebaseFirestore.instance.collection('tasks_rooms');
+  FirebaseFirestore.instance.collection('tasks_rooms');
   var auth = FirebaseAuth.instance;
 
   User? getCurrentUser() {
     return auth.currentUser;
+  }
+
+  Future<void> updateInfo({
+    required String id,
+    required String name,
+    required String email,
+    required String phone,
+    required String title,
+    required String? url,
+    required String typee,
+    required String NewId,
+    required String Newname,
+    required String Newemail,
+    required String Newphone,
+    required String Newtitle,
+    required String? Newurl,
+    required String Newtypee}) async {
+    name = typee;
+    id = NewId;
+    email = Newname;
+    phone = Newemail;
+    title = Newphone;
+    url = Newtitle;
+    typee = Newurl!;
   }
 
   Future<void> getUserInfo(String uid) async {
@@ -62,7 +89,6 @@ class AppCubit extends Cubit<AppState> {
 
       if (doc.exists) {
         final Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
-
         final String userName = data['name'] as String;
         final String userEmail = data['email'] as String;
         final String userPhone = data['phone'] as String;
@@ -76,9 +102,23 @@ class AppCubit extends Cubit<AppState> {
         email = userEmail;
         phone = userPhone;
         title = Title;
-        uid = userUid;
         url = image!;
-        typee = type;
+        typee = type!;
+        // await updateInfo(
+        //     id: id,
+        //     name: name,
+        //     email: email,
+        //     phone: phone,
+        //     title: title,
+        //     url: url,
+        //     typee: typee,
+        //     NewId: userUid,
+        //     Newname: userName,
+        //     Newemail: userEmail,
+        //     Newphone: userPhone,
+        //     Newtitle: Title,
+        //     Newurl: image,
+        //     Newtypee: type!);
 
         emit(GetUserInfoSuccess());
       }
@@ -126,15 +166,13 @@ class AppCubit extends Cubit<AppState> {
     emit(DatePickedSuccessfully());
   }
 
-  Future<UserCredential> Register(
-      {required String email,
-      required String password,
-      required String name,
-      required String phone,
-      String? image,
-      required String title ,
-        required String type
-      }) async {
+  Future<UserCredential> Register({required String email,
+    required String password,
+    required String name,
+    required String phone,
+    String? image,
+    required String title,
+    required String type}) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -160,17 +198,27 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Future<UserCredential> Login(
-      {required String email, required String password}) async {
+      {required String email, required String password , required BuildContext context}) async {
     try {
       emit(LoginLoading());
 
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
 
-      emit(LoginSuccess());
-      id = user!.uid;
 
-      getUserInfo(id);
+      await getUserInfo(userCredential.user!.uid);
+
+      emit(LoginSuccess());
+
+      if (typee == 'Admin') {
+        navigateToToFinish(
+            context, AdminMainLayout(uid: user!.uid));
+      } else if (typee == 'User') {
+        navigateTo(context, MainLayout(uid: user!.uid));
+      }
+      emit(NavigationDone());
+
+
 
       print(id);
       return userCredential;
@@ -233,17 +281,16 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-
   List<Tasks> tasksCalendar = [];
 
   Future<void> getTasksInCalender(int day, int month, int year) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-        FirebaseFirestore.instance
-            .collection('tasks_rooms')
-            .doc('taskRoomId')
-            .collection('tasks')
-            .where('receiverId', isEqualTo: id)
-            .snapshots();
+    FirebaseFirestore.instance
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('receiverId', isEqualTo: id)
+        .snapshots();
     emit(GetCalenderTasks());
 
     notificationStream.listen((snapshot) {
@@ -264,14 +311,14 @@ class AppCubit extends Cubit<AppState> {
   }
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-      FlutterLocalNotificationsPlugin();
+  FlutterLocalNotificationsPlugin();
 
   String channelId = 'your_channel_id';
 
   showNotification({required String title, required String body}) {
     AndroidNotificationDetails androidNotificationDetails =
-        AndroidNotificationDetails(channelId, 'Notify my',
-            importance: Importance.high);
+    AndroidNotificationDetails(channelId, 'Notify my',
+        importance: Importance.high);
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
@@ -283,11 +330,9 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-      FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
+  FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
   // chat
-
-
 
   Future<String> uploadImageToStorage(String childName, Uint8List file) async {
     Reference ref = _storage.ref().child(childName);
@@ -316,16 +361,23 @@ class AppCubit extends Cubit<AppState> {
 
   void addMemberToGroup(String memberId) async {
     // Search for the user with the specified memberId
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collection('Users').where('uid', isEqualTo: memberId).get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('Users')
+        .where('uid', isEqualTo: memberId)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
       // Get the first user document that matches the memberId
-      DocumentSnapshot<Map<String, dynamic>> userDocument = querySnapshot.docs.first;
+      DocumentSnapshot<Map<String, dynamic>> userDocument =
+          querySnapshot.docs.first;
       Map<String, dynamic>? userData = userDocument.data();
 
       // Create a new collection called 'groups'
-      CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups').doc('id').collection('members');
+      CollectionReference groupsCollection = FirebaseFirestore.instance
+          .collection('groups')
+          .doc('id')
+          .collection('members');
 
       // Add a new document with the user data to the 'groups' collection
       await groupsCollection.doc(memberId).set(userData);
@@ -336,15 +388,21 @@ class AppCubit extends Cubit<AppState> {
       print('No user found with the specified memberId');
     }
   }
+
   void addMemberToGroupByEmail(String email) async {
-    QuerySnapshot<Map<String, dynamic>> querySnapshot =
-    await FirebaseFirestore.instance.collection('Users').where('email', isEqualTo: email).get();
+    QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
+        .instance
+        .collection('Users')
+        .where('email', isEqualTo: email)
+        .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      DocumentSnapshot<Map<String, dynamic>> userDocument = querySnapshot.docs.first;
+      DocumentSnapshot<Map<String, dynamic>> userDocument =
+          querySnapshot.docs.first;
       Map<String, dynamic>? userData = userDocument.data();
 
-      CollectionReference groupsCollection = FirebaseFirestore.instance.collection('groups');
+      CollectionReference groupsCollection =
+      FirebaseFirestore.instance.collection('groups');
 
       await groupsCollection.doc(id).set(userData);
 
@@ -354,7 +412,6 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-
   Stream<QuerySnapshot> getTasksStream() {
     return database
         .collection('tasks_rooms')
@@ -363,14 +420,15 @@ class AppCubit extends Cubit<AppState> {
         .where('receiverId', isEqualTo: id)
         .snapshots();
   }
-  Stream<QuerySnapshot<Map<String, dynamic>>>performanceStream (){
-    return database.collection('tasks_rooms').doc('taskRoomId').collection('tasks').where('senderId' ,isEqualTo: 'VLCOlKkUE5TcnPUnRFZSqIb7Os02').snapshots();
 
+  Stream<QuerySnapshot<Map<String, dynamic>>> performanceStream() {
+    return database
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('senderId', isEqualTo: 'VLCOlKkUE5TcnPUnRFZSqIb7Os02')
+        .snapshots();
   }
-
-
-  
-  
 
   List<Widget> pagesNames = const [
     HomeScreen(

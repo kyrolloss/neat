@@ -32,6 +32,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
         box1Color = AppColor.primeColor;
         box2Color = AppColor.secondColor;
         box3Color = AppColor.secondColor;
+        priority = 'Low';
 
       } else if (boxNumber == 2) {
         box1Color = AppColor.secondColor;
@@ -55,6 +56,11 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
       });
     });
   }
+
+
+
+
+
   String _taskName = '';
   String _taskDescription = '';
   String _receiverId = '';

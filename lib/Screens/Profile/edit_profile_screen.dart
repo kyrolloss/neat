@@ -67,7 +67,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     /// Pick an image.
     final XFile? imageGallery =
-        await picker.pickImage(source: ImageSource.gallery);
+        await picker.pickImage(source: ImageSource.camera);
     if (imageGallery != null) {
       // if (kDebugMode) {
       //   print('******');
@@ -99,7 +99,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       url = await refStorage.getDownloadURL();
       await database
           .collection('Users')
-          .doc('f1xQHnHVneTjbxT9wMqTlAQutS63')
+          .doc(AppCubit.get(context).id)
           .update({
         'url': url,
       });
