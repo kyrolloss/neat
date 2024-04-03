@@ -223,7 +223,7 @@ class AppCubit extends Cubit<AppState> {
 
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
-
+ //     await database.collection('Users').doc(userCredential.user!.uid).set({})
 
       await getUserInfo(userCredential.user!.uid);
 
