@@ -395,7 +395,7 @@ class AppCubit extends Cubit<AppState> {
       // Create a new collection called 'groups'
       CollectionReference groupsCollection = FirebaseFirestore.instance
           .collection('groups')
-          .doc('id')
+          .doc(id)
           .collection('members');
 
       // Add a new document with the user data to the 'groups' collection
@@ -430,6 +430,20 @@ class AppCubit extends Cubit<AppState> {
       print('No user found with the specified memberId');
     }
   }
+
+
+
+  Stream<List<Map<String, dynamic>>> getTeamStream(){
+    return database.collection('groups').doc(id).collection('members').snapshots().map((snapshot) {
+      return snapshot.docs.map((doc) {
+        /// go through each individual user
+        final user = doc.data();
+        /// return user
+        return user;
+      }).toList();
+    });
+  }
+
 
   Stream<QuerySnapshot> getTasksStream() {
     return database

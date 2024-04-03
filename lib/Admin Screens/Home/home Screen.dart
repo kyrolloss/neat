@@ -16,7 +16,9 @@ import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../../common/widgets/appbar/appbar.dart';
 import '../../Screens/Task Details Screen/Task Details Screen.dart';
+import '../../Screens/chat/chat_screen.dart';
 import '../../Screens/chat/users_screen.dart';
+import '../../Screens/chat/widgets/user_tile.dart';
 
 class adminHomeScreen extends StatefulWidget {
   final String receiverId;
@@ -119,7 +121,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   ),
                   TCircularContainer(
                     backgroundColor: TColors.primaryColor,
-                    width: width * .85,
+                    width: width * .925,
                     height: height * .2,
                     child: Padding(
                       padding: const EdgeInsets.all(15.0),
@@ -144,228 +146,297 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                           SizedBox(
                             height: height * .01,
                           ),
-                          GestureDetector(
-                            onTap: () async {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return StatefulBuilder(
-                                    builder: (context, setState) {
-                                      return Dialog(
-                                        child: Container(
-                                          height: height * .3,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(25)),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Center(
-                                                child: DropdownButton<String>(
-                                                  value: selectedValue,
-                                                  onChanged: (newValue) {
-                                                    setState(() {
-                                                      // تحديث القيمة المختارة
-                                                      selectedValue = newValue!;
-                                                    });
-                                                  },
-                                                  items: values.map((value) {
-                                                    return DropdownMenuItem<
-                                                        String>(
-                                                      value: value,
-                                                      child: Text(value),
-                                                    );
-                                                  }).toList(),
-                                                ),
-                                              ),
-                                              selectedValue == 'ID'
-                                                  ? Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      child: TextFormField(
-                                                        controller:
-                                                            idController,
-                                                        cursorColor:
-                                                            Colors.black,
-                                                        decoration:
-                                                            InputDecoration(
-                                                                contentPadding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                fillColor: AppColor
-                                                                    .secondColor,
-                                                                filled: true,
-                                                                hintText:
-                                                                    'ID ...',
-                                                                hintStyle:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 15,
-                                                                ),
-                                                                border: OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30),
-                                                                    gapPadding:
-                                                                        20,
-                                                                    borderSide:
-                                                                        BorderSide
-                                                                            .none),
-                                                                counterStyle: const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        25,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                      ),
-                                                    )
-                                                  : Padding(
-                                                      padding:
-                                                          const EdgeInsets.all(
-                                                              12.0),
-                                                      child: TextFormField(
-                                                        controller:
-                                                            emailController,
-                                                        cursorColor:
-                                                            Colors.black,
-                                                        decoration:
-                                                            InputDecoration(
-                                                                contentPadding:
-                                                                    const EdgeInsets
-                                                                        .all(
-                                                                        10),
-                                                                fillColor: AppColor
-                                                                    .secondColor,
-                                                                filled: true,
-                                                                hintText:
-                                                                    'Email ...',
-                                                                hintStyle:
-                                                                    const TextStyle(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  fontSize: 15,
-                                                                ),
-                                                                border: OutlineInputBorder(
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30),
-                                                                    gapPadding:
-                                                                        20,
-                                                                    borderSide:
-                                                                        BorderSide
-                                                                            .none),
-                                                                counterStyle: const TextStyle(
-                                                                    color: Colors
-                                                                        .white,
-                                                                    fontSize:
-                                                                        25,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold)),
-                                                      ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return Dialog(
+                                            child: Container(
+                                              height: height * .3,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                      BorderRadius.circular(25)),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.spaceEvenly,
+                                                children: [
+                                                  Center(
+                                                    child: DropdownButton<String>(
+                                                      value: selectedValue,
+                                                      onChanged: (newValue) {
+                                                        setState(() {
+                                                          // تحديث القيمة المختارة
+                                                          selectedValue = newValue!;
+                                                        });
+                                                      },
+                                                      items: values.map((value) {
+                                                        return DropdownMenuItem<
+                                                            String>(
+                                                          value: value,
+                                                          child: Text(value),
+                                                        );
+                                                      }).toList(),
                                                     ),
-                                              selectedValue == 'ID'
-                                                  ? GestureDetector(
-                                                      child: GestureDetector(
-                                                        onTap: () async {
-                                                          cubit.addMemberToGroup(
-                                                              idController.text
-                                                                  .toString());
-                                                          idController.clear();
-                                                          Navigator.pop(
-                                                              context);
-                                                        },
-                                                        child: Container(
-                                                          height: height * .04,
-                                                          width: width * .3,
-                                                          decoration:
-                                                              BoxDecoration(
-                                                            color: AppColor
-                                                                .primeColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        25),
+                                                  ),
+                                                  selectedValue == 'ID'
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                  12.0),
+                                                          child: TextFormField(
+                                                            controller:
+                                                                idController,
+                                                            cursorColor:
+                                                                Colors.black,
+                                                            decoration:
+                                                                InputDecoration(
+                                                                    contentPadding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                    fillColor: AppColor
+                                                                        .secondColor,
+                                                                    filled: true,
+                                                                    hintText:
+                                                                        'ID ...',
+                                                                    hintStyle:
+                                                                        const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize: 15,
+                                                                    ),
+                                                                    border: OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                30),
+                                                                        gapPadding:
+                                                                            20,
+                                                                        borderSide:
+                                                                            BorderSide
+                                                                                .none),
+                                                                    counterStyle: const TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            25,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold)),
                                                           ),
-                                                          child: Center(
-                                                            child: BuildText(
-                                                              text: "Add ",
-                                                              color: AppColor
-                                                                  .secondColor,
-                                                              size: 17.5,
-                                                              bold: true,
-                                                            ),
+                                                        )
+                                                      : Padding(
+                                                          padding:
+                                                              const EdgeInsets.all(
+                                                                  12.0),
+                                                          child: TextFormField(
+                                                            controller:
+                                                                emailController,
+                                                            cursorColor:
+                                                                Colors.black,
+                                                            decoration:
+                                                                InputDecoration(
+                                                                    contentPadding:
+                                                                        const EdgeInsets
+                                                                            .all(
+                                                                            10),
+                                                                    fillColor: AppColor
+                                                                        .secondColor,
+                                                                    filled: true,
+                                                                    hintText:
+                                                                        'Email ...',
+                                                                    hintStyle:
+                                                                        const TextStyle(
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      fontSize: 15,
+                                                                    ),
+                                                                    border: OutlineInputBorder(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                30),
+                                                                        gapPadding:
+                                                                            20,
+                                                                        borderSide:
+                                                                            BorderSide
+                                                                                .none),
+                                                                    counterStyle: const TextStyle(
+                                                                        color: Colors
+                                                                            .white,
+                                                                        fontSize:
+                                                                            25,
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .bold)),
                                                           ),
                                                         ),
+                                                  selectedValue == 'ID'
+                                                      ? GestureDetector(
+                                                          child: GestureDetector(
+                                                            onTap: () async {
+                                                              cubit.addMemberToGroup(
+                                                                  idController.text
+                                                                      .toString());
+                                                              idController.clear();
+                                                              Navigator.pop(
+                                                                  context);
+                                                            },
+                                                            child: Container(
+                                                              height: height * .04,
+                                                              width: width * .3,
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: AppColor
+                                                                    .primeColor,
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            25),
+                                                              ),
+                                                              child: Center(
+                                                                child: BuildText(
+                                                                  text: "Add ",
+                                                                  color: AppColor
+                                                                      .secondColor,
+                                                                  size: 17.5,
+                                                                  bold: true,
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : GestureDetector(
+                                                    onTap: () async {
+                                                      cubit.addMemberToGroupByEmail(
+                                                          emailController.text
+                                                              .toString());
+                                                      emailController.clear();
+                                                      Navigator.pop(
+                                                          context);
+                                                    },
+                                                    child: Container(
+                                                      height: height * .04,
+                                                      width: width * .3,
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        color: AppColor
+                                                            .primeColor,
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            25),
                                                       ),
-                                                    )
-                                                  : GestureDetector(
-                                                onTap: () async {
-                                                  cubit.addMemberToGroupByEmail(
-                                                      emailController.text
-                                                          .toString());
-                                                  emailController.clear();
-                                                  Navigator.pop(
-                                                      context);
-                                                },
-                                                child: Container(
-                                                  height: height * .04,
-                                                  width: width * .3,
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    color: AppColor
-                                                        .primeColor,
-                                                    borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        25),
-                                                  ),
-                                                  child: Center(
-                                                    child: BuildText(
-                                                      text: "Add ",
-                                                      color: AppColor
-                                                          .secondColor,
-                                                      size: 17.5,
-                                                      bold: true,
+                                                      child: Center(
+                                                        child: BuildText(
+                                                          text: "Add ",
+                                                          color: AppColor
+                                                              .secondColor,
+                                                          size: 17.5,
+                                                          bold: true,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
-                                                ),
-                                              ),
 
-                                            ],
-                                          ),
-                                        ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                        },
                                       );
                                     },
                                   );
                                 },
-                              );
-                            },
-                            child: Container(
-                              height: height * .04,
-                              width: width * .5,
-                              decoration: BoxDecoration(
-                                color: AppColor.secondColor,
-                                borderRadius: BorderRadius.circular(25),
-                              ),
-                              child: Center(
-                                child: BuildText(
-                                  text: "Add a new individual",
-                                  color: AppColor.primeColor,
-                                  size: 17.5,
-                                  bold: true,
+                                child: Container(
+                                  height: height * .04,
+                                  width: width * .4,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.secondColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Center(
+                                    child: BuildText(
+                                      text: "Add a new individual",
+                                      color: AppColor.primeColor,
+                                      size: 15,
+                                      bold: true,
+                                    ),
+                                  ),
                                 ),
                               ),
-                            ),
+                              GestureDetector(
+                                onTap: () async {
+                                  showDialog(
+                                    context: context,
+                                    builder: (context) {
+                                      
+                                      return StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return Dialog(
+                                            child: Container(
+                                              height: height * .3,
+                                              decoration: BoxDecoration(
+                                                  color: Colors.white,
+                                                  borderRadius:
+                                                  BorderRadius.circular(25)),
+                                              child: StreamBuilder(
+                                                
+                                                stream: cubit.getTeamStream(),
+                                                builder: (context, snapshot) {
+                                                  /// error
+                                                  if (snapshot.hasError) {
+                                                    return const Text("Error");
+                                                  }
+                                                  /// loading
+                                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                                    return const Text("Loading..");
+                                                  }
+
+
+                                                  /// return listview
+                                                  if (!snapshot.hasData) {
+                                                    return const Text("no members..");
+                                                  }
+                                                  return ListView(
+                                                    children: snapshot.data!
+                                                        .map<Widget>((userData) => _buildUserListItem(userData, context))
+                                                        .toList(),
+                                                  );
+                                                },
+                                              )
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    },
+                                  );
+                                },
+                                child: Container(
+                                  height: height * .04,
+                                  width: width * .35,
+                                  decoration: BoxDecoration(
+                                    color: AppColor.secondColor,
+                                    borderRadius: BorderRadius.circular(25),
+                                  ),
+                                  child: Center(
+                                    child: BuildText(
+                                      text: "Your team list",
+                                      color: AppColor.primeColor,
+                                      size: 15,
+                                      bold: true,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -546,6 +617,35 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
 
       },
     );
+  }
+  Widget _buildUserListItem(Map<String, dynamic> userData , BuildContext context) {
+    /// display all users except current user
+    if (userData['email'] != AppCubit.get(context).getCurrentUser()!.email) {
+      return Padding(
+
+        padding: const EdgeInsets.all(12.0),
+        child: TCircularContainer(
+
+          child: UserTile(
+            text:
+            userData['name'],
+            onTap: () {
+              /// pass the clicked user's UID to the chat page
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ChatScreen(
+                        receiverUserEmail: userData['email'],
+                        receiverUserID: userData['uid'],
+                      )));
+            },
+          ),
+        ),
+      );
+    } else {
+      /// return empty container
+      return Container();
+    }
   }
 
 }

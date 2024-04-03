@@ -49,7 +49,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
     /// Pick an image.
     final XFile? imageGallery =
-    await picker.pickImage(source: ImageSource.gallery);
+    await picker.pickImage(source: ImageSource.camera);
     if (imageGallery != null) {
       // if (kDebugMode) {
       //   print('******');

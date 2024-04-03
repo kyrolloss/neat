@@ -32,6 +32,9 @@ class ChatService extends ChangeNotifier{
     });
   }
 
+
+
+
   /// SEND MESSAGE
   Future<void> sendMessage(String receiverId, String message) async {
     /// get current user info
