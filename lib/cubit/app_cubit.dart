@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -158,6 +159,24 @@ class AppCubit extends Cubit<AppState> {
       rethrow;
     }
   }
+
+  Future<void> updateProfilePicture(String uid , String imageUrl) async{
+    try{
+      /// Upload the image to Firebase Storage and get the download URL
+      var refStorage = FirebaseStorage.instance.ref("ProfileImg/$uid");
+      await refStorage.putFile(File(imageUrl));
+      String downloadUrl = await refStorage.getDownloadURL();
+      /// Once you have the download URL, update the Firestore document
+      await FirebaseFirestore.instance.collection('Users').doc(uid).update(
+          {
+            'url' : downloadUrl ,/// Update the 'url' field with the new photo URL
+          });
+      /// Now the photo URL is associated with the user's email in Firestore
+    }catch (e){
+      print(e.toString());
+    }
+  }
+
 
   Future<UserCredential> Login(
       {required String email, required String password}) async {

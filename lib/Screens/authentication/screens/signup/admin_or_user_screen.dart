@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/MainLayout.dart';
+import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
 import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/enum/user_role.dart';
@@ -86,7 +87,7 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
       //   print(imageName);
       // }
       var docRef =
-          database.collection('Users').doc('f1xQHnHVneTjbxT9wMqTlAQutS63');
+          database.collection('Users').doc(AppCubit.get(context).id);
       var docSnapshot = await docRef.get();
 
       if (docSnapshot.exists) {
@@ -165,26 +166,8 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                     child: Column(
                       children: [
                         Stack(children: [
-                          Container(
-                              height: 250,
-                              width: 250,
-                              decoration: const BoxDecoration(
-                                shape: BoxShape.circle,
-                              ),
-                              child: cubit.url != null && cubit.url!.isNotEmpty
-                                  ? ClipOval(
-                                      child: Image.network(
-                                        cubit.url!,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )
-                                  : const ClipOval(
-                                      child: Image(
-                                        image: AssetImage(
-                                            'assets/images/user/user.png'),
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
+                          /// Profile picture
+                          ProfilePicture(cubit: cubit, width: 250, height: 250),
                           Positioned(
                             bottom: 3,
                             right: 20,

@@ -9,7 +9,9 @@ import 'package:inkblob_navigation_bar/inkblob_navigation_bar.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
+import 'package:provider/provider.dart';
 
+import '../utlis/constants/themes/theme_provider.dart';
 import 'Home/home Screen.dart';
 
 class AdminMainLayout extends StatefulWidget {
@@ -170,6 +172,8 @@ class _MainLayoutState extends State<AdminMainLayout> {
 
   @override
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
         // TODO: implement listener
@@ -223,7 +227,7 @@ class _MainLayoutState extends State<AdminMainLayout> {
             ],
             color: AppColor.primeColor,
             buttonBackgroundColor: AppColor.primeColor,
-            backgroundColor: TColors.backgroundColor,
+            backgroundColor:isDarkMode? Colors.grey.shade900 :   TColors.backgroundColor,
             animationCurve: Curves.easeInOut,
             animationDuration: const Duration(milliseconds: 450),
             onTap: (index) {
