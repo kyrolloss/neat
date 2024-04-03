@@ -15,6 +15,7 @@ import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../../common/widgets/appbar/appbar.dart';
+import '../../Screens/Profile/widgets/profile_picture.dart';
 import '../../Screens/Task Details Screen/Task Details Screen.dart';
 import '../../Screens/chat/chat_screen.dart';
 import '../../Screens/chat/users_screen.dart';
@@ -61,11 +62,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      const TCircularImage(
-                        image: "assets/images/user/user.png",
-                        width: 90,
-                        height: 90,
-                      ),
+                      ProfilePicture(cubit: cubit, width: 120, height: 120),
                       SizedBox(
                         width: width * .025,
                       ),
