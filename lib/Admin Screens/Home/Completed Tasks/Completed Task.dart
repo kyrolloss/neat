@@ -5,6 +5,7 @@ import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 
 import '../../../Screens/Task Details Screen/Task Details Screen.dart';
+import '../../../Screens/chat/chat_screen.dart';
 import '../../../components/components.dart';
 import '../../../cubit/app_cubit.dart';
 
@@ -85,43 +86,97 @@ class _CompletedTaskState extends State<CompletedTask> {
               senderName: taskData['senderName'],
               senderEmail: taskData['senderEmail'],
               senderPhone: taskData['senderPhoneNumber'],
-              taskId: taskData['id'],
+              taskId: taskData['id'], sender: true,
             ));
       },
-      child: taskData ['status'] == 'completed' ?Padding(
+      child: taskData ['status'] == 'completed' ?
+      Padding(
         padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
-        child: ConstrainedBox(
-          constraints: BoxConstraints(
-            maxWidth: width * .2,
-            minWidth: width * .05,
-          ),
-          child: Container(
-            height: height * .1,
-            decoration: BoxDecoration(
-                color: AppColor.secondColor,
-                borderRadius: BorderRadius.circular(25)),
+        child: Container(
+          height: height * .1,
+          decoration: BoxDecoration(
+              color: AppColor.secondColor,
+              borderRadius: BorderRadius.circular(25)),
+          child: Padding(
+            padding: const EdgeInsets.only(
+                right: 12.0, top: 8, bottom: 8, left:17.5),
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Icon(
-                  Icons.note_sharp,
-                  color: AppColor.primeColor,
-                ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SizedBox(
-                        width: width * .2,
-                        child: BuildText(
-                          text: taskData['name'],
-                          size: 17.5,
-                          bold: true,
-                          color: AppColor.primeColor,
-                          maxLines: 2,
-                        )),
+                    BuildText(
+                      text: taskData['name'],
+                      size: 16,
+                      bold: true,
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '${taskData['year']}/${taskData['month']}/${taskData['day']}',
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold),
+                    ),
+                    const SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      taskData['priority'],
+                      style: const TextStyle(
+                          color: Colors.black,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold),
+                    )
                   ],
                 ),
+                StreamBuilder(
+                  stream: FirebaseFirestore.instance
+                      .collection('Users')
+                      .where('uid', isEqualTo: taskData['receiverId'])
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    return GestureDetector(
+                      onTap: () {
+                        navigateTo(context, ChatScreen(
+                          receiverUserEmail: snapshot.data!.docs[0]['email'],
+                          receiverUserID: snapshot.data!.docs[0]['uid'],));
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.chat,
+                            color: AppColor.primeColor,
+                          ),
+                          Text('Chat with',
+                              style: TextStyle(
+                                color: AppColor.primeColor,
+                                fontSize: 12,
+                              )),
+                          SizedBox(
+                            height: height * .025,
+                            width: width * .3,
+                            child: Center(
+                              child: Text(
+                                snapshot.data!.docs[0]['name'],
+                                style: TextStyle(
+                                  color: AppColor.primeColor,
+                                  fontSize: 12,
+                                ),
+                                maxLines: 3,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                )
               ],
             ),
           ),

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
@@ -20,19 +21,22 @@ class _ToDoTasksState extends State<ToDoTasks> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: BuildText(
-          text: 'In progress tasks',
-          color: Colors.white,
-          size: 17.5,
-          letterSpacing: 1.5,
-
-        ),
-        backgroundColor: AppColor.primeColor,
-        centerTitle: true,
-          leading: IconButton(onPressed: (){Navigator.pop(context);}, icon:  Icon(Icons.arrow_back_ios , color: AppColor.secondColor,))
-
-      )
-      ,
+          title: BuildText(
+            text: 'To Do tasks',
+            color: Colors.white,
+            size: 17.5,
+            letterSpacing: 1.5,
+          ),
+          backgroundColor: AppColor.primeColor,
+          centerTitle: true,
+          leading: IconButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              icon: Icon(
+                Icons.arrow_back_ios,
+                color: AppColor.secondColor,
+              ))),
       body: BuilderTasksList(),
     );
   }
@@ -41,7 +45,6 @@ class _ToDoTasksState extends State<ToDoTasks> {
     return StreamBuilder(
       stream: AppCubit.get(context).performanceStream(),
       builder: (context, snapshot) {
-
         if (snapshot.hasError) {
           return const Text('error');
         }
@@ -55,7 +58,7 @@ class _ToDoTasksState extends State<ToDoTasks> {
         }
         return GridView(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1, childAspectRatio: 3.5),
+              crossAxisCount: 1, childAspectRatio: 3.15),
           children:
           snapshot.data!.docs.map((doc) => BuildtaskListItem(doc)).toList(),
         );
@@ -65,8 +68,14 @@ class _ToDoTasksState extends State<ToDoTasks> {
 
   Widget BuildtaskListItem(DocumentSnapshot doc) {
     Map<String, dynamic> taskData = doc.data() as Map<String, dynamic>;
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
+    var height = MediaQuery
+        .of(context)
+        .size
+        .height;
+    var width = MediaQuery
+        .of(context)
+        .size
+        .width;
 
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -84,52 +93,107 @@ class _ToDoTasksState extends State<ToDoTasks> {
                 senderName: taskData['senderName'],
                 senderEmail: taskData['senderEmail'],
                 senderPhone: taskData['senderPhoneNumber'],
-                taskId: taskData['id'],
+                taskId: taskData['id'], sender: true,
               ));
         },
-        child: taskData ['status'] == 'to do' ?Padding(
+        child: taskData['status'] == 'to do'
+            ? Padding(
           padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
-          child: ConstrainedBox(
-            constraints: BoxConstraints(
-              maxWidth: width * .2,
-              minWidth: width * .05,
-            ),
-            child: Container(
-              height: height * .1,
-              decoration: BoxDecoration(
-                  color: AppColor.secondColor,
-                  borderRadius: BorderRadius.circular(25)),
+          child: Container(
+            height: height * .1,
+            decoration: BoxDecoration(
+                color: AppColor.secondColor,
+                borderRadius: BorderRadius.circular(25)),
+            child: Padding(
+              padding: const EdgeInsets.only(
+                  right: 12.0, top: 8, bottom: 8, left:17.5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Icon(
-                    Icons.note_sharp,
-                    color: AppColor.primeColor,
-                  ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      SizedBox(
-                          width: width * .2,
-                          child: BuildText(
-                            text: taskData['name'],
-                            size: 17.5,
-                            bold: true,
-                            color: AppColor.primeColor,
-                            maxLines: 2,
-                          )),
+                      BuildText(
+                        text: taskData['name'],
+                        size: 16,
+                        bold: true,
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        '${taskData['year']}/${taskData['month']}/${taskData['day']}',
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 15,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(
+                        height: 5,
+                      ),
+                      Text(
+                        taskData['priority'],
+                        style: const TextStyle(
+                            color: Colors.black,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      )
                     ],
                   ),
+                  StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection('Users')
+                        .where('uid', isEqualTo: taskData['receiverId'])
+                        .snapshots(),
+                    builder: (context, snapshot) {
+                      return GestureDetector(
+                        onTap: () {
+                          navigateTo(context, ChatScreen(
+                              receiverUserEmail: snapshot.data!.docs[0]['email'],
+                              receiverUserID: snapshot.data!.docs[0]['uid'],));
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.chat,
+                              color: AppColor.primeColor,
+                            ),
+                            Text('Chat with',
+                                style: TextStyle(
+                                  color: AppColor.primeColor,
+                                  fontSize: 12,
+                                )),
+                            SizedBox(
+                              height: height * .025,
+                              width: width * .3,
+                              child: Center(
+                                child: Text(
+                                  snapshot.data!.docs[0]['name'],
+                                  style: TextStyle(
+                                    color: AppColor.primeColor,
+                                    fontSize: 12,
+                                  ),
+                                  maxLines: 3,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                  )
                 ],
               ),
             ),
           ),
-        ): Center(
+        )
+            : Center(
           child: BuildText(
             text: 'No Tasks sent',
             size: 25,
-            color : AppColor.primeColor,
+            color: AppColor.primeColor,
             bold: true,
             letterSpacing: 2,
           ),

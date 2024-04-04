@@ -12,9 +12,9 @@ import '../../components/Text.dart';
 class taskDetailsScreen extends StatefulWidget {
   String? senderID;
   String? description;
-  Int? year;
-  Int? month;
-  Int? day;
+ int year;
+ int month;
+ int day;
   String? senderName;
   String? senderPhone;
   String? taskId;
@@ -23,6 +23,7 @@ class taskDetailsScreen extends StatefulWidget {
 
   // // String? priority;
   String? senderEmail;
+  bool? sender = false;
 
   // String? imageURl;
   // dynamic attachments;
@@ -33,13 +34,16 @@ class taskDetailsScreen extends StatefulWidget {
     this.senderName,
     this.senderPhone,
     this.taskId,
-    this.year,
-    this.month,
-    this.day,
+   required this.year,
+   required this.month,
+   required this.day,
     //  this.status,
     this.name,
     //  // this.priority,
     this.senderEmail,
+     this.sender,
+    // this.imageURl,
+    // this.attachments,
     // this.imageURl,
     // // this.attachments,
   });
@@ -70,7 +74,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                         text: widget.name!,
                         bold: true,
                         color: AppColor.primeColor,
-                        size: 35,
+                        size: 25,
                         center: true,
                       ),
                     ),
@@ -165,11 +169,18 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                   size: 17.5,
                                   bold: true,
                                 ),
-                                BuildText(
-                                    text: widget.senderEmail!,
-                                    color: Colors.white,
-                                    size: 17.5,
-                                    bold: true),
+                                SizedBox(
+                                    width : width*.475,
+                                    height: height*.1,
+                                    child: Center(
+                                      child: BuildText(
+                                        text: widget.senderEmail!,
+                                        color: Colors.white,
+                                        size: 17.5,
+                                        maxLines: 2,
+                                        bold: true),
+                                    ),
+                                ),
                                 IconButton(
                                     onPressed: () {},
                                     icon: const Icon(
@@ -281,7 +292,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                         center: true,
                       ),
                       BuildText(
-                        text: '${widget.year}+${widget.month}+${widget.day}',
+                        text: ' ${widget.year}/${widget.month}/${widget.day}',
                         bold: true,
                         color: Colors.black,
                         size: 20,
@@ -289,7 +300,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       ),
                     ],
                   ),
-                  Padding(
+                  widget.sender == false ?Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15.0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -310,7 +321,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                             ),
                           ),
                         ),
-                        Container(
+                       Container(
                           height: height * .075,
                           width: width * .15,
                           decoration: BoxDecoration(
@@ -338,7 +349,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                         )
                       ],
                     ),
-                  ),
+                  ) : const SizedBox(),
                 ],
               ),
             ),

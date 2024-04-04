@@ -78,6 +78,8 @@ class _admincompletedTab extends State<admincompletedTab> {
             senderEmail: taskData['senderEmail'],
             senderPhone: taskData['senderPhoneNumber'],
             taskId: taskData['id'],
+            sender: true,
+
 
           ));
         },

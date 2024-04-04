@@ -79,6 +79,8 @@ class _admininProgress extends State<admininProgress> {
             senderEmail: taskData['senderEmail'],
             senderPhone: taskData['senderPhoneNumber'],
             taskId: taskData['id'],
+            sender: true,
+
 
           ));
         },
