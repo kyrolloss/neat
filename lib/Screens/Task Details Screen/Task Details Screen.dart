@@ -1,20 +1,15 @@
-import 'dart:ffi';
-
-import 'dart:ffi';
-
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'package:neat/components/color.dart';
+import 'package:syncfusion_flutter_sliders/sliders.dart';
 
 import '../../components/Text.dart';
 
 class taskDetailsScreen extends StatefulWidget {
   String? senderID;
   String? description;
- int year;
- int month;
- int day;
+  int year;
+  int month;
+  int day;
   String? senderName;
   String? senderPhone;
   String? taskId;
@@ -34,14 +29,14 @@ class taskDetailsScreen extends StatefulWidget {
     this.senderName,
     this.senderPhone,
     this.taskId,
-   required this.year,
-   required this.month,
-   required this.day,
+    required this.year,
+    required this.month,
+    required this.day,
     //  this.status,
     this.name,
     //  // this.priority,
     this.senderEmail,
-     this.sender,
+    this.sender,
     // this.imageURl,
     // this.attachments,
     // this.imageURl,
@@ -53,6 +48,8 @@ class taskDetailsScreen extends StatefulWidget {
 }
 
 class _taskDetailsScreenState extends State<taskDetailsScreen> {
+  double _value = 40.0;
+
   @override
   Widget build(BuildContext context) {
     var height = MediaQuery.of(context).size.height;
@@ -99,13 +96,14 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                   text: 'Sender Name : ',
                                   color: Colors.white,
                                   size: 17.5,
-                                  bold: true,
+                                  letterSpacing: 1.5,
                                 ),
                                 BuildText(
-                                    text: widget.senderName!,
-                                    color: Colors.white,
-                                    size: 17.5,
-                                    bold: true)
+                                  text: widget.senderName!,
+                                  color: Colors.white,
+                                  size: 17.5,
+                                  letterSpacing: 1.5,
+                                )
                               ],
                             ),
                             Row(
@@ -114,19 +112,20 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 BuildText(
                                   text: 'Sender Id : ',
                                   color: Colors.white,
-                                  size: 17.5,
-                                  bold: true,
+                                  size: 15,
+                                  letterSpacing: 1.5,
                                 ),
                                 SizedBox(
                                     width: width * .5,
                                     height: height * .1,
                                     child: Center(
                                       child: BuildText(
-                                          maxLines: 2,
-                                          text: widget.senderID!,
-                                          color: Colors.white,
-                                          size: 17.5,
-                                          bold: true),
+                                        maxLines: 2,
+                                        text: widget.senderID!,
+                                        color: Colors.white,
+                                        size: 15,
+                                        letterSpacing: 1.5,
+                                      ),
                                     )),
                                 Center(
                                   child: IconButton(
@@ -143,13 +142,13 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 BuildText(
                                   text: 'Sender phone : ',
                                   color: Colors.white,
-                                  size: 17.5,
-                                  bold: true,
+                                  size: 15,
+                                  letterSpacing: 1.5,
                                 ),
                                 BuildText(
                                     text: widget.senderPhone!,
                                     color: Colors.white,
-                                    size: 17.5,
+                                    size: 15,
                                     bold: true),
                                 Center(
                                   child: IconButton(
@@ -166,20 +165,21 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 BuildText(
                                   text: 'Sender Email : ',
                                   color: Colors.white,
-                                  size: 17.5,
-                                  bold: true,
+                                  size: 15,
+                                  letterSpacing: 1.5,
                                 ),
                                 SizedBox(
-                                    width : width*.475,
-                                    height: height*.1,
-                                    child: Center(
-                                      child: BuildText(
-                                        text: widget.senderEmail!,
-                                        color: Colors.white,
-                                        size: 17.5,
-                                        maxLines: 2,
-                                        bold: true),
+                                  width: width * .475,
+                                  height: height * .1,
+                                  child: Center(
+                                    child: BuildText(
+                                      text: widget.senderEmail!,
+                                      color: Colors.white,
+                                      size: 15,
+                                      maxLines: 2,
+                                      letterSpacing: 1.5,
                                     ),
+                                  ),
                                 ),
                                 IconButton(
                                     onPressed: () {},
@@ -194,19 +194,20 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 BuildText(
                                   text: 'Task ID :  ',
                                   color: Colors.white,
-                                  size: 17.5,
-                                  bold: true,
+                                  size: 15,
+                                  letterSpacing: 1.5,
                                 ),
                                 SizedBox(
                                     height: height * .075,
                                     width: width * .5,
                                     child: Center(
                                       child: BuildText(
-                                          maxLines: 3,
-                                          text: widget.taskId!,
-                                          color: Colors.white,
-                                          size: 17.5,
-                                          bold: true),
+                                        maxLines: 3,
+                                        text: widget.taskId!,
+                                        color: Colors.white,
+                                        size: 15,
+                                        letterSpacing: 1.5,
+                                      ),
                                     ))
                               ],
                             ),
@@ -214,8 +215,9 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                         ),
                       )),
                   SizedBox(
-                    height: height * .01,
+                    height: height * .02,
                   ),
+
                   BuildText(
                     text: 'Task Description',
                     bold: true,
@@ -231,12 +233,17 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        SizedBox(
+                          height: height * .01,
+                        ),
                         BuildText(
-                          maxLines: 100,
+                          maxLines: 150,
                           text: widget.description!,
                           bold: true,
                           color: Colors.black,
-                          size: 17.5,
+                          size: 15,
+                          letterSpacing: 1.25,
+                          wordSpacing: 1,
                         ),
                       ],
                     ),
@@ -300,56 +307,81 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       ),
                     ],
                   ),
-                  widget.sender == false ?Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 15.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Container(
-                          height: height * .075,
-                          width: width * .75,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(25),
-                            color: AppColor.primeColor,
-                          ),
-                          child: Center(
-                            child: BuildText(
-                              text: 'Send Task',
-                              color: Colors.white,
-                              bold: true,
-                              size: 25,
-                            ),
-                          ),
-                        ),
-                       Container(
-                          height: height * .075,
-                          width: width * .15,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Center(
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Icon(
-                                  Icons.send,
-                                  size: 25,
+
+                  SizedBox(
+                    height: height * .01,
+                  ),
+                  SfSlider(
+                    min: 0.0,
+                    max: 100.0,
+                    value: _value,
+                    interval: 100,
+
+                    activeColor: _value <33.3 ?Colors.red:_value<66.6&&_value >33.3 ?Colors.blue:Colors.green ,
+                    showLabels: true,
+                    enableTooltip: true,
+
+                    minorTicksPerInterval: 1,
+                    onChanged: (dynamic value){
+                      setState(() {
+                        _value = value;
+                        print(value);
+                      });
+                    },
+                  ),
+                  widget.sender == false
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 15.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Container(
+                                height: height * .075,
+                                width: width * .75,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(25),
                                   color: AppColor.primeColor,
                                 ),
-                                BuildText(
-                                  text: 'Chat',
-                                  size: 12.5,
-                                  color: AppColor.primeColor,
-                                  bold: true,
+                                child: Center(
+                                  child: BuildText(
+                                    text: 'Send Task',
+                                    color: Colors.white,
+                                    bold: true,
+                                    size: 25,
+                                  ),
                                 ),
-                              ],
-                            ),
+                              ),
+                              Container(
+                                height: height * .075,
+                                width: width * .15,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Icon(
+                                        Icons.send,
+                                        size: 25,
+                                        color: AppColor.primeColor,
+                                      ),
+                                      BuildText(
+                                        text: 'Chat',
+                                        size: 12.5,
+                                        color: AppColor.primeColor,
+                                        bold: true,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         )
-                      ],
-                    ),
-                  ) : const SizedBox(),
+                      : const SizedBox(),
                 ],
               ),
             ),
