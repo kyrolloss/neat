@@ -1,15 +1,17 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/Screens/chat/services/chat_service.dart';
-import 'package:neat/Screens/chat/widgets/chat_box.dart';
 import 'package:neat/Screens/chat/widgets/chat_bubble.dart';
 import 'package:neat/Screens/chat/widgets/text_field.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
-import 'package:neat/common/widgets/drawer/drawer.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
+import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
@@ -50,16 +52,18 @@ class _ChatScreenState extends State<ChatScreen> {
         /// then the amount of remaining space will be calculated ,
         /// then scroll down
         Future.delayed(
-          Duration(milliseconds: 500),
+          const Duration(milliseconds: 500),
           () => scrollDown(),
         );
       }
     });
+
     /// wait a bit for listview to be built , then scroll to bottom
-    Future.delayed(Duration(
-      milliseconds: 500,
-    ),
-        ()=> scrollDown(),
+    Future.delayed(
+      const Duration(
+        milliseconds: 500,
+      ),
+      () => scrollDown(),
     );
   }
 
@@ -75,7 +79,7 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void scrollDown() {
     _scrollController.animateTo(_scrollController.position.maxScrollExtent,
-        duration: Duration(seconds: 1), curve: Curves.fastOutSlowIn);
+        duration: const Duration(seconds: 1), curve: Curves.fastOutSlowIn);
   }
 
   void sendMessage() async {
@@ -93,65 +97,110 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      appBar: AppBar(
-        backgroundColor: TColors.primaryColor,
-        automaticallyImplyLeading: true,
-        leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: const Icon(
-              Icons.arrow_back_ios_new,
-              color: Colors.white,
+    return BlocConsumer<AppCubit, AppState>(
+      listener: (context, state) {
+        // TODO: implement listener
+      },
+      builder: (context, state) {
+        var cubit = AppCubit.get(context);
+        return Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.background,
+          appBar: AppBar(
+            backgroundColor: TColors.primaryColor,
+            automaticallyImplyLeading: true,
+            leading: IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                )),
+            shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(15),
+              bottomRight: Radius.circular(15),
             )),
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-          bottomLeft: Radius.circular(15),
-          bottomRight: Radius.circular(15),
-        )),
-        title: Row(
-          children: [
-            const TCircularImage(image: TImages.user),
-            const SizedBox(
-              width: 10,
+            title: Row(
+              children: [
+                /// Fetch and display receiver's profile picture
+                FutureBuilder(
+                  future: FirebaseFirestore.instance
+                      .collection('Users')
+                      .doc(widget.receiverUserID)
+                      .get(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const CircularProgressIndicator();
+                    } else if (snapshot.hasError) {
+                      return Text('Error : ${snapshot.error}');
+                    } else {
+                      var userData = snapshot.data?.data();
+                      var receiverImageUrl = userData?['url'];
+                      return Container(
+                          height: 35,
+                          width: 35,
+                          decoration: const BoxDecoration(
+                            shape: BoxShape.circle,
+                          ),
+                          child: receiverImageUrl != null &&
+                                  receiverImageUrl!.isNotEmpty
+                              ? ClipOval(
+                                  child: Image.network(
+                                    receiverImageUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+                              : const ClipOval(
+                                  child: Image(
+                                    image: AssetImage(
+                                        'assets/images/user/user.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ));
+                    }
+                  },
+                ),
+                const SizedBox(
+                  width: 10,
+                ),
+                Text(
+                  widget.receiverUserEmail,
+                  style: Theme.of(context)
+                      .textTheme
+                      .bodySmall!
+                      .apply(color: Colors.white),
+                ),
+              ],
             ),
-            Text(
-              widget.receiverUserEmail,
-              style: Theme.of(context)
-                  .textTheme
-                  .bodySmall!
-                  .apply(color: Colors.white),
-            ),
-          ],
-        ),
-        actions: [
-          IconButton(
-              onPressed: () {},
-              icon: const Icon(
-                Icons.more_vert,
-                color: Colors.white,
-              )),
-        ],
-      ),
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            /// display all Messages
-            Expanded(
-              child: _buildMessageList(),
-            ),
+            actions: [
+              IconButton(
+                  onPressed: () {},
+                  icon: const Icon(
+                    Icons.more_vert,
+                    color: Colors.white,
+                  )),
+            ],
+          ),
+          body: SafeArea(
+              child: Padding(
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                /// display all Messages
+                Expanded(
+                  child: _buildMessageList(),
+                ),
 
-            /// User Input
-            _buildMessageInput(),
-          ],
-        ),
-      )),
+                /// User Input
+                _buildMessageInput(),
+              ],
+            ),
+          )),
+        );
+      },
     );
   }
 
@@ -168,7 +217,7 @@ class _ChatScreenState extends State<ChatScreen> {
             return const Text('Loading..');
           }
           return ListView(
-            controller: _scrollController ,
+            controller: _scrollController,
             children: snapshot.data!.docs
                 .map((doc) => _buildMessageItem(doc))
                 .toList(),
@@ -186,35 +235,102 @@ class _ChatScreenState extends State<ChatScreen> {
     /// align the messages to the right if the sender is the current user , otherwise to the left
     var alignment =
         isCurrentUser ? Alignment.centerRight : Alignment.centerLeft;
-    return Container(
-      alignment: alignment,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Column(
-          crossAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
-                  ? CrossAxisAlignment.end
-                  : CrossAxisAlignment.start,
-          mainAxisAlignment:
-              (data['senderId'] == _firebaseAuth.currentUser!.uid)
-                  ? MainAxisAlignment.end
-                  : MainAxisAlignment.start,
-          children: [
-            Text(
-              data['senderEmail'],
-              style: const TextStyle(color: TColors.primaryColor),
-            ),
-            const SizedBox(
-              height: 5,
-            ),
-            ChatBubble(
-              message: data['message'],
-              isCurrentUser: isCurrentUser,
-            ),
-          ],
-        ),
-      ),
-    );
+    return FutureBuilder(
+        future: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(isCurrentUser
+                ? _authService.getCurrentUser()!.uid
+                : widget.receiverUserID)
+            .get(),
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return CircularProgressIndicator();
+          } else if (snapshot.hasError) {
+            return Text("Error : ${snapshot.error}");
+          } else {
+            var userData = snapshot.data?.data();
+            var profileImageUrl = userData?['url'];
+            return Container(
+              alignment: alignment,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  crossAxisAlignment: isCurrentUser
+                      ? CrossAxisAlignment.end
+                      : CrossAxisAlignment.start,
+                  // (data['senderId'] == _firebaseAuth.currentUser!.uid)
+                  //     ? CrossAxisAlignment.end
+                  //     : CrossAxisAlignment.start,
+                  mainAxisAlignment: isCurrentUser
+                      ? MainAxisAlignment.end
+                      : MainAxisAlignment.start,
+                  // (data['senderId'] == _firebaseAuth.currentUser!.uid)
+                  //     ? MainAxisAlignment.end
+                  //     : MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      data['senderEmail'],
+                      style: const TextStyle(color: TColors.primaryColor),
+                    ),
+                    const SizedBox(
+                      height: TSizes.spaceBtwItems / 2,
+                    ),
+                    Row(mainAxisSize: MainAxisSize.min, children: [
+                      if (!isCurrentUser) ...[
+                        ClipOval(
+                          child: profileImageUrl != null &&
+                                  profileImageUrl.isNotEmpty
+                              ? Image.network(
+                                  profileImageUrl,
+                                  fit: BoxFit.cover,
+                                  width: 35,
+                                  height: 35,
+                                )
+                              : Image.asset(
+                                  'assets/images/user/user.png',
+                                  fit: BoxFit.cover,
+                                  width: 35,
+                                  height: 35,
+                                ),
+                        ),
+                        const SizedBox(
+                          width: 8,
+                        )
+                      ],
+                      Flexible(
+                        child: ChatBubble(
+                          message: data['message'],
+                          isCurrentUser: isCurrentUser,
+                        ),
+                      ),
+                      if (isCurrentUser) ...[
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        ClipOval(
+                          child: profileImageUrl != null &&
+                                  profileImageUrl.isNotEmpty
+                              ? Image.network(
+                                  profileImageUrl,
+                                  fit: BoxFit.cover,
+                                  width: 35,
+                                  height: 35,
+                                )
+                              : Image.asset(
+                                  'assets/images/user/user.png',
+                                  fit: BoxFit.cover,
+                                  width: 35,
+                                  height: 35,
+                                ),
+                        ),
+                      ],
+                    ]),
+                  ],
+                ),
+              ),
+            );
+          }
+        });
   }
 
   /// build Message Input
@@ -231,7 +347,7 @@ class _ChatScreenState extends State<ChatScreen> {
               children: [
                 Expanded(
                     child: MyTextField(
-                      focusNode: myFocusNode,
+                        focusNode: myFocusNode,
                         messageController: _messageController)),
               ],
             ),
@@ -256,5 +372,3 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 }
-
-

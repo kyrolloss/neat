@@ -18,11 +18,23 @@ class ChatBubble extends StatelessWidget {
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return Container(
+
       padding: EdgeInsets.all(12),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(25),
+        borderRadius: isCurrentUser ? BorderRadius.only(
+          topLeft: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        )
+        : BorderRadius.only(
+          topRight: Radius.circular(30),
+          bottomLeft: Radius.circular(30),
+          bottomRight: Radius.circular(30),
+        )
+        ,
         color: isCurrentUser ? TColors.primaryColor
             : TColors.secondaryColor.withOpacity(0.9) ,
+
       ),
       child: Text(
         message,

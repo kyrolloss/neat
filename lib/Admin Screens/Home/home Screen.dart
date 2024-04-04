@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Admin%20Screens/Home/Completed%20Tasks/Completed%20Task.dart';
 import 'package:neat/Admin%20Screens/Home/In%20progress%20tasks/in%20Progress%20tasks.dart';
+import 'package:neat/Admin%20Screens/Home/widgets/builder_completed.dart';
+import 'package:neat/Admin%20Screens/Home/widgets/builder_progress.dart';
+import 'package:neat/Admin%20Screens/Home/widgets/builder_todo.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
@@ -65,6 +68,9 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      SizedBox(
+                        height: TSizes.spaceBtwSections * 5,
+                      ),
                       ProfilePicture(cubit: cubit, width: 120, height: 120),
                       SizedBox(
                         width: width * .025,
@@ -130,7 +136,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(
-                            height: TSizes.lg * 3.5,
+                            height: TSizes.lg * 4,
                             width: width * .4,
                             child: Center(
                               child: BuildText(
@@ -160,27 +166,33 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                             child: Container(
                                               height: height * .3,
                                               decoration: BoxDecoration(
-                                                  color: Colors.white,
+                                                  color: TColors.backgroundColor,
                                                   borderRadius:
-                                                      BorderRadius.circular(25)),
+                                                      BorderRadius.circular(
+                                                          25)),
                                               child: Column(
                                                 mainAxisAlignment:
-                                                    MainAxisAlignment.spaceEvenly,
+                                                    MainAxisAlignment
+                                                        .spaceEvenly,
                                                 children: [
                                                   Center(
-                                                    child: DropdownButton<String>(
+                                                    child:
+                                                        DropdownButton<String>(
+                                                          dropdownColor: TColors.backgroundColor,
                                                       value: selectedValue,
                                                       onChanged: (newValue) {
                                                         setState(() {
                                                           // تحديث القيمة المختارة
-                                                          selectedValue = newValue!;
+                                                          selectedValue =
+                                                              newValue!;
                                                         });
                                                       },
-                                                      items: values.map((value) {
+                                                      items:
+                                                          values.map((value) {
                                                         return DropdownMenuItem<
                                                             String>(
                                                           value: value,
-                                                          child: Text(value),
+                                                          child: Text(value,style: TextStyle(color: TColors.primaryColor),),
                                                         );
                                                       }).toList(),
                                                     ),
@@ -188,109 +200,131 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                   selectedValue == 'ID'
                                                       ? Padding(
                                                           padding:
-                                                              const EdgeInsets.all(
-                                                                  12.0),
+                                                              const EdgeInsets
+                                                                  .all(12.0),
                                                           child: TextFormField(
+                                                            style: TextStyle(color: TColors.primaryColor),
                                                             controller:
                                                                 idController,
                                                             cursorColor:
-                                                                Colors.black,
+                                                                TColors.primaryColor,
                                                             decoration:
                                                                 InputDecoration(
+                                                                  enabledBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(color: TColors.primaryColor),
+                                                                    borderRadius: BorderRadius.circular(30),
+                                                                  ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide(color: TColors.secondaryColor),
+                                                                      borderRadius: BorderRadius.circular(30)
+                                                                    ),
                                                                     contentPadding:
                                                                         const EdgeInsets
                                                                             .all(
                                                                             10),
-                                                                    fillColor: AppColor
-                                                                        .secondColor,
-                                                                    filled: true,
+                                                                    fillColor:
+                                                                        TColors.backgroundColor,
+                                                                    filled:
+                                                                        true,
                                                                     hintText:
                                                                         'ID ...',
                                                                     hintStyle:
-                                                                        const TextStyle(
+                                                                         TextStyle(
+                                                                          color: TColors.primaryColor.withOpacity(0.6),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
-                                                                      fontSize: 15,
+                                                                      fontSize:
+                                                                          15,
                                                                     ),
                                                                     border: OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                30),
+                                                                        borderRadius: BorderRadius.circular(
+                                                                            30),
                                                                         gapPadding:
                                                                             20,
-                                                                        borderSide:
-                                                                            BorderSide
-                                                                                .none),
+                                                                        borderSide: BorderSide
+                                                                            .none),
                                                                     counterStyle: const TextStyle(
                                                                         color: Colors
                                                                             .white,
                                                                         fontSize:
                                                                             25,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold)),
+                                                                            FontWeight.bold)),
                                                           ),
                                                         )
                                                       : Padding(
                                                           padding:
-                                                              const EdgeInsets.all(
-                                                                  12.0),
+                                                              const EdgeInsets
+                                                                  .all(12.0),
                                                           child: TextFormField(
+                                                            style: TextStyle(color: TColors.primaryColor),
                                                             controller:
                                                                 emailController,
                                                             cursorColor:
-                                                                Colors.black,
+                                                                TColors.primaryColor,
                                                             decoration:
                                                                 InputDecoration(
+                                                                  enabledBorder: OutlineInputBorder(
+                                                                    borderSide: BorderSide(color: TColors.primaryColor),
+                                                                    borderRadius: BorderRadius.circular(30),
+                                                                  ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                      borderSide: BorderSide(color: TColors.secondaryColor),
+                                                                      borderRadius: BorderRadius.circular(30),
+                                                                    ),
                                                                     contentPadding:
                                                                         const EdgeInsets
                                                                             .all(
                                                                             10),
-                                                                    fillColor: AppColor
-                                                                        .secondColor,
-                                                                    filled: true,
+                                                                    fillColor:
+                                                                        TColors.backgroundColor,
+                                                                    filled:
+                                                                        true,
                                                                     hintText:
                                                                         'Email ...',
                                                                     hintStyle:
-                                                                        const TextStyle(
+                                                                         TextStyle(
+                                                                          color: TColors.primaryColor.withOpacity(0.6),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
-                                                                      fontSize: 15,
+                                                                      fontSize:
+                                                                          15,
                                                                     ),
                                                                     border: OutlineInputBorder(
-                                                                        borderRadius:
-                                                                            BorderRadius.circular(
-                                                                                30),
+                                                                        borderRadius: BorderRadius.circular(
+                                                                            30),
                                                                         gapPadding:
                                                                             20,
-                                                                        borderSide:
-                                                                            BorderSide
-                                                                                .none),
+                                                                        borderSide: BorderSide
+                                                                            .none),
                                                                     counterStyle: const TextStyle(
                                                                         color: Colors
                                                                             .white,
                                                                         fontSize:
                                                                             25,
                                                                         fontWeight:
-                                                                            FontWeight
-                                                                                .bold)),
+                                                                            FontWeight.bold)),
                                                           ),
                                                         ),
                                                   selectedValue == 'ID'
                                                       ? GestureDetector(
-                                                          child: GestureDetector(
+                                                          child:
+                                                              GestureDetector(
                                                             onTap: () async {
                                                               cubit.addMemberToGroup(
-                                                                  idController.text
+                                                                  idController
+                                                                      .text
                                                                       .toString());
-                                                              idController.clear();
+                                                              idController
+                                                                  .clear();
                                                               Navigator.pop(
                                                                   context);
                                                             },
                                                             child: Container(
-                                                              height: height * .04,
+                                                              height:
+                                                                  height * .04,
                                                               width: width * .3,
                                                               decoration:
                                                                   BoxDecoration(
@@ -302,10 +336,11 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                             25),
                                                               ),
                                                               child: Center(
-                                                                child: BuildText(
+                                                                child:
+                                                                    BuildText(
                                                                   text: "Add ",
-                                                                  color: AppColor
-                                                                      .secondColor,
+                                                                  color: TColors
+                                                                      .backgroundColor,
                                                                   size: 17.5,
                                                                   bold: true,
                                                                 ),
@@ -314,38 +349,39 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                           ),
                                                         )
                                                       : GestureDetector(
-                                                    onTap: () async {
-                                                      cubit.addMemberToGroupByEmail(
-                                                          emailController.text
-                                                              .toString());
-                                                      emailController.clear();
-                                                      Navigator.pop(
-                                                          context);
-                                                    },
-                                                    child: Container(
-                                                      height: height * .04,
-                                                      width: width * .3,
-                                                      decoration:
-                                                      BoxDecoration(
-                                                        color: AppColor
-                                                            .primeColor,
-                                                        borderRadius:
-                                                        BorderRadius
-                                                            .circular(
-                                                            25),
-                                                      ),
-                                                      child: Center(
-                                                        child: BuildText(
-                                                          text: "Add ",
-                                                          color: AppColor
-                                                              .secondColor,
-                                                          size: 17.5,
-                                                          bold: true,
+                                                          onTap: () async {
+                                                            cubit.addMemberToGroupByEmail(
+                                                                emailController
+                                                                    .text
+                                                                    .toString());
+                                                            emailController
+                                                                .clear();
+                                                            Navigator.pop(
+                                                                context);
+                                                          },
+                                                          child: Container(
+                                                            height:
+                                                                height * .04,
+                                                            width: width * .3,
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: AppColor
+                                                                  .primeColor,
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          25),
+                                                            ),
+                                                            child: Center(
+                                                              child: BuildText(
+                                                                text: "Add ",
+                                                                color: TColors.backgroundColor,
+                                                                size: 17.5,
+                                                                bold: true,
+                                                              ),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-
                                                 ],
                                               ),
                                             ),
@@ -377,42 +413,49 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                   showDialog(
                                     context: context,
                                     builder: (context) {
-                                      
                                       return StatefulBuilder(
                                         builder: (context, setState) {
                                           return Dialog(
                                             child: Container(
-                                              height: height * .3,
-                                              decoration: BoxDecoration(
-                                                  color: Colors.white,
-                                                  borderRadius:
-                                                  BorderRadius.circular(25)),
-                                              child: StreamBuilder(
-                                                
-                                                stream: cubit.getTeamStream(),
-                                                builder: (context, snapshot) {
-                                                  /// error
-                                                  if (snapshot.hasError) {
-                                                    return const Text("Error");
-                                                  }
-                                                  /// loading
-                                                  if (snapshot.connectionState == ConnectionState.waiting) {
-                                                    return const Text("Loading..");
-                                                  }
+                                                height: height * .3,
+                                                decoration: BoxDecoration(
+                                                    color: Colors.white,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            25)),
+                                                child: StreamBuilder(
+                                                  stream: cubit.getTeamStream(),
+                                                  builder: (context, snapshot) {
+                                                    /// error
+                                                    if (snapshot.hasError) {
+                                                      return const Text(
+                                                          "Error");
+                                                    }
 
+                                                    /// loading
+                                                    if (snapshot
+                                                            .connectionState ==
+                                                        ConnectionState
+                                                            .waiting) {
+                                                      return const Text(
+                                                          "Loading..");
+                                                    }
 
-                                                  /// return listview
-                                                  if (!snapshot.hasData) {
-                                                    return const Text("no members..");
-                                                  }
-                                                  return ListView(
-                                                    children: snapshot.data!
-                                                        .map<Widget>((userData) => _buildUserListItem(userData, context))
-                                                        .toList(),
-                                                  );
-                                                },
-                                              )
-                                            ),
+                                                    /// return listview
+                                                    if (!snapshot.hasData) {
+                                                      return const Text(
+                                                          "no members..");
+                                                    }
+                                                    return ListView(
+                                                      children: snapshot.data!
+                                                          .map<Widget>((userData) =>
+                                                              _buildUserListItem(
+                                                                  userData,
+                                                                  context))
+                                                          .toList(),
+                                                    );
+                                                  },
+                                                )),
                                           );
                                         },
                                       );
@@ -445,33 +488,27 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   SizedBox(
                     height: height * .02,
                   ),
-
                   BuildText(
                     text: 'Your Team Performance',
-                    color: isDarkMode ? TColors.backgroundColor : TColors.primaryColor,
+                    color: isDarkMode
+                        ? TColors.backgroundColor
+                        : TColors.primaryColor,
                     size: 20,
                     bold: true,
                     maxLines: 3,
                   ),
-
-                  SizedBox(height: height*.175,
-                      width: width*.9,
-                      child: Center(child: BuilderTodo())),
-
-
-                  SizedBox(height: height*.175,
-                      width: width*.9,
-                      child: Center(child: BuilderProgress())),
-
-                  SizedBox(height: height*.175,
-                      width: width*.9,
-                      child: Center(child: BuilderCompleted()))
-
-
-
-
-
-
+                  SizedBox(
+                      height: height * .175,
+                      width: width * .9,
+                      child: Center(child: BuilderTodo(context: context))),
+                  SizedBox(
+                      height: height * .175,
+                      width: width * .9,
+                      child: Center(child: BuilderProgress(context: context))),
+                  SizedBox(
+                      height: height * .175,
+                      width: width * .9,
+                      child: Center(child: BuilderCompleted(context: context)))
                 ],
               ),
             ),
@@ -481,174 +518,24 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
     );
   }
 
-  Widget BuilderTodo() {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-    final Color textColor;
-    return StreamBuilder(
-      stream: AppCubit.get(context).performanceStream( ),
-      builder: (context, snapshot) {
-        AppCubit.get(context)
-            .performanceStream( )
-            .listen((event) {
-          for (var doc in event.docs) {
-            Map<String, dynamic> data = doc.data();
-            if (data['status'] == 'to do') {
-              AppCubit.get(context).numberOfTodoTasks=event.docs.length;
-            }
-          }
-        });
-        if (snapshot.hasError) {
-          return const Text('error');
-        }
-        if (snapshot.connectionState == ConnectionState) {
-          return const Text('Loading');
-        }
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator(
-            color: AppColor.primeColor,
-          );
-        }
-        return GestureDetector(
-          onTap: (){navigateTo(context, const ToDoTasks());},
-
-          child: Container(
-            height: height*.15,
-            width: width*.9,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color:AppColor.secondColor,
-            ),
-            child: SizedBox(height: height*.1,width: width*.4,
-              child: Center(child:
-              BuildText( text: 'You have ${ AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent',
-                color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
-            ),
-          ),
-        );
-
-      },
-    );
-  }
-
-  Widget BuilderProgress() {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
-    return StreamBuilder(
-      stream: AppCubit.get(context).performanceStream( ),
-      builder: (context, snapshot) {
-        AppCubit.get(context)
-            .performanceStream( )
-            .listen((event) {
-          for (var doc in event.docs) {
-            Map<String, dynamic> data = doc.data();
-            if (data['status'] == 'inProgress') {
-              AppCubit.get(context).numberOfInProgressTasks=event.docs.length;
-            }
-          }
-        });
-        if (snapshot.hasError) {
-          return const Text('error');
-        }
-        if (snapshot.connectionState == ConnectionState) {
-          return const Text('Loading');
-        }
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator(
-            color: AppColor.primeColor,
-          );
-        }
-        return GestureDetector(
-          onTap: (){navigateTo(context, const inProgressTasks());},
-          child: Container(
-            height: height*.15,
-            width: width*.9,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color:AppColor.secondColor,
-            ),
-            child: SizedBox(height: height*.1,width: width*.4,
-              child: Center(child:
-              BuildText( text: 'You have ${ AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent',
-                color: TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
-            ),
-          ),
-        );
-
-      },
-    );
-  }
-
-  Widget BuilderCompleted() {
-    var height = MediaQuery.of(context).size.height;
-    var width = MediaQuery.of(context).size.width;
-
-    return StreamBuilder(
-      stream: AppCubit.get(context).performanceStream( ),
-      builder: (context, snapshot) {
-        AppCubit.get(context)
-            .performanceStream( )
-            .listen((event) {
-          for (var doc in event.docs) {
-            Map<String, dynamic> data = doc.data();
-            if (data['status'] == 'completed') {
-              AppCubit.get(context).numberOfCompletedTasks=event.docs.length;
-            }
-          }
-        });
-        if (snapshot.hasError) {
-          return const Text('error');
-        }
-        if (snapshot.connectionState == ConnectionState) {
-          return const Text('Loading');
-        }
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator(
-            color: AppColor.primeColor,
-          );
-        }
-        return GestureDetector(
-          onTap: (){navigateTo(context, const CompletedTask());},
-
-          child: Container(
-            height: height*.15,
-            width: width*.9,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(25),
-              color:AppColor.secondColor,
-            ),
-            child: SizedBox(height: height*.1,width: width*.4,
-              child: Center(child:
-              BuildText( text: 'You have ${ AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent',
-                color:  TColors.primaryColor,size: 17.50,bold: true,maxLines: 3,) ,),
-            ),
-          ),
-        );
-
-      },
-    );
-  }
-  Widget _buildUserListItem(Map<String, dynamic> userData , BuildContext context) {
+  Widget _buildUserListItem(
+      Map<String, dynamic> userData, BuildContext context) {
     /// display all users except current user
     if (userData['email'] != AppCubit.get(context).getCurrentUser()!.email) {
       return Padding(
-
         padding: const EdgeInsets.all(12.0),
         child: TCircularContainer(
-
           child: UserTile(
-            text:
-            userData['name'],
+            text: userData['name'],
             onTap: () {
               /// pass the clicked user's UID to the chat page
               Navigator.push(
                   context,
                   MaterialPageRoute(
                       builder: (context) => ChatScreen(
-                        receiverUserEmail: userData['email'],
-                        receiverUserID: userData['uid'],
-                      )));
+                            receiverUserEmail: userData['email'],
+                            receiverUserID: userData['uid'],
+                          )));
             },
           ),
         ),
@@ -658,7 +545,10 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
       return Container();
     }
   }
-
 }
+
+
+
+
 
 
