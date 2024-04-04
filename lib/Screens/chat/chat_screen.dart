@@ -345,7 +345,9 @@ class _ChatScreenState extends State<ChatScreen> {
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+
                 Expanded(
+
                     child: MyTextField(
                         focusNode: myFocusNode,
                         messageController: _messageController)),
