@@ -172,44 +172,44 @@ class _MainLayoutState extends State<MainLayout> {
         return Scaffold(
           bottomNavigationBar: InkblobNavigationBar(
             backgroundColor: TColors.secondaryColor.withOpacity(0.9),
-            selectedIndex: 1,
+            selectedIndex: widget.buttomIndex,
             iconSize: 35,
             items: [
               InkblobBarItem(
                   emptyIcon: Icon(
-                    Icons.home,
-                    color: TColors.primaryColor,
-                  ),
-                  filledIcon: Icon(
                     Icons.home_outlined,
-                    color: TColors.backgroundColor,
+                    color: TColors.primaryColor.withOpacity(0.6),
+                  ),
+                  filledIcon: const Icon(
+                    Icons.home_outlined,
+                    color: TColors.primaryColor,
                   )),
               InkblobBarItem(
                   emptyIcon: Icon(
                     Icons.calendar_month,
-                    color: TColors.primaryColor,
+                    color:TColors.primaryColor.withOpacity(0.6),
                   ),
-                  filledIcon: Icon(
+                  filledIcon: const Icon(
                     Icons.calendar_month_outlined,
                     color: TColors.primaryColor,
                   )),
               InkblobBarItem(
                   emptyIcon: Icon(
-                    Icons.notifications,
-                    color: TColors.primaryColor,
+                    Icons.notifications_on_outlined,
+                    color: TColors.primaryColor.withOpacity(0.6),
                   ),
-                  filledIcon: Icon(
+                  filledIcon: const Icon(
                     Icons.notifications_none,
-                    color: TColors.backgroundColor,
+                    color: TColors.primaryColor,
                   )),
               InkblobBarItem(
                   emptyIcon: Icon(
-                    Icons.person,
-                    color: TColors.primaryColor,
-                  ),
-                  filledIcon: Icon(
                     Icons.person_outline,
-                    color: TColors.backgroundColor,
+                    color: TColors.primaryColor.withOpacity(0.6),
+                  ),
+                  filledIcon: const Icon(
+                    Icons.person_outline,
+                    color: TColors.primaryColor,
                   )),
             ],
             onItemSelected: (int value) {
