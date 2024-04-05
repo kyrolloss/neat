@@ -166,7 +166,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                             child: Container(
                                               height: height * .3,
                                               decoration: BoxDecoration(
-                                                  color: TColors.backgroundColor,
+                                                  color:
+                                                      TColors.backgroundColor,
                                                   borderRadius:
                                                       BorderRadius.circular(
                                                           25)),
@@ -178,7 +179,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                   Center(
                                                     child:
                                                         DropdownButton<String>(
-                                                          dropdownColor: TColors.backgroundColor,
+                                                      dropdownColor: TColors
+                                                          .backgroundColor,
                                                       value: selectedValue,
                                                       onChanged: (newValue) {
                                                         setState(() {
@@ -192,7 +194,12 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                         return DropdownMenuItem<
                                                             String>(
                                                           value: value,
-                                                          child: Text(value,style: TextStyle(color: TColors.primaryColor),),
+                                                          child: Text(
+                                                            value,
+                                                            style: TextStyle(
+                                                                color: TColors
+                                                                    .primaryColor),
+                                                          ),
                                                         );
                                                       }).toList(),
                                                     ),
@@ -203,34 +210,47 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                               const EdgeInsets
                                                                   .all(12.0),
                                                           child: TextFormField(
-                                                            style: TextStyle(color: TColors.primaryColor),
+                                                            style: TextStyle(
+                                                                color: TColors
+                                                                    .primaryColor),
                                                             controller:
                                                                 idController,
-                                                            cursorColor:
-                                                                TColors.primaryColor,
+                                                            cursorColor: TColors
+                                                                .primaryColor,
                                                             decoration:
                                                                 InputDecoration(
-                                                                  enabledBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(color: TColors.primaryColor),
-                                                                    borderRadius: BorderRadius.circular(30),
-                                                                  ),
-                                                                    focusedBorder: OutlineInputBorder(
-                                                                      borderSide: BorderSide(color: TColors.secondaryColor),
-                                                                      borderRadius: BorderRadius.circular(30)
+                                                                    enabledBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                              color: TColors.primaryColor),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              30),
                                                                     ),
+                                                                    focusedBorder: OutlineInputBorder(
+                                                                        borderSide: BorderSide(
+                                                                            color: TColors
+                                                                                .secondaryColor),
+                                                                        borderRadius: BorderRadius.circular(
+                                                                            30)),
                                                                     contentPadding:
                                                                         const EdgeInsets
                                                                             .all(
                                                                             10),
                                                                     fillColor:
-                                                                        TColors.backgroundColor,
+                                                                        TColors
+                                                                            .backgroundColor,
                                                                     filled:
                                                                         true,
                                                                     hintText:
                                                                         'ID ...',
                                                                     hintStyle:
-                                                                         TextStyle(
-                                                                          color: TColors.primaryColor.withOpacity(0.6),
+                                                                        TextStyle(
+                                                                      color: TColors
+                                                                          .primaryColor
+                                                                          .withOpacity(
+                                                                              0.6),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
@@ -242,8 +262,9 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                             30),
                                                                         gapPadding:
                                                                             20,
-                                                                        borderSide: BorderSide
-                                                                            .none),
+                                                                        borderSide:
+                                                                            BorderSide
+                                                                                .none),
                                                                     counterStyle: const TextStyle(
                                                                         color: Colors
                                                                             .white,
@@ -258,34 +279,50 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                               const EdgeInsets
                                                                   .all(12.0),
                                                           child: TextFormField(
-                                                            style: TextStyle(color: TColors.primaryColor),
+                                                            style: TextStyle(
+                                                                color: TColors
+                                                                    .primaryColor),
                                                             controller:
                                                                 emailController,
-                                                            cursorColor:
-                                                                TColors.primaryColor,
+                                                            cursorColor: TColors
+                                                                .primaryColor,
                                                             decoration:
                                                                 InputDecoration(
-                                                                  enabledBorder: OutlineInputBorder(
-                                                                    borderSide: BorderSide(color: TColors.primaryColor),
-                                                                    borderRadius: BorderRadius.circular(30),
-                                                                  ),
-                                                                    focusedBorder: OutlineInputBorder(
-                                                                      borderSide: BorderSide(color: TColors.secondaryColor),
-                                                                      borderRadius: BorderRadius.circular(30),
+                                                                    enabledBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                              color: TColors.primaryColor),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              30),
+                                                                    ),
+                                                                    focusedBorder:
+                                                                        OutlineInputBorder(
+                                                                      borderSide:
+                                                                          BorderSide(
+                                                                              color: TColors.secondaryColor),
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              30),
                                                                     ),
                                                                     contentPadding:
                                                                         const EdgeInsets
                                                                             .all(
                                                                             10),
                                                                     fillColor:
-                                                                        TColors.backgroundColor,
+                                                                        TColors
+                                                                            .backgroundColor,
                                                                     filled:
                                                                         true,
                                                                     hintText:
                                                                         'Email ...',
                                                                     hintStyle:
-                                                                         TextStyle(
-                                                                          color: TColors.primaryColor.withOpacity(0.6),
+                                                                        TextStyle(
+                                                                      color: TColors
+                                                                          .primaryColor
+                                                                          .withOpacity(
+                                                                              0.6),
                                                                       fontWeight:
                                                                           FontWeight
                                                                               .bold,
@@ -297,8 +334,9 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                             30),
                                                                         gapPadding:
                                                                             20,
-                                                                        borderSide: BorderSide
-                                                                            .none),
+                                                                        borderSide:
+                                                                            BorderSide
+                                                                                .none),
                                                                     counterStyle: const TextStyle(
                                                                         color: Colors
                                                                             .white,
@@ -375,7 +413,8 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                             child: Center(
                                                               child: BuildText(
                                                                 text: "Add ",
-                                                                color: TColors.backgroundColor,
+                                                                color: TColors
+                                                                    .backgroundColor,
                                                                 size: 17.5,
                                                                 bold: true,
                                                               ),
@@ -500,7 +539,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   SizedBox(
                       height: height * .175,
                       width: width * .9,
-                      child: Center(child: BuilderTodo(context: context))),
+                      child: Center(child: BuilderTodo())),
                   SizedBox(
                       height: height * .175,
                       width: width * .9,
@@ -545,10 +584,180 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
       return Container();
     }
   }
+
+  Widget BuilderTodo() {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+    return StreamBuilder(
+      stream: AppCubit.get(context).performanceStream(),
+      builder: (context, snapshot) {
+        AppCubit.get(context).performanceStream().listen((event) {
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'to do') {
+              AppCubit.get(context).numberOfTodoTasks = event.docs.length;
+            }
+          }
+        });
+        if (snapshot.hasError) {
+          return const Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState) {
+          return const Text('Loading');
+        }
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(
+            color: AppColor.primeColor,
+          );
+        }
+        return GestureDetector(
+          onTap: () {
+            navigateTo(context, const ToDoTasks());
+          },
+          child: Container(
+            height: height * .15,
+            width: width * .9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: AppColor.secondColor,
+            ),
+            child: SizedBox(
+              height: height * .1,
+              width: width * .4,
+              child: Center(
+                child: BuildText(
+                  text:
+                      'You have ${AppCubit.get(context).numberOfTodoTasks} ToDo Task That You Sent',
+                  color: TColors.primaryColor,
+                  size: 17.50,
+                  bold: true,
+                  maxLines: 3,
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget BuilderProgress({required BuildContext context}) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
+    return StreamBuilder(
+      stream: AppCubit.get(context).performanceStream(),
+      builder: (context, snapshot) {
+        AppCubit.get(context).performanceStream().listen((event) {
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'inProgress') {
+              AppCubit.get(context).numberOfInProgressTasks = event.docs.length;
+            }
+          }
+        });
+        if (snapshot.hasError) {
+          return const Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState) {
+          return const Text('Loading');
+        }
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(
+            color: AppColor.primeColor,
+          );
+        }
+        return GestureDetector(
+          onTap: () {
+            navigateTo(context, const inProgressTasks());
+          },
+          child: Container(
+            height: height * .15,
+            width: width * .9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: AppColor.secondColor,
+            ),
+            child: SizedBox(
+              height: height * .1,
+              width: width * .4,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: BuildText(
+                    text:
+                        'You have ${AppCubit.get(context).numberOfInProgressTasks} in Progress Task That You Sent',
+                    color: TColors.primaryColor,
+                    size: 17.50,
+                    bold: true,
+                    maxLines: 3,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget BuilderCompleted({required BuildContext context}) {
+    var height = MediaQuery.of(context).size.height;
+    var width = MediaQuery.of(context).size.width;
+
+    return StreamBuilder(
+      stream: AppCubit.get(context).performanceStream(),
+      builder: (context, snapshot) {
+        AppCubit.get(context).performanceStream().listen((event) {
+          for (var doc in event.docs) {
+            Map<String, dynamic> data = doc.data();
+            if (data['status'] == 'completed') {
+              AppCubit.get(context).numberOfCompletedTasks = event.docs.length;
+            }
+          }
+        });
+        if (snapshot.hasError) {
+          return const Text('error');
+        }
+        if (snapshot.connectionState == ConnectionState) {
+          return const Text('Loading');
+        }
+        if (!snapshot.hasData) {
+          return CircularProgressIndicator(
+            color: AppColor.primeColor,
+          );
+        }
+        return GestureDetector(
+          onTap: () {
+            navigateTo(context, const CompletedTask());
+          },
+          child: Container(
+            height: height * .15,
+            width: width * .9,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(25),
+              color: AppColor.secondColor,
+            ),
+            child: SizedBox(
+              height: height * .1,
+              width: width * .4,
+              child: Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: BuildText(
+                    text:
+                        'You have ${AppCubit.get(context).numberOfCompletedTasks} completed Task That You Sent',
+                    color: TColors.primaryColor,
+                    size: 17.50,
+                    bold: true,
+                    maxLines: 3,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 }
-
-
-
-
-
-
