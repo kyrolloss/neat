@@ -99,6 +99,7 @@ class _UsersScreenState extends State<UsersScreen> {
 
           child: UserTile(
             text:
+
               userData['name'],
             onTap: () {
               /// pass the clicked user's UID to the chat page

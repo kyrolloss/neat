@@ -40,3 +40,7 @@ class AddDataFailed extends AppState {}
 class GetCalenderTasks extends AppState {}
 class AddToCalenderTasksList extends AppState {}
 class EqualityBetweenTheTwoLists extends AppState {}
+
+class UpdateTaskSuccess extends AppState {}
+class UpdateTaskLoading extends AppState {}
+class UpdateTaskFailed extends AppState {}

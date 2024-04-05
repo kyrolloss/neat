@@ -459,10 +459,24 @@ class AppCubit extends Cubit<AppState> {
         .collection('tasks_rooms')
         .doc('taskRoomId')
         .collection('tasks')
-        .where('senderId', isEqualTo: 'VLCOlKkUE5TcnPUnRFZSqIb7Os02')
+        .where('senderId', isEqualTo: id)
         .snapshots();
   }
+  Future<void> updateTaskStatus( String taskId, String newStatus) async {
+    try {
+      emit(UpdateTaskLoading());
+var future = FirebaseFirestore.instance.collection('task_rooms').doc('taskRoomId').collection('tasks').snapshots();
 
+
+      emit(UpdateTaskSuccess());
+
+      print('تم تحديث حالة المهمة بنجاح');
+    } catch (e) {
+      print('حدث خطأ أثناء تحديث حالة المهمة: $e');
+      emit(UpdateTaskFailed());
+
+    }
+  }
   List<Widget> pagesNames = const [
     HomeScreen(
       receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
