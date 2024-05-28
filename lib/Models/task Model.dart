@@ -1,4 +1,7 @@
-class Tasks {
+
+import 'dart:io';
+
+class  Tasks {
   final String name;
   final String id;
   final String senderId;
@@ -13,6 +16,10 @@ class Tasks {
   final int year;
   final int month;
   final int day;
+  final int? dayCompleted;
+  final int? monthCompleted;
+  final int? yearCompleted;
+  final File? image;
 
   Tasks({
     required this.name,
@@ -29,8 +36,12 @@ class Tasks {
     required this.priority,
     required this.year,
     required this.month,
-
+    this.dayCompleted,
+    this.monthCompleted,
+    this.yearCompleted,
+    this.image,
   });
+
   factory Tasks.fromJson(Map<String, dynamic> json) {
     return Tasks(
       name: json['name'],
@@ -47,7 +58,10 @@ class Tasks {
       year: json['year'],
       month: json['month'],
       day: json['day'],
-
+      image: json['image'],
+      dayCompleted: json['dayCompleted'],
+      monthCompleted: json['monthCompleted'],
+      yearCompleted: json['yearCompleted'],
     );
   }
 
@@ -67,6 +81,10 @@ class Tasks {
       'year': year,
       'month': month,
       'day': day,
+      'dayCompleted': dayCompleted,
+      'monthCompleted': monthCompleted,
+      'yearCompleted': yearCompleted,
+      'image': image,
     };
   }
 }

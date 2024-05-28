@@ -24,46 +24,15 @@ class TaskTemplateScreen extends StatefulWidget {
 }
 
 class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
-  String priority = 'Low';
+  String priority = '';
   Color box1Color = AppColor.primeColor;
-  Color box2Color = AppColor.secondColor;
-  Color box3Color = AppColor.secondColor;
+  Color box2Color = AppColor.primeColor;
+  Color box3Color = AppColor.primeColor;
 
   TextEditingController taskNameController = TextEditingController();
   TextEditingController taskDescriptionController = TextEditingController();
   TextEditingController receiverID = TextEditingController();
 
-
-  void _toggleBoxColor(int boxNumber) {
-    setState(() {
-      if (boxNumber == 1) {
-        box1Color = AppColor.primeColor;
-        box2Color = AppColor.secondColor;
-        box3Color = AppColor.secondColor;
-        priority = 'Low';
-
-      } else if (boxNumber == 2) {
-        box1Color = AppColor.secondColor;
-        box2Color = AppColor.primeColor;
-        box3Color = AppColor.secondColor;
-        priority = 'medium';
-      } else if (boxNumber == 3) {
-        box1Color = AppColor.secondColor;
-        box2Color = AppColor.secondColor;
-        box3Color = AppColor.primeColor;
-        priority = 'high';
-
-      }
-
-      setState(() {
-        // Save the current taskName and taskDescription values
-        _taskName = taskNameController.text;
-        _taskDescription = taskDescriptionController.text;
-
-        // TODO: Show the priority picker
-      });
-    });
-  }
   String _taskName = '';
   String _taskDescription = '';
   String _receiverId = '';
@@ -82,14 +51,15 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
         return Scaffold(
           backgroundColor: Colors.transparent,
           appBar: TAppBar(
-              backgroundColor:  Colors.transparent,
-              showBackArrow: true,
-              iconColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+              backgroundColor: Colors.transparent,
+              showBackArrow: false,
+              iconColor:
+                  isDarkMode ? TColors.secondaryColor : TColors.primaryColor,
               title: Text("Create Task",
-                  style: Theme.of(context)
-                      .textTheme
-                      .titleMedium!
-                      .apply(color:isDarkMode? TColors.secondaryColor : TColors.primaryColor))),
+                  style: Theme.of(context).textTheme.titleMedium!.apply(
+                      color: isDarkMode
+                          ? TColors.secondaryColor
+                          : TColors.primaryColor))),
           body: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(TSizes.defaultSpace),
@@ -98,13 +68,12 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // SizedBox(
-                      //   height: height * .08,
-                      // ),
                       TSectionHeading(
                         title: 'Task Name',
                         showActionButton: false,
-                        textColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                        textColor: isDarkMode
+                            ? TColors.secondaryColor
+                            : TColors.primaryColor,
                       ),
 
                       SizedBox(
@@ -114,7 +83,10 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         height: height * .065,
                         width: width * .975,
                         child: TextFormField(
-                          style: TextStyle(color: isDarkMode? TColors.secondaryColor : TColors.primaryColor),
+                          style: TextStyle(
+                              color: isDarkMode
+                                  ? TColors.secondaryColor
+                                  : TColors.primaryColor),
                           onChanged: (value) {
                             setState(() {
                               _taskName = value;
@@ -134,18 +106,22 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               contentPadding: const EdgeInsets.all(20),
-                              fillColor: isDarkMode? Colors.grey.shade900 : TColors.backgroundColor,
+                              fillColor: isDarkMode
+                                  ? Colors.grey.shade900
+                                  : TColors.backgroundColor,
                               filled: true,
                               hintText: ' Name ...',
                               hintStyle: TextStyle(
                                 fontWeight: FontWeight.bold,
-                                color:isDarkMode? TColors.secondaryColor : TColors.primaryColor.withOpacity(0.7),
+                                color: isDarkMode
+                                    ? TColors.secondaryColor
+                                    : TColors.primaryColor.withOpacity(0.7),
                                 fontSize: 15,
                               ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   gapPadding: 20,
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                     color: TColors.primaryColor,
                                   )),
                               counterStyle: const TextStyle(
@@ -157,7 +133,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
 
                       //
 
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                       // const Divider(color: TColors.secondaryColor,),
@@ -165,7 +141,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                       TSectionHeading(
                         title: 'Task Description',
                         showActionButton: false,
-                        textColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                        textColor: isDarkMode
+                            ? TColors.secondaryColor
+                            : TColors.primaryColor,
                       ),
 
                       SizedBox(
@@ -176,7 +154,10 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         height: height * .065,
                         width: width * .975,
                         child: TextFormField(
-                          style: TextStyle(color: isDarkMode? TColors.secondaryColor :TColors.primaryColor),
+                          style: TextStyle(
+                              color: isDarkMode
+                                  ? TColors.secondaryColor
+                                  : TColors.primaryColor),
                           onChanged: (value) {
                             setState(() {
                               _taskDescription = value;
@@ -186,27 +167,32 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           cursorColor: TColors.primaryColor,
                           decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: TColors.secondaryColor),
+                                borderSide: const BorderSide(
+                                    color: TColors.secondaryColor),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: TColors.primaryColor),
+                                borderSide: const BorderSide(
+                                    color: TColors.primaryColor),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               contentPadding: const EdgeInsets.all(20),
-                              fillColor: isDarkMode? Colors.grey.shade900 : TColors.backgroundColor,
+                              fillColor: isDarkMode
+                                  ? Colors.grey.shade900
+                                  : TColors.backgroundColor,
                               filled: true,
                               hintText: 'Description ...',
                               hintStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-                                color:isDarkMode? TColors.secondaryColor : TColors.primaryColor.withOpacity(0.7),),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: isDarkMode
+                                    ? TColors.secondaryColor
+                                    : TColors.primaryColor.withOpacity(0.7),
+                              ),
                               border: OutlineInputBorder(
                                   borderRadius: BorderRadius.circular(30),
                                   gapPadding: 20,
-                                  borderSide: BorderSide(
+                                  borderSide: const BorderSide(
                                     color: TColors.primaryColor,
                                   )),
                               counterStyle: const TextStyle(
@@ -217,7 +203,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                       ),
 
                       //
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                       SizedBox(
@@ -227,7 +213,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                       TSectionHeading(
                         title: "Receiver ID",
                         showActionButton: false,
-                        textColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                        textColor: isDarkMode
+                            ? TColors.secondaryColor
+                            : TColors.primaryColor,
                       ),
 
                       SizedBox(
@@ -237,7 +225,12 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                         height: height * .065,
                         width: width * .975,
                         child: TextFormField(
-                          style: TextStyle(color:isDarkMode? TColors.secondaryColor :isDarkMode? TColors.secondaryColor : TColors.primaryColor),
+                          style: TextStyle(
+                              color: isDarkMode
+                                  ? TColors.secondaryColor
+                                  : isDarkMode
+                                      ? TColors.secondaryColor
+                                      : TColors.primaryColor),
                           onChanged: (value) {
                             setState(() {
                               _receiverId = value;
@@ -247,29 +240,33 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           cursorColor: TColors.primaryColor,
                           decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: TColors.secondaryColor),
+                                borderSide: const BorderSide(
+                                    color: TColors.secondaryColor),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: TColors.primaryColor),
+                                borderSide: const BorderSide(
+                                    color: TColors.primaryColor),
                                 borderRadius: BorderRadius.circular(30),
                               ),
                               contentPadding: const EdgeInsets.all(20),
-                              fillColor: isDarkMode? Colors.grey.shade900 : TColors.backgroundColor,
+                              fillColor: isDarkMode
+                                  ? Colors.grey.shade900
+                                  : TColors.backgroundColor,
                               filled: true,
                               hintText: 'ID... ',
                               hintStyle: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15,
-
-                                color:isDarkMode? TColors.secondaryColor : TColors.primaryColor.withOpacity(0.7),),
+                                fontWeight: FontWeight.bold,
+                                fontSize: 15,
+                                color: isDarkMode
+                                    ? TColors.secondaryColor
+                                    : TColors.primaryColor.withOpacity(0.7),
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30),
                                 gapPadding: 20,
-                                borderSide:
-                                    BorderSide(color: TColors.primaryColor),
+                                borderSide: const BorderSide(
+                                    color: TColors.primaryColor),
                               ),
                               counterStyle: const TextStyle(
                                   color: TColors.primaryColor,
@@ -280,45 +277,19 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
 
                       //
 
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
 
-                      // Row(
-                      //   children: [
-                      //     BuildText(
-                      //       text: 'Priority ...',
-                      //       color: AppColor.primeColor,
-                      //       size: 20,
-                      //       bold: true,
-                      //     ),
-                      //     const Spacer(),
-                      //     DropdownButton<String>(
-                      //       value: selectedPriority,
-                      //       onChanged: (newValue) {
-                      //         setState(() {
-                      //           selectedPriority = newValue!;
-                      //         });
-                      //       },
-                      //       items: <String>['Low', 'Medium', 'High']
-                      //           .map<DropdownMenuItem<String>>((String value) {
-                      //         return DropdownMenuItem<String>(
-                      //           value: value,
-                      //           child: Text(value , style: TextStyle(
-                      //               color: AppColor.primeColor,fontWeight: FontWeight.bold
-                      //           ),),
-                      //         );
-                      //       }).toList(),
-                      //     ),
-                      //   ],
-                      // ),
                       SizedBox(
                         height: height * .01,
                       ),
                       TSectionHeading(
                         title: "Priority",
                         showActionButton: false,
-                        textColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                        textColor: isDarkMode
+                            ? TColors.secondaryColor
+                            : TColors.primaryColor,
                       ),
                       SizedBox(
                         height: height * .01,
@@ -327,18 +298,12 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                       Row(
                         children: [
                           GestureDetector(
-                            onTapDown: (_) {
+                            onTap: () {
                               setState(() {
                                 box1Color = TColors.secondaryColor;
                                 box2Color = TColors.primaryColor;
                                 box3Color = TColors.primaryColor;
-                              });
-                            },
-                            onTapUp: (_) {
-                              setState(() {
-                                box1Color = TColors.secondaryColor;
-                                box2Color = TColors.primaryColor;
-                                box3Color = TColors.primaryColor;
+                                priority = 'Low';
                               });
                             },
                             onTapCancel: () {
@@ -362,22 +327,16 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                               )),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: TSizes.spaceBtwItems,
                           ),
                           GestureDetector(
-                            onTapDown: (_) {
+                            onTap: () {
                               setState(() {
                                 box2Color = TColors.secondaryColor;
                                 box1Color = TColors.primaryColor;
                                 box3Color = TColors.primaryColor;
-                              });
-                            },
-                            onTapUp: (_) {
-                              setState(() {
-                                box2Color = TColors.secondaryColor;
-                                box1Color = TColors.primaryColor;
-                                box3Color = TColors.primaryColor;
+                                priority = '';
                               });
                             },
                             onTapCancel: () {
@@ -401,7 +360,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                               )),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: TSizes.spaceBtwItems,
                           ),
                           GestureDetector(
@@ -412,7 +371,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                 box1Color = TColors.primaryColor;
                               });
                             },
-                            onTapUp: (_) {
+                            onTap: () {
                               setState(() {
                                 box3Color = TColors.secondaryColor;
                                 box2Color = TColors.primaryColor;
@@ -442,7 +401,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwSections,
                       ),
 
@@ -451,7 +410,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           TSectionHeading(
                             title: 'DeadLine ',
                             showActionButton: false,
-                            textColor: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                            textColor: isDarkMode
+                                ? TColors.secondaryColor
+                                : TColors.primaryColor,
                           ),
                           const Spacer(),
                           IconButton(
@@ -463,11 +424,13 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                               // Use a more appropriate calendar icon
                               size: 30,
                             ),
-                            color: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                            color: isDarkMode
+                                ? TColors.secondaryColor
+                                : TColors.primaryColor,
                           ),
                         ],
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
 
@@ -476,7 +439,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           TSectionHeading(
                             title: 'Attachment',
                             showActionButton: false,
-                            textColor:isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                            textColor: isDarkMode
+                                ? TColors.secondaryColor
+                                : TColors.primaryColor,
                           ),
                           const Spacer(),
                           IconButton(
@@ -486,38 +451,100 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                               // Use a more appropriate calendar icon
                               size: 32.5,
                             ),
-                            color: isDarkMode? TColors.secondaryColor : TColors.primaryColor,
+                            color: isDarkMode
+                                ? TColors.secondaryColor
+                                : TColors.primaryColor,
                           ),
                         ],
                       ),
-                      // SizedBox(
-                      //   height: height * .008,
-                      // ),
                     ],
                   ),
-                  SizedBox(height: TSizes.spaceBtwItems*2,),
+                  const SizedBox(
+                    height: TSizes.spaceBtwItems * 2,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       GestureDetector(
                         onTap: () {
-                          var uuid = const Uuid();
-                          cubit.sendTask(
-                            receiverID: receiverID.text.toString(),
-                            senderID: cubit.id,
-                            title: cubit.title,
-                            description:
-                                taskDescriptionController.text.toString(),
-                            senderName: cubit.name,
-                            senderPhone: cubit.phone,
-                            taskName: taskNameController.text.toString(),
-                            taskId: uuid.v1(),
-                            priority: priority,
-                            status: 'to do',
-                            year: cubit.year,
-                            day: cubit.day,
-                            month: cubit.month,
-                          );
+                          if (priority == '') {
+
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Please Select Priority'),
+                              ),
+                            );
+                          }
+                          else if(
+                            receiverID.text.toString() == cubit.id
+                          ){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Can not send to yourself'),
+                              ),
+                            );
+                          }
+                          else if(
+                          receiverID.text.isEmpty||taskNameController.text.isEmpty||taskDescriptionController.text.isEmpty
+                          ){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Please fill out all fields'),
+                              ),
+                            );
+                          }
+                          else if(
+                          receiverID.text.isEmpty||taskNameController.text.isEmpty||taskDescriptionController.text.isEmpty
+                          ){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Please fill out all fields'),
+                              ),
+                            );
+                          }
+
+                          else if(
+                          cubit.year==0||cubit.day==0||cubit.month==0
+                          ){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                backgroundColor: Colors.red,
+                                content: Text('Please choose the date'),
+                              ),
+                            );
+                          }
+
+
+                          else{
+                            var uuid = const Uuid();
+                            cubit.sendTask(
+                              receiverID: receiverID.text.toString(),
+                              senderID: cubit.id,
+                              title: cubit.title,
+                              description:
+                              taskDescriptionController.text.toString(),
+                              senderName: cubit.name,
+                              senderPhone: cubit.phone,
+                              taskName: taskNameController.text.toString(),
+                              taskId: uuid.v1(),
+                              priority: priority,
+                              status: 'to do',
+                              year: cubit.year,
+                              day: cubit.day,
+                              month: cubit.month,
+                            );
+                            taskNameController.clear();
+                            taskDescriptionController.clear();
+                            cubit.year=0;
+                            cubit.day=0;
+                            cubit.month=0;
+                            receiverID.clear();
+                          }
+
                         },
                         child: Container(
                           height: height * .065,
@@ -527,10 +554,18 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                             color: AppColor.primeColor,
                           ),
                           child: Center(
-                              child: Text("Send Now", style: Theme.of(context).textTheme.bodyLarge!.apply(color: TColors.backgroundColor),)),
+                              child: Text(
+                            "Send Now",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyLarge!
+                                .apply(color: TColors.backgroundColor),
+                          )),
                         ),
                       ),
-                      SizedBox(width: TSizes.spaceBtwItems/4,),
+                      const SizedBox(
+                        width: TSizes.spaceBtwItems / 4,
+                      ),
                       Container(
                           height: height * .065,
                           width: width * .13,
@@ -545,7 +580,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           )),
                     ],
                   ),
-                  SizedBox(height: TSizes.spaceBtwSections,),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
+                  ),
                 ],
               ),
             ),

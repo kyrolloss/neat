@@ -40,24 +40,22 @@ class _inProgressTasksState extends State<inProgressTasks> {
   Widget BuilderTasksList() {
     return StreamBuilder(
       stream: AppCubit.get(context).performanceStream(),
-      builder: (context, snapshot) {
-
+      builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) {
-          return const Text('error');
+          return Text('Error: ${snapshot.error}');
         }
-        if (snapshot.connectionState == ConnectionState) {
-          return const Text('Loading');
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CircularProgressIndicator();
         }
-        if (!snapshot.hasData) {
-          return CircularProgressIndicator(
-            color: AppColor.primeColor,
-          );
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return const Text('No data available');
         }
-        return GridView(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 1, childAspectRatio: 1.5),
-          children:
-          snapshot.data!.docs.map((doc) => BuildtaskListItem(doc)).toList(),
+        return ListView.builder(
+          itemCount: snapshot.data!.docs.length,
+          itemBuilder: (context, index) {
+            DocumentSnapshot doc = snapshot.data!.docs[index];
+            return BuildtaskListItem(doc);
+          },
         );
       },
     );
@@ -68,9 +66,11 @@ class _inProgressTasksState extends State<inProgressTasks> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
-    return GestureDetector(
-      onTap: () async {
-        navigateTo(
+    return taskData['status'] == 'in progress' ? Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: GestureDetector(
+        onTap: () async {
+          navigateTo(
             context,
             taskDetailsScreen(
               name: taskData['name'],
@@ -82,25 +82,31 @@ class _inProgressTasksState extends State<inProgressTasks> {
               senderName: taskData['senderName'],
               senderEmail: taskData['senderEmail'],
               senderPhone: taskData['senderPhoneNumber'],
-              taskId: taskData['id'], sender: true,
-            ));
-      },
-      child: taskData ['status'] == 'in progress' ?Padding(
-        padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
-        child: Padding(
-          padding: const EdgeInsets.only(bottom: 10, right: 12, left: 12),
+              taskId: taskData['id'],
+              sender: true,
+            ),
+          );
+        },
+        child:
+             Padding(
+          padding: const EdgeInsets.only( right: 12, left: 12),
           child: Container(
             height: height * .1,
             decoration: BoxDecoration(
-                color: AppColor.secondColor,
-                borderRadius: BorderRadius.circular(25)),
+              color: AppColor.secondColor,
+              borderRadius: BorderRadius.circular(25),
+            ),
             child: Padding(
               padding: const EdgeInsets.only(
-                  right: 12.0, top: 8, bottom: 8, left:17.5),
+                  right: 12.0, top: 8, bottom: 8, left: 17.5),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
+                  taskData.isEmpty
+                      ? CircularProgressIndicator(
+                    color: AppColor.primeColor,
+                  )
+                      : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -136,58 +142,73 @@ class _inProgressTasksState extends State<inProgressTasks> {
                         .collection('Users')
                         .where('uid', isEqualTo: taskData['receiverId'])
                         .snapshots(),
-                    builder: (context, snapshot) {
-                      return GestureDetector(
-                        onTap: () {
-                          navigateTo(context, ChatScreen(
-                            receiverUserEmail: snapshot.data!.docs[0]['email'],
-                            receiverUserID: snapshot.data!.docs[0]['uid'],));
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.chat,
-                              color: AppColor.primeColor,
-                            ),
-                            Text('Chat with',
-                                style: TextStyle(
-                                  color: AppColor.primeColor,
-                                  fontSize: 12,
-                                )),
-                            SizedBox(
-                              height: height * .025,
-                              width: width * .3,
-                              child: Center(
-                                child: Text(
-                                  snapshot.data!.docs[0]['name'],
+                    builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+                      if (snapshot.hasError) {
+                        return const Text('error');
+                      }
+                      if (snapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Center(
+                          child: CircularProgressIndicator(
+                            color: AppColor.primeColor,
+                          ),
+                        );
+                      }
+                      if (!snapshot.hasData) {
+                        return CircularProgressIndicator(
+                          color: AppColor.primeColor,
+                        );
+                      } else {
+                        return GestureDetector(
+                          onTap: () {
+                            navigateTo(
+                                context,
+                                ChatScreen(
+                                  receiverUserEmail:
+                                  snapshot.data!.docs[0]['email'],
+                                  receiverUserID:
+                                  snapshot.data!.docs[0]['uid'],
+                                ));
+                          },
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.chat,
+                                color: AppColor.primeColor,
+                              ),
+                              Text('Chat with',
                                   style: TextStyle(
                                     color: AppColor.primeColor,
                                     fontSize: 12,
+                                  )),
+                              SizedBox(
+                                height: height * .025,
+                                width: width * .3,
+                                child: Center(
+                                  child: Text(
+                                    snapshot.data!.docs[0]['name'],
+                                    style: TextStyle(
+                                      color: AppColor.primeColor,
+                                      fontSize: 12,
+                                    ),
+                                    maxLines: 3,
                                   ),
-                                  maxLines: 3,
                                 ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
+                            ],
+                          ),
+                        );
+                      }
                     },
                   )
                 ],
               ),
             ),
           ),
-        ),
-      ): Center(
-        child: BuildText(
-          text: 'No Tasks sent',
-          size: 25,
-          color : AppColor.primeColor,
-          bold: true,
-          letterSpacing: 2,
-        ),
+        )
+
       ),
-    );
+    ):const SizedBox();
   }
 }

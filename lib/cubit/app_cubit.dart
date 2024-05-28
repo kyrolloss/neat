@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Admin%20Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
+import 'package:neat/components/color.dart';
 
 import '../Admin Screens/Home/home Screen.dart';
 import '../Admin Screens/Main Layout.dart';
@@ -155,18 +156,39 @@ class AppCubit extends Cubit<AppState> {
   Future<void> showCalendar(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
+      cancelText: 'cancel',
+      confirmText: 'confirm',
+      helpText: 'select date',
+      initialEntryMode: DatePickerEntryMode.calendar,
+      initialDatePickerMode: DatePickerMode.day,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2101),
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(
+              primary: AppColor.primeColor,
+            ),
+            buttonTheme: ButtonThemeData(
+              textTheme: ButtonTextTheme.primary,
+
+            ),
+          ),
+          child: child!,
+        );
+      },
     );
-    selectedDate = picked;
-    year = selectedDate!.year;
-    month = selectedDate!.month;
-    day = selectedDate!.day;
 
-    emit(DatePickedSuccessfully());
+    if (picked != null) {
+      selectedDate = picked;
+      year = selectedDate!.year;
+      month = selectedDate!.month;
+      day = selectedDate!.day;
+
+      emit(DatePickedSuccessfully());
+    }
   }
-
   Future<UserCredential> Register({required String email,
     required String password,
     required String name,
@@ -223,8 +245,6 @@ class AppCubit extends Cubit<AppState> {
 
       UserCredential userCredential = await auth.signInWithEmailAndPassword(
           email: email, password: password);
- //     await database.collection('Users').doc(userCredential.user!.uid).set({})
-
       await getUserInfo(userCredential.user!.uid);
 
       emit(LoginSuccess());
@@ -282,6 +302,9 @@ class AppCubit extends Cubit<AppState> {
       day: day,
       year: year,
       month: month,
+        dayCompleted:0,
+        monthCompleted:0,
+        yearCompleted:0,
     );
 
     await database
@@ -328,6 +351,34 @@ class AppCubit extends Cubit<AppState> {
       emit(EqualityBetweenTheTwoLists());
     });
   }
+
+  Future<void> getAdminTasksInCalender(int day, int month, int year) async {
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+    FirebaseFirestore.instance
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('senderId', isEqualTo: id)
+        .snapshots();
+    emit(GetCalenderTasks());
+
+    notificationStream.listen((snapshot) {
+      List<Tasks> tasks = [];
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        Tasks task = Tasks.fromJson(data);
+
+        if (task.year == year && task.month == month && task.day == day) {
+          tasks.add(task);
+          emit(AddToCalenderTasksList());
+        }
+      }
+
+      tasksCalendar = tasks;
+      emit(EqualityBetweenTheTwoLists());
+    });
+  }
+
 
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
   FlutterLocalNotificationsPlugin();
@@ -453,6 +504,16 @@ class AppCubit extends Cubit<AppState> {
         .where('receiverId', isEqualTo: id)
         .snapshots();
   }
+
+  Stream<QuerySnapshot> getAdminTasksStream() {
+    return database
+        .collection('tasks_rooms')
+        .doc('taskRoomId')
+        .collection('tasks')
+        .where('senderId', isEqualTo: id)
+        .snapshots();
+  }
+
 
   Stream<QuerySnapshot<Map<String, dynamic>>> performanceStream() {
     return database

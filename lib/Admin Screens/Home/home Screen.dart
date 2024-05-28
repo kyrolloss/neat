@@ -1,23 +1,17 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:dotted_border/dotted_border.dart';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Admin%20Screens/Home/Completed%20Tasks/Completed%20Task.dart';
 import 'package:neat/Admin%20Screens/Home/In%20progress%20tasks/in%20Progress%20tasks.dart';
-import 'package:neat/Admin%20Screens/Home/widgets/builder_completed.dart';
-import 'package:neat/Admin%20Screens/Home/widgets/builder_progress.dart';
-import 'package:neat/Admin%20Screens/Home/widgets/builder_todo.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/circular_container.dart';
-import 'package:neat/common/widgets/images/circular_image.dart';
 import 'package:neat/components/Text.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:neat/utlis/constants/colors.dart';
-import 'package:neat/utlis/constants/image_strings.dart';
 import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:provider/provider.dart';
 import '../../../common/widgets/appbar/appbar.dart';
 import '../../Screens/Profile/widgets/profile_picture.dart';
@@ -44,6 +38,37 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
   TextEditingController emailController = TextEditingController();
   String selectedValue = 'Email';
   List<String> values = ['ID', 'Email'];
+  Timer? timer;
+  int timeRemaining = 3;
+
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        if (timeRemaining > 0) {
+          timeRemaining--;
+        } else {
+          restartTimer();
+        }
+      });
+    });
+  }
+  @override
+  void dispose() {
+    timer?.cancel();
+
+    super.dispose();
+  }
+
+  void restartTimer() {
+    timer?.cancel();
+    startTimer();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +93,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      SizedBox(
+                      const SizedBox(
                         height: TSizes.spaceBtwSections * 5,
                       ),
                       ProfilePicture(cubit: cubit, width: 120, height: 120),
@@ -184,7 +209,6 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                       value: selectedValue,
                                                       onChanged: (newValue) {
                                                         setState(() {
-                                                          // تحديث القيمة المختارة
                                                           selectedValue =
                                                               newValue!;
                                                         });
@@ -196,7 +220,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                           value: value,
                                                           child: Text(
                                                             value,
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 color: TColors
                                                                     .primaryColor),
                                                           ),
@@ -210,7 +234,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                               const EdgeInsets
                                                                   .all(12.0),
                                                           child: TextFormField(
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 color: TColors
                                                                     .primaryColor),
                                                             controller:
@@ -222,14 +246,14 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                     enabledBorder:
                                                                         OutlineInputBorder(
                                                                       borderSide:
-                                                                          BorderSide(
+                                                                          const BorderSide(
                                                                               color: TColors.primaryColor),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
                                                                               30),
                                                                     ),
                                                                     focusedBorder: OutlineInputBorder(
-                                                                        borderSide: BorderSide(
+                                                                        borderSide: const BorderSide(
                                                                             color: TColors
                                                                                 .secondaryColor),
                                                                         borderRadius: BorderRadius.circular(
@@ -279,7 +303,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                               const EdgeInsets
                                                                   .all(12.0),
                                                           child: TextFormField(
-                                                            style: TextStyle(
+                                                            style: const TextStyle(
                                                                 color: TColors
                                                                     .primaryColor),
                                                             controller:
@@ -291,7 +315,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                     enabledBorder:
                                                                         OutlineInputBorder(
                                                                       borderSide:
-                                                                          BorderSide(
+                                                                          const BorderSide(
                                                                               color: TColors.primaryColor),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -300,7 +324,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                                                                     focusedBorder:
                                                                         OutlineInputBorder(
                                                                       borderSide:
-                                                                          BorderSide(
+                                                                          const BorderSide(
                                                                               color: TColors.secondaryColor),
                                                                       borderRadius:
                                                                           BorderRadius.circular(
@@ -592,10 +616,12 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
       stream: AppCubit.get(context).performanceStream(),
       builder: (context, snapshot) {
         AppCubit.get(context).performanceStream().listen((event) {
+          AppCubit.get(context).numberOfTodoTasks =0;
           for (var doc in event.docs) {
             Map<String, dynamic> data = doc.data();
             if (data['status'] == 'to do') {
-              AppCubit.get(context).numberOfTodoTasks = event.docs.length;
+
+              AppCubit.get(context).numberOfTodoTasks +=1;
             }
           }
         });
@@ -649,10 +675,11 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
       stream: AppCubit.get(context).performanceStream(),
       builder: (context, snapshot) {
         AppCubit.get(context).performanceStream().listen((event) {
+          AppCubit.get(context).numberOfInProgressTasks =0;
           for (var doc in event.docs) {
             Map<String, dynamic> data = doc.data();
-            if (data['status'] == 'inProgress') {
-              AppCubit.get(context).numberOfInProgressTasks = event.docs.length;
+            if (data['status'] == 'in progress') {
+              AppCubit.get(context).numberOfInProgressTasks += 1;
             }
           }
         });
@@ -704,16 +731,20 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
   Widget BuilderCompleted({required BuildContext context}) {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
-
     return StreamBuilder(
       stream: AppCubit.get(context).performanceStream(),
       builder: (context, snapshot) {
         AppCubit.get(context).performanceStream().listen((event) {
+          AppCubit.get(context).numberOfCompletedTasks = 0;
           for (var doc in event.docs) {
             Map<String, dynamic> data = doc.data();
+
             if (data['status'] == 'completed') {
-              AppCubit.get(context).numberOfCompletedTasks = event.docs.length;
+
+
+              AppCubit.get(context).numberOfCompletedTasks +=1 ;
             }
+
           }
         });
         if (snapshot.hasError) {

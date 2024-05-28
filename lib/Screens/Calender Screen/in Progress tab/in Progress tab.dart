@@ -24,7 +24,7 @@ class _toDoTabState extends State<inProgress> {
     return ListView.builder(
       itemCount: widget.tasks.length,
       itemBuilder: (context, index) {
-        return widget.tasks[index].status == 'inProgress'
+        return widget.tasks[index].status == 'in progress'
             ? Padding(
           padding: const EdgeInsets.all(8.0),
           child: Container(

@@ -5,18 +5,13 @@ import 'package:provider/provider.dart';
 
 import '../components/color.dart';
 
-EasyDateTimeLine changeTodyHighlightColorExample() {
+EasyDateTimeLine changeTodyHighlightColorExample({required Function(DateTime)? onDateChange}) {
 
   return EasyDateTimeLine(
     initialDate: DateTime.now(),
-    onDateChange: (selectedDate) {
-      //`selectedDate` the new date selected.
-    },
+    onDateChange: onDateChange,
     activeColor: AppColor.primeColor,
-    dayProps:  EasyDayProps(
-      todayHighlightStyle: TodayHighlightStyle.withBackground,
-      todayHighlightColor:  AppColor.secondColor,
-    ),
+
   );
 }
 

@@ -1,17 +1,13 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
-import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
-import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:neat/common/widgets/list_tiles/settings_menu_tile.dart';
-import 'package:neat/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:neat/common/widgets/settings_screen/settings_screen.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/components/components.dart';
@@ -21,7 +17,6 @@ import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
-import '../../common/widgets/images/circular_image.dart';
 import '../../components/Text.dart';
 import '../../components/color.dart';
 
@@ -52,7 +47,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-        // TODO: implement listener
       },
       builder: (context, state) {
         var cubit = AppCubit.get(context);
@@ -164,10 +158,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  final fcmToken = await FirebaseMessaging
-                                      .instance
-                                      .getToken();
-                                  print('token is ${fcmToken}');
+
                                 },
                                 child: Container(
                                   height: height * .03,
@@ -208,8 +199,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
-                      const TSettingsMenuTile(
-                          icon: Icons.language, title: "Language"),
+                       TSettingsMenuTile(
+                          icon: Icons.star_rate_outlined , title: "Performance",onTap: (){},),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),

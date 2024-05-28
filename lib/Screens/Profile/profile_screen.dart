@@ -1,6 +1,7 @@
 
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
@@ -22,6 +23,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/Text.dart';
 import '../../components/color.dart';
+import '../../cubit/app_cubit.dart';
 
 class ProfileScreen extends StatefulWidget {
   final String uid;
@@ -48,6 +50,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
+    return BlocConsumer<AppCubit, AppState>(
+  listener: (context, state) {
+    // TODO: implement listener
+  },
+  builder: (context, state) {
+    var cubit = AppCubit.get(context);
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.background,
       body: SingleChildScrollView(
@@ -116,7 +124,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   width: width * .5,
                                   child: Center(
                                     child: BuildText(
-                                      text: 'You have completed 41 tasks!',
+                                      text: 'You have completed ${cubit.numberOfCompletedTasks} tasks!',
                                       color: AppColor.secondColor,
                                       size: 20,
                                       bold: true,
@@ -130,8 +138,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         GestureDetector(
                           onTap: () async{
-                            final fcmToken =  await FirebaseMessaging.instance.getToken();
-                            print('token is ${fcmToken}');
                           },
                           child: Container(
                             height: height * .03,
@@ -159,10 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
 
                 TSettingsMenuTile(icon: Iconsax.user, title: "Account Information",onTap: (){
-                  navigateTo(context, const TaskTemplateScreen(senderID: '',));
+
                 },),
                 const SizedBox(height: TSizes.spaceBtwItems,),
-                const TSettingsMenuTile(icon: Icons.language, title: "Language"),
+                 TSettingsMenuTile(icon: Icons.star_rate_outlined, title: "performance", onTap: (){},),
                 const SizedBox(height: TSizes.spaceBtwItems,),
                  TSettingsMenuTile(icon: Icons.settings_suggest_outlined, title: "Settings", onTap: (){
                   navigateTo(context, const SettingsScreen());
@@ -179,5 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
       ),
     );
+  },
+);
   }
 }
