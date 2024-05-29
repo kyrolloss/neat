@@ -88,7 +88,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                   size: 15,
                                 ),
                                 BuildText(
-                                  text: notification['deadline'],
+                                  text: '${notification['year']} - ${notification['month']} - ${notification['day']}',
                                   color: AppColor.primeColor,
                                   size: 17.5,
                                   bold: true,
@@ -103,11 +103,7 @@ class _NotificationScreenState extends State<NotificationScreen> {
                                     SizedBox(
                                       width: width * .02,
                                     ),
-                                    BuildText(
-                                      text: '15.00 pm - 16.00',
-                                      color: AppColor.primeColor,
-                                      size: 15,
-                                    ),
+                                   
                                   ],
                                 )
                               ],

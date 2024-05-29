@@ -15,9 +15,8 @@ import 'package:neat/cubit/app_cubit.dart';
 import '../utlis/constants/themes/theme_provider.dart';
 
 class TaskTemplateScreen extends StatefulWidget {
-  final String senderID;
 
-  const TaskTemplateScreen({super.key, required this.senderID});
+  const TaskTemplateScreen({super.key, });
 
   @override
   State<TaskTemplateScreen> createState() => _TaskTemplateScreenState();

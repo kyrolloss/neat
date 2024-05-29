@@ -12,9 +12,8 @@ import 'completed tab/completed tab.dart';
 import 'in Progress tab/in Progress tab.dart';
 
 class adminCalenderScreen extends StatefulWidget {
-  final String uid;
 
-  const adminCalenderScreen({Key? key, required this.uid});
+  const adminCalenderScreen({Key? key, });
 
   @override
   State<adminCalenderScreen> createState() => _adminCalenderScreen();

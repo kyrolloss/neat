@@ -10,6 +10,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:neat/Admin%20Screens/Calender%20Screen/Calender%20Screen.dart';
 import 'package:neat/Models/task%20Model.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
+import 'package:neat/Screens/Profile/profile_screen.dart';
 import 'package:neat/components/color.dart';
 
 import '../Admin Screens/Home/home Screen.dart';
@@ -19,6 +20,7 @@ import '../Screens/Calender Screen/Calender Screen.dart';
 import '../Screens/Home/home.dart';
 import '../Screens/MainLayout.dart';
 import '../Screens/Notification/Notification.dart';
+import '../Screens/Profile/performance/performance.dart';
 import '../components/components.dart';
 
 part 'app_state.dart';
@@ -51,28 +53,28 @@ class AppCubit extends Cubit<AppState> {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   final CollectionReference tasksRoomsCollection =
-  FirebaseFirestore.instance.collection('tasks_rooms');
+      FirebaseFirestore.instance.collection('tasks_rooms');
   var auth = FirebaseAuth.instance;
 
   User? getCurrentUser() {
     return auth.currentUser;
   }
 
-  Future<void> updateInfo({
-    required String id,
-    required String name,
-    required String email,
-    required String phone,
-    required String title,
-    required String? url,
-    required String typee,
-    required String NewId,
-    required String Newname,
-    required String Newemail,
-    required String Newphone,
-    required String Newtitle,
-    required String? Newurl,
-    required String Newtypee}) async {
+  Future<void> updateInfo(
+      {required String id,
+      required String name,
+      required String email,
+      required String phone,
+      required String title,
+      required String? url,
+      required String typee,
+      required String NewId,
+      required String Newname,
+      required String Newemail,
+      required String Newphone,
+      required String Newtitle,
+      required String? Newurl,
+      required String Newtypee}) async {
     name = typee;
     id = NewId;
     email = Newname;
@@ -172,7 +174,6 @@ class AppCubit extends Cubit<AppState> {
             ),
             buttonTheme: ButtonThemeData(
               textTheme: ButtonTextTheme.primary,
-
             ),
           ),
           child: child!,
@@ -189,13 +190,15 @@ class AppCubit extends Cubit<AppState> {
       emit(DatePickedSuccessfully());
     }
   }
-  Future<UserCredential> Register({required String email,
-    required String password,
-    required String name,
-    required String phone,
-    String? image,
-    required String title,
-    required String type}) async {
+
+  Future<UserCredential> Register(
+      {required String email,
+      required String password,
+      required String name,
+      required String phone,
+      String? image,
+      required String title,
+      required String type}) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -220,26 +223,30 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Future<void> updateProfilePicture(String uid , String imageUrl) async{
-    try{
+  Future<void> updateProfilePicture(String uid, String imageUrl) async {
+    try {
       /// Upload the image to Firebase Storage and get the download URL
       var refStorage = FirebaseStorage.instance.ref("ProfileImg/$uid");
       await refStorage.putFile(File(imageUrl));
       String downloadUrl = await refStorage.getDownloadURL();
+
       /// Once you have the download URL, update the Firestore document
-      await FirebaseFirestore.instance.collection('Users').doc(uid).update(
-          {
-            'url' : downloadUrl ,/// Update the 'url' field with the new photo URL
-          });
+      await FirebaseFirestore.instance.collection('Users').doc(uid).update({
+        'url': downloadUrl,
+
+        /// Update the 'url' field with the new photo URL
+      });
+
       /// Now the photo URL is associated with the user's email in Firestore
-    }catch (e){
+    } catch (e) {
       print(e.toString());
     }
   }
 
-
   Future<UserCredential> Login(
-      {required String email, required String password , required BuildContext context}) async {
+      {required String email,
+      required String password,
+      required BuildContext context}) async {
     try {
       emit(LoginLoading());
 
@@ -250,14 +257,11 @@ class AppCubit extends Cubit<AppState> {
       emit(LoginSuccess());
 
       if (typee == 'Admin') {
-        navigateToToFinish(
-            context, AdminMainLayout(uid: user!.uid));
+        navigateToToFinish(context, AdminMainLayout(uid: user!.uid));
       } else if (typee == 'User') {
         navigateTo(context, MainLayout(uid: user!.uid));
       }
       emit(NavigationDone());
-
-
 
       print(id);
       return userCredential;
@@ -302,9 +306,9 @@ class AppCubit extends Cubit<AppState> {
       day: day,
       year: year,
       month: month,
-        dayCompleted:0,
-        monthCompleted:0,
-        yearCompleted:0,
+      dayCompleted: 0,
+      monthCompleted: 0,
+      yearCompleted: 0,
     );
 
     await database
@@ -324,15 +328,16 @@ class AppCubit extends Cubit<AppState> {
   }
 
   List<Tasks> tasksCalendar = [];
+  List<Tasks> taskss = [];
 
   Future<void> getTasksInCalender(int day, int month, int year) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-    FirebaseFirestore.instance
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('receiverId', isEqualTo: id)
-        .snapshots();
+        FirebaseFirestore.instance
+            .collection('tasks_rooms')
+            .doc('taskRoomId')
+            .collection('tasks')
+            .where('receiverId', isEqualTo: id)
+            .snapshots();
     emit(GetCalenderTasks());
 
     notificationStream.listen((snapshot) {
@@ -350,16 +355,91 @@ class AppCubit extends Cubit<AppState> {
       tasksCalendar = tasks;
       emit(EqualityBetweenTheTwoLists());
     });
+  }
+
+  double competedTask = 0;
+  double toDoTask = 0;
+
+  Future<void> getPerformanceTask() async {
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+        FirebaseFirestore.instance
+            .collection('tasks_rooms')
+            .doc('taskRoomId')
+            .collection('tasks')
+            .where('receiverId', isEqualTo: id)
+            .snapshots();
+    emit(GetCalenderTasks());
+
+    notificationStream.listen((snapshot) {
+      List<Tasks> tasks = [];
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+        Tasks task = Tasks.fromJson(data);
+        if (data['yearCompleted'] != 0 && data['monthCompleted'] != 0 && data['dayCompleted'] != 0){
+          tasks.add(task);
+
+        }
+      }
+      taskss = tasks;
+      emit(EqualityBetweenTheTwoLists());
+    });
+  }
+
+  Future<void> getPerformance(BuildContext context) async {
+    await getPerformanceTask();
+    emit(GetPerformanceLoading());
+    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+        FirebaseFirestore.instance
+            .collection('tasks_rooms')
+            .doc('taskRoomId')
+            .collection('tasks')
+            .where('receiverId', isEqualTo: id)
+            .snapshots();
+    notificationStream.listen((snapshot) {
+      competedTask = 0;
+      toDoTask = 0;
+      for (var doc in snapshot.docs) {
+        Map<String, dynamic> data = doc.data();
+if (data['yearCompleted'] != 0 && data['monthCompleted'] != 0 && data['dayCompleted'] != 0) {
+  if (data['yearCompleted'] <= data['year']) {
+    if (data['monthCompleted'] <= data['month']) {
+      if (data['dayCompleted'] <= data['day']) {
+        competedTask++;
+      } else {
+        toDoTask++;
+      }
+    } else {
+      toDoTask++;
+    }
+  }
+  else {
+    toDoTask++;
+  }
+}
+else {
+  ScaffoldMessenger.of(context).showSnackBar(
+    const SnackBar(content: Text('No tasks delivered yet')),
+  )  ;
+}
+      }
+
+      print(toDoTask);
+      print(competedTask);
+      emit(GetPerformanceSuccess());
+
+    });
+
+
   }
 
   Future<void> getAdminTasksInCalender(int day, int month, int year) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-    FirebaseFirestore.instance
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('senderId', isEqualTo: id)
-        .snapshots();
+        FirebaseFirestore.instance
+            .collection('tasks_rooms')
+            .doc('taskRoomId')
+            .collection('tasks')
+            .where('senderId', isEqualTo: id)
+            .snapshots();
     emit(GetCalenderTasks());
 
     notificationStream.listen((snapshot) {
@@ -379,16 +459,15 @@ class AppCubit extends Cubit<AppState> {
     });
   }
 
-
   FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
-  FlutterLocalNotificationsPlugin();
+      FlutterLocalNotificationsPlugin();
 
   String channelId = 'your_channel_id';
 
   showNotification({required String title, required String body}) {
     AndroidNotificationDetails androidNotificationDetails =
-    AndroidNotificationDetails(channelId, 'Notify my',
-        importance: Importance.high);
+        AndroidNotificationDetails(channelId, 'Notify my',
+            importance: Importance.high);
 
     NotificationDetails notificationDetails = NotificationDetails(
         android: androidNotificationDetails,
@@ -400,7 +479,7 @@ class AppCubit extends Cubit<AppState> {
   }
 
   Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-  FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
+      FirebaseFirestore.instance.collection('tasks_rooms').snapshots();
 
   // chat
 
@@ -430,7 +509,6 @@ class AppCubit extends Cubit<AppState> {
   }
 
   void addMemberToGroup(String memberId) async {
-    // Search for the user with the specified memberId
     QuerySnapshot<Map<String, dynamic>> querySnapshot = await FirebaseFirestore
         .instance
         .collection('Users')
@@ -438,21 +516,17 @@ class AppCubit extends Cubit<AppState> {
         .get();
 
     if (querySnapshot.docs.isNotEmpty) {
-      // Get the first user document that matches the memberId
       DocumentSnapshot<Map<String, dynamic>> userDocument =
           querySnapshot.docs.first;
       Map<String, dynamic>? userData = userDocument.data();
 
-      // Create a new collection called 'groups'
       CollectionReference groupsCollection = FirebaseFirestore.instance
           .collection('groups')
           .doc(id)
           .collection('members');
 
-      // Add a new document with the user data to the 'groups' collection
       await groupsCollection.doc(memberId).set(userData);
 
-      // Print the new group document reference
       print('Group document created: ${groupsCollection.doc(memberId)}');
     } else {
       print('No user found with the specified memberId');
@@ -472,7 +546,7 @@ class AppCubit extends Cubit<AppState> {
       Map<String, dynamic>? userData = userDocument.data();
 
       CollectionReference groupsCollection =
-      FirebaseFirestore.instance.collection('groups');
+          FirebaseFirestore.instance.collection('groups');
 
       await groupsCollection.doc(id).set(userData);
 
@@ -482,19 +556,22 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-
-
-  Stream<List<Map<String, dynamic>>> getTeamStream(){
-    return database.collection('groups').doc(id).collection('members').snapshots().map((snapshot) {
+  Stream<List<Map<String, dynamic>>> getTeamStream() {
+    return database
+        .collection('groups')
+        .doc(id)
+        .collection('members')
+        .snapshots()
+        .map((snapshot) {
       return snapshot.docs.map((doc) {
         /// go through each individual user
         final user = doc.data();
+
         /// return user
         return user;
       }).toList();
     });
   }
-
 
   Stream<QuerySnapshot> getTasksStream() {
     return database
@@ -514,7 +591,6 @@ class AppCubit extends Cubit<AppState> {
         .snapshots();
   }
 
-
   Stream<QuerySnapshot<Map<String, dynamic>>> performanceStream() {
     return database
         .collection('tasks_rooms')
@@ -523,21 +599,7 @@ class AppCubit extends Cubit<AppState> {
         .where('senderId', isEqualTo: id)
         .snapshots();
   }
-  Future<void> updateTaskStatus( String taskId, String newStatus) async {
-    try {
-      emit(UpdateTaskLoading());
-var future = FirebaseFirestore.instance.collection('task_rooms').doc('taskRoomId').collection('tasks').snapshots();
 
-
-      emit(UpdateTaskSuccess());
-
-      print('تم تحديث حالة المهمة بنجاح');
-    } catch (e) {
-      print('حدث خطأ أثناء تحديث حالة المهمة: $e');
-      emit(UpdateTaskFailed());
-
-    }
-  }
   List<Widget> pagesNames = const [
     HomeScreen(
       receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
@@ -548,25 +610,17 @@ var future = FirebaseFirestore.instance.collection('task_rooms').doc('taskRoomId
     NotificationScreen(
       uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
-    ProfileScreen(
-      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-    ),
+    ProfileScreen()
   ];
 
   List<Widget> adminPagesNames = const [
-    adminHomeScreen(
-      receiverId: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-    ),
-    adminCalenderScreen(
-      uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
-    ),
-    TaskTemplateScreen(
-      senderID: 'fiyT0flMHFdXHuotIjgREGNczkP2',
-    ),
+    adminHomeScreen(),
+    adminCalenderScreen(),
+    TaskTemplateScreen(),
     NotificationScreen(
       uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
-    ProfileScreen(
+    AdminProfileScreen(
       uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
   ];

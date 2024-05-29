@@ -20,7 +20,7 @@ class AdminMainLayout extends StatefulWidget {
   Widget? widget;
 
   AdminMainLayout({super.key, required this.uid}) {
-    widget = adminHomeScreen(receiverId: uid);
+    widget = adminHomeScreen();
   }
 
   @override
@@ -133,7 +133,7 @@ class _MainLayoutState extends State<AdminMainLayout> {
         .collection('Notification')
         .doc(userId);
 
-    await userNotificationDoc.set({'userId': userId});  // لإنشاء المستند إذا لم يكن موجودًا
+    await userNotificationDoc.set({'userId': userId});
 
     await userNotificationDoc
         .collection('tasks')

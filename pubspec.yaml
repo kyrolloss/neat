@@ -61,6 +61,9 @@ dependencies:
   syncfusion_flutter_sliders: ^25.1.38
   ionicons: ^0.2.2
   emoji_picker_flutter: ^2.1.1
+  action_slider: ^0.7.0
+  syncfusion_flutter_charts: ^25.2.6
+  pie_chart: ^5.4.0
 
 
 dev_dependencies:

@@ -20,16 +20,16 @@ import 'package:provider/provider.dart';
 import '../../components/Text.dart';
 import '../../components/color.dart';
 
-class ProfileScreen extends StatefulWidget {
+class AdminProfileScreen extends StatefulWidget {
   final String uid;
 
-  const ProfileScreen({super.key, required this.uid});
+  const AdminProfileScreen({super.key, required this.uid});
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<AdminProfileScreen> createState() => _AdminProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _AdminProfileScreenState extends State<AdminProfileScreen> {
   /// Sign user out
   void signOut() {
     /// get auth service
@@ -192,7 +192,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           navigateTo(
                               context,
                               const TaskTemplateScreen(
-                                senderID: '',
+
                               ));
                         },
                       ),

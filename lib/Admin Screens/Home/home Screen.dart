@@ -22,11 +22,10 @@ import '../../Screens/chat/widgets/user_tile.dart';
 import 'To do Tasks/to do tasks.dart';
 
 class adminHomeScreen extends StatefulWidget {
-  final String receiverId;
+
 
   const adminHomeScreen({
     super.key,
-    required this.receiverId,
   });
 
   @override

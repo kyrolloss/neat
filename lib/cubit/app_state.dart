@@ -44,3 +44,10 @@ class EqualityBetweenTheTwoLists extends AppState {}
 class UpdateTaskSuccess extends AppState {}
 class UpdateTaskLoading extends AppState {}
 class UpdateTaskFailed extends AppState {}
+
+
+
+class GetPerformanceLoading extends AppState {}
+class GetPerformanceSuccess extends AppState {}
+class GetPerformanceFailed extends AppState {}
+class NavigatePerformanceFailed extends AppState {}
