@@ -89,7 +89,7 @@ class _CompletedTaskState extends State<CompletedTask> {
               senderEmail: taskData['senderEmail'],
               senderPhone: taskData['senderPhoneNumber'],
               taskId: taskData['id'],
-              sender: true,
+              sender: true, status: taskData['status'],
             ),
           );
         },

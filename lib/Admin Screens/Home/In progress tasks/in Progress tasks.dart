@@ -83,7 +83,7 @@ class _inProgressTasksState extends State<inProgressTasks> {
               senderEmail: taskData['senderEmail'],
               senderPhone: taskData['senderPhoneNumber'],
               taskId: taskData['id'],
-              sender: true,
+              sender: true, status:     taskData['status'],
             ),
           );
         },

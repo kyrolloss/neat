@@ -322,6 +322,8 @@ class _HomeScreenState extends State<HomeScreen> {
               senderEmail: taskData['senderEmail'],
               senderPhone: taskData['senderPhoneNumber'],
               taskId: taskData['id'],
+              sender: false,
+              status: taskData['status'],
             ));
       },
       child: Padding(

@@ -88,7 +88,7 @@ class _ToDoTasksState extends State<ToDoTasks> {
                       senderEmail: taskData['senderEmail'],
                       senderPhone: taskData['senderPhoneNumber'],
                       taskId: taskData['id'],
-                      sender: true,
+                      sender: true, status: taskData['status'],
                     ),
                   );
                 },

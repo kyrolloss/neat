@@ -1,3 +1,6 @@
+import 'dart:math';
+
+import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -16,7 +19,7 @@ class taskDetailsScreen extends StatefulWidget {
   String? senderName;
   String? senderPhone;
   String? taskId;
-  String? status;
+  String status;
   String? name;
 
   // // String? priority;
@@ -35,7 +38,7 @@ class taskDetailsScreen extends StatefulWidget {
     required this.year,
     required this.month,
     required this.day,
-    //  this.status,
+    required this.status,
     this.name,
     //  // this.priority,
     this.senderEmail,
@@ -52,6 +55,27 @@ class taskDetailsScreen extends StatefulWidget {
 
 class _taskDetailsScreenState extends State<taskDetailsScreen> {
   double _value = 40.0;
+  ActionSliderController toDoController = ActionSliderController();
+  ActionSliderController inProgressController = ActionSliderController();
+  ActionSliderController completeController = ActionSliderController();
+
+  @override
+  void initState() {
+    if (widget.status == 'to do') {
+      toDoController.reset();
+
+      toDoController.success();
+    } else if (widget.status == 'in progress') {
+      inProgressController.reset();
+
+      inProgressController.success();
+    } else if (widget.status == 'completed') {
+      completeController.reset();
+
+      completeController.success();
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -317,87 +341,270 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       SizedBox(
                         height: height * .04,
                       ),
-                      widget.sender == false ?SfSlider(
-                        min: 0.0,
-                        max: 100.0,
-                        value: _value,
-                        stepSize: 50,
-                        interval: 50,
-                        activeColor: _value < 33.3
-                            ? Colors.red
-                            : _value < 66.6 && _value > 33.3
-                                ? Colors.blue
-                                : Colors.green,
-                        minorTicksPerInterval: 1,
+                      widget.sender == false
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: SizedBox(
+                                width: width * .95,
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    SizedBox(
+                                      height: height * .065,
+                                      width: width * .25,
+                                      child: ActionSlider.dual(
+                                        backgroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        foregroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        width: 300.0,
+                                        backgroundColor: AppColor.secondColor,
+                                        icon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 2.0),
+                                          child: Transform.rotate(
+                                              angle: 0,
+                                              child: const Icon(
+                                                  Icons.title_outlined,
+                                                  size: 28.0)),
+                                        ),
+                                        startAction: (controller) async {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('U Can not change to early step!'),
 
-                        onChanged: (dynamic value) {
-                          setState(() {
-                            _value = value;
-                            cubit.updateTaskStatus(widget.taskId!, 'completed');
-                            if (_value <= 33.3) {
-                              FirebaseFirestore.instance
-                                  .collection('tasks_rooms')
-                                  .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                                  .get()
-                                  .then((snapshot) {
-                                for (var doc in snapshot.docs) {
-                                  doc.reference.update({'status': 'to do'});
-                                }
-                              });
-                            } else if (_value > 33.3 && value < 66.6) {
-                              FirebaseFirestore.instance
-                                  .collection('tasks_rooms')
-                                  .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                                  .get()
-                                  .then((snapshot) {
-                                for (var doc in snapshot.docs) {
-                                  doc.reference.update({'status': 'in progress'});
-                                }
-                              });
+                                            ),
+                                          );
+                                        },
+                                        endAction: (controller) async {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text('U Can not change to early step!'),
 
-                            } else if (_value > 66.6) {
-                              FirebaseFirestore.instance
-                                  .collection('tasks_rooms')
-                                  .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                                  .get()
-                                  .then((snapshot) {
-                                for (var doc in snapshot.docs) {
-                                  doc.reference.update({'status': 'completed'});
-                                }
-                              });
+                                            ),
+                                          );
+                                        },
+                                        controller: toDoController,
+                                        toggleColor: AppColor.primeColor,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * .065,
+                                      width: width * .25,
+                                      child: ActionSlider.dual(
+                                        backgroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        foregroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        width: 300.0,
+                                        backgroundColor: AppColor.secondColor,
+                                        icon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 2.0),
+                                          child: Transform.rotate(
+                                              angle: 0,
+                                              child: const Icon(
+                                                  Icons.title_outlined,
+                                                  size: 28.0)),
+                                        ),
+                                        startAction: (controller) async {
+                                          setState(() {
+                                            controller
+                                                .loading(); //starts loading animation
+                                            Future.delayed(
+                                                const Duration(seconds: 3));
+                                            controller
+                                                .success(); //starts success animation
+                                            Future.delayed(
+                                                const Duration(seconds: 1));
+                                          });
+                                        },
+                                        endAction: (controller) async {
+                                          setState(() {
+                                            controller
+                                                .loading(); //starts loading animation
+                                            Future.delayed(
+                                                const Duration(seconds: 3));
+                                            FirebaseFirestore.instance
+                                                .collection('tasks_rooms')
+                                                .doc('taskRoomId')
+                                                .collection('tasks')
+                                                .where('id',
+                                                    isEqualTo: widget.taskId)
+                                                .get()
+                                                .then((snapshot) {
+                                              for (var doc in snapshot.docs) {
+                                                doc.reference.update(
+                                                    {'status': 'in progress'});
+                                              }
+                                            });
+                                            controller
+                                                .success(); //starts success animation
+                                            Future.delayed(
+                                                const Duration(seconds: 1));
+                                            toDoController.reset();
+                                            completeController.reset();
+                                          });
+                                        },
+                                        controller: inProgressController,
+                                        toggleColor: AppColor.primeColor,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      height: height * .065,
+                                      width: width * .25,
+                                      child: ActionSlider.dual(
+                                        backgroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        foregroundBorderRadius:
+                                            BorderRadius.circular(50.0),
+                                        width: 300.0,
+                                        backgroundColor: AppColor.secondColor,
+                                        icon: Padding(
+                                          padding:
+                                              const EdgeInsets.only(right: 2.0),
+                                          child: Transform.rotate(
+                                              angle: 0,
+                                              child: const Icon(
+                                                  Icons.title_outlined,
+                                                  size: 28.0)),
+                                        ),
+                                        startAction: (controller) async {
+                                          setState(() {
+                                            controller
+                                                .loading(); //starts loading animation
+                                            Future.delayed(
+                                                const Duration(seconds: 3));
+                                            controller
+                                                .success(); //starts success animation
+                                            Future.delayed(
+                                                const Duration(seconds: 1));
+                                          });
+                                        },
+                                        endAction: (controller) async {
+                                          setState(() {
+                                            controller.loading();
+                                            FirebaseFirestore.instance
+                                                .collection('tasks_rooms')
+                                                .doc('taskRoomId')
+                                                .collection('tasks')
+                                                .where('id',
+                                                    isEqualTo: widget.taskId)
+                                                .get()
+                                                .then((snapshot) {
+                                              for (var doc in snapshot.docs) {
+                                                doc.reference.update(
+                                                    {'status': 'completed'});
+                                              }
+                                            });
+                                            Future.delayed(
+                                                const Duration(seconds: 3));
+                                            controller
+                                                .success(); //starts success animation
+                                            Future.delayed(
+                                                const Duration(seconds: 1));
+                                            inProgressController.reset();
+                                            toDoController.reset();
+                                          });
+                                        },
+                                        controller: completeController,
+                                        toggleColor: AppColor.primeColor,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
 
-                            }
-                            print(value);
-                          });
-                        },
-                      ):const SizedBox(),
+                          // SfSlider(
+                          //                         min: 0.0,
+                          //                         max: 100.0,
+                          //                         value: _value,
+                          //                         stepSize: 50,
+                          //                         interval: 50,
+                          //                         activeColor: _value < 33.3
+                          //                             ? Colors.red
+                          //                             : _value < 66.6 && _value > 33.3
+                          //                                 ? Colors.blue
+                          //                                 : Colors.green,
+                          //                         minorTicksPerInterval: 1,
+                          //
+                          //                         onChanged: (dynamic value) {
+                          //                           setState(() {
+                          //                             _value = value;
+                          //                             cubit.updateTaskStatus(widget.taskId!, 'completed');
+                          //                             if (_value <= 33.3) {
+                          //                               FirebaseFirestore.instance
+                          //                                   .collection('tasks_rooms')
+                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
+                          //                                   .get()
+                          //                                   .then((snapshot) {
+                          //                                 for (var doc in snapshot.docs) {
+                          //                                   doc.reference.update({'status': 'to do'});
+                          //                                 }
+                          //                               });
+                          //                             } else if (_value > 33.3 && value < 66.6) {
+                          //                               FirebaseFirestore.instance
+                          //                                   .collection('tasks_rooms')
+                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
+                          //                                   .get()
+                          //                                   .then((snapshot) {
+                          //                                 for (var doc in snapshot.docs) {
+                          //                                   doc.reference.update({'status': 'in progress'});
+                          //                                 }
+                          //                               });
+                          //
+                          //                             } else if (_value > 66.6) {
+                          //                               FirebaseFirestore.instance
+                          //                                   .collection('tasks_rooms')
+                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
+                          //                                   .get()
+                          //                                   .then((snapshot) {
+                          //                                 for (var doc in snapshot.docs) {
+                          //                                   doc.reference.update({'status': 'completed'});
+                          //                                 }
+                          //                               });
+                          //
+                          //                             }
+                          //                             print(value);
+                          //                           });
+                          //                         },
+                          //                       )
 
-                      widget.sender == false ?Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          BuildText(
-                            text: 'To Do',
-                            color: Colors.red,
-                            bold: true,
-                            size: 15,
-                            letterSpacing: 1,
-                          ),
-                          BuildText(
-                            text: '  InProgress',
-                            color: Colors.blue,
-                            bold: true,
-                            size: 15,
-                            letterSpacing: 1,
-                          ),
-                          BuildText(
-                            text: 'Completed',
-                            color: Colors.green,
-                            bold: true,
-                            size: 15,
-                            letterSpacing: 1,
-                          )
-                        ],
-                      ): const SizedBox(),
+                          : const SizedBox(),
+                      widget.sender == false
+                          ? SizedBox(
+                              width: width * .95,
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  BuildText(
+                                    text: 'To Do',
+                                    color: AppColor.primeColor,
+                                    bold: true,
+                                    size: 17.5,
+                                    letterSpacing: 1,
+                                  ),
+                                  BuildText(
+                                    text: '  InProgress',
+                                    color: AppColor.primeColor,
+                                    bold: true,
+                                    size: 17.5,
+                                    letterSpacing: 1,
+                                  ),
+                                  BuildText(
+                                    text: 'Completed',
+                                    color: AppColor.primeColor,
+                                    bold: true,
+                                    size: 17.5,
+                                    letterSpacing: 1,
+                                  )
+                                ],
+                              ),
+                            )
+                          : const SizedBox(),
                       widget.sender == false
                           ? Padding(
                               padding:
