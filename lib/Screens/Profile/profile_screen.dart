@@ -198,9 +198,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           });
                         }
                       ),
+                      //
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
-                      ),
+                       ),
                       TSettingsMenuTile(
                         icon: Icons.settings_suggest_outlined,
                         title: "Settings",
