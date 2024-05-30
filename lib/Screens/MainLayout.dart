@@ -56,32 +56,7 @@ class _MainLayoutState extends State<MainLayout> {
         .where('receiverId', isEqualTo: AppCubit.get(context).id)
         .snapshots();
 
-    Stream<QuerySnapshot<Map<String, dynamic>>> deadlineStream =
-    FirebaseFirestore.instance
-        .collection('tasks_rooms')
-        .doc('taskRoomId')
-        .collection('tasks')
-        .where('receiverId', isEqualTo: AppCubit.get(context).id)
-        .snapshots();
 
-    deadlineStream.listen((event) async {
-      if (event.docs.isEmpty) {
-        return;
-      }
-      for (var doc in event.docs) {
-        DateTime? date = DateTime.tryParse('yyyy-MM-dd');
-        String year = date!.year.toString();
-        String month = date.month.toString();
-        int day = date.day;
-
-        if (doc['year'] == year &&
-            doc['month'] == month &&
-            doc['day'] == day - 1) {
-          print('deadline');
-          showDeadlineNotification(doc, year, month, day);
-        }
-      }
-    });
 
     notificationStream.listen((event) async {
       if (event.docs.isEmpty) {
@@ -145,6 +120,8 @@ class _MainLayoutState extends State<MainLayout> {
   int _page = 0;
 
   Widget build(BuildContext context) {
+    bool isDarkMode =
+        Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
         // TODO: implement listener
