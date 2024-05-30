@@ -335,7 +335,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                 box2Color = TColors.secondaryColor;
                                 box1Color = TColors.primaryColor;
                                 box3Color = TColors.primaryColor;
-                                priority = '';
+                                priority = 'medium';
                               });
                             },
                             onTapCancel: () {
@@ -363,25 +363,17 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                             width: TSizes.spaceBtwItems,
                           ),
                           GestureDetector(
-                            onTapDown: (_) {
-                              setState(() {
-                                box3Color = TColors.secondaryColor;
-                                box2Color = TColors.primaryColor;
-                                box1Color = TColors.primaryColor;
-                              });
-                            },
+
                             onTap: () {
                               setState(() {
                                 box3Color = TColors.secondaryColor;
                                 box2Color = TColors.primaryColor;
                                 box1Color = TColors.primaryColor;
+                                priority = 'high';
+
                               });
                             },
-                            onTapCancel: () {
-                              setState(() {
-                                box3Color = TColors.primaryColor;
-                              });
-                            },
+
                             child: Container(
                               width: width * .3,
                               height: height * .065,

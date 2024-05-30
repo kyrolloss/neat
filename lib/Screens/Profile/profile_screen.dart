@@ -52,16 +52,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     return BlocConsumer<AppCubit, AppState>(
       listener: (context, state) {
-        if (state is GetPerformanceSuccess && AppCubit.get(context).taskss.isNotEmpty) {
-          navigateTo(
-              context,
-              PerformanceScreen(
-                toDoTask: AppCubit.get(context).toDoTask,
-                completeTask: AppCubit.get(context).competedTask,
-                tasksList: AppCubit.get(context).taskss,
-              ));
-
-        }
 
       },
       builder: (context, state) {
@@ -192,8 +182,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.star_rate_outlined,
                         title: "performance",
                         onTap: () async {
+                          await cubit.getPerformance(context);
+
                           setState(() {
-                              cubit.getPerformance(context);
+
+                              if (state is GetPerformanceSuccess && AppCubit.get(context).taskss.isNotEmpty) {
+                                navigateTo(
+                                    context,
+                                    PerformanceScreen(
+                                      toDoTask: AppCubit.get(context).toDoTask,
+                                      completeTask: AppCubit.get(context).competedTask,
+                                      tasksList: AppCubit.get(context).taskss,
+                                    ));
+
+                              }
+
 
                           });
                         }

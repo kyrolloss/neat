@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -6,8 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
-import 'package:syncfusion_flutter_sliders/sliders.dart';
-
 import '../../components/Text.dart';
 
 class taskDetailsScreen extends StatefulWidget {
@@ -54,7 +51,6 @@ class taskDetailsScreen extends StatefulWidget {
 }
 
 class _taskDetailsScreenState extends State<taskDetailsScreen> {
-  double _value = 40.0;
   ActionSliderController toDoController = ActionSliderController();
   ActionSliderController inProgressController = ActionSliderController();
   ActionSliderController completeController = ActionSliderController();
@@ -79,6 +75,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime? now = DateTime.now();
+
     var height = MediaQuery.of(context).size.height;
     var width = MediaQuery.of(context).size.width;
 
@@ -445,7 +443,10 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                                   .then((snapshot) {
                                                 for (var doc in snapshot.docs) {
                                                   doc.reference.update({
-                                                    'status': 'in progress'
+                                                    'status': 'in progress',
+                                                    'dayCompleted':now.day,
+                                                    'monthCompleted':now.month,
+                                                    'yearCompleted':now.year,
                                                   });
                                                 }
                                               });
@@ -521,7 +522,16 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                                   .then((snapshot) {
                                                 for (var doc in snapshot.docs) {
                                                   doc.reference.update(
-                                                      {'status': 'completed'});
+                                                      {
+                                                        'status': 'completed',
+                                                        'dayCompleted':now.day,
+                                                        'monthCompleted':now.month,
+                                                        'yearCompleted':now.year,
+
+
+
+
+                                                      });
                                                 }
                                               });
                                               Future.delayed(
@@ -552,60 +562,6 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                               ),
                             )
 
-                          // SfSlider(
-                          //                         min: 0.0,
-                          //                         max: 100.0,
-                          //                         value: _value,
-                          //                         stepSize: 50,
-                          //                         interval: 50,
-                          //                         activeColor: _value < 33.3
-                          //                             ? Colors.red
-                          //                             : _value < 66.6 && _value > 33.3
-                          //                                 ? Colors.blue
-                          //                                 : Colors.green,
-                          //                         minorTicksPerInterval: 1,
-                          //
-                          //                         onChanged: (dynamic value) {
-                          //                           setState(() {
-                          //                             _value = value;
-                          //                             cubit.updateTaskStatus(widget.taskId!, 'completed');
-                          //                             if (_value <= 33.3) {
-                          //                               FirebaseFirestore.instance
-                          //                                   .collection('tasks_rooms')
-                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                          //                                   .get()
-                          //                                   .then((snapshot) {
-                          //                                 for (var doc in snapshot.docs) {
-                          //                                   doc.reference.update({'status': 'to do'});
-                          //                                 }
-                          //                               });
-                          //                             } else if (_value > 33.3 && value < 66.6) {
-                          //                               FirebaseFirestore.instance
-                          //                                   .collection('tasks_rooms')
-                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                          //                                   .get()
-                          //                                   .then((snapshot) {
-                          //                                 for (var doc in snapshot.docs) {
-                          //                                   doc.reference.update({'status': 'in progress'});
-                          //                                 }
-                          //                               });
-                          //
-                          //                             } else if (_value > 66.6) {
-                          //                               FirebaseFirestore.instance
-                          //                                   .collection('tasks_rooms')
-                          //                                   .doc('taskRoomId').collection('tasks').where('id',isEqualTo: widget.taskId)
-                          //                                   .get()
-                          //                                   .then((snapshot) {
-                          //                                 for (var doc in snapshot.docs) {
-                          //                                   doc.reference.update({'status': 'completed'});
-                          //                                 }
-                          //                               });
-                          //
-                          //                             }
-                          //                             print(value);
-                          //                           });
-                          //                         },
-                          //                       )
 
                           : const SizedBox(),
                       widget.sender == false

@@ -401,33 +401,32 @@ class AppCubit extends Cubit<AppState> {
       for (var doc in snapshot.docs) {
         Map<String, dynamic> data = doc.data();
 if (data['yearCompleted'] != 0 && data['monthCompleted'] != 0 && data['dayCompleted'] != 0) {
-  if (data['yearCompleted'] <= data['year']) {
-    if (data['monthCompleted'] <= data['month']) {
-      if (data['dayCompleted'] <= data['day']) {
-        competedTask++;
-      } else {
-        toDoTask++;
-      }
-    } else {
-      toDoTask++;
+  if (data['yearCompleted'] == data['year']) {
+    if (data['monthCompleted'] < data['month']) {
+    competedTask++;
+
     }
+    else if(data['monthCompleted'] == data['month']&& data['dayCompleted'] <= data['day']){ {
+      competedTask++;
+    }
+
   }
+
   else {
     toDoTask++;
   }
 }
-else {
-  ScaffoldMessenger.of(context).showSnackBar(
-    const SnackBar(content: Text('No tasks delivered yet')),
-  )  ;
-}
+  else {
+    toDoTask++;
+  }
+
       }
 
-      print(toDoTask);
-      print(competedTask);
+      print('toDoTask is $toDoTask');
+      print('competedTask is $competedTask');
       emit(GetPerformanceSuccess());
 
-    });
+    }});
 
 
   }
