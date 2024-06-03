@@ -68,6 +68,21 @@ class _CalenderScreenState extends State<CalenderScreen>
                       });
                     },
                   ),
+                  EasyDateTimeLine(
+                    initialDate: DateTime.now(),
+                    activeColor: AppColor.primeColor,
+                    onDateChange:  (selectedDate) async {
+                      setState(()  {
+                        cubit.tasksCalendar.clear();
+                        _focusDate = selectedDate;
+
+                        cubit.getTasksInCalender(selectedDate.day,
+                            selectedDate.month, selectedDate.year);
+
+                      });
+
+                    },
+                  ),
                   SizedBox(
                     height: height * .02,
                   ),

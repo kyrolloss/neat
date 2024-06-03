@@ -165,7 +165,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                             child: Center(
                               child: BuildText(
                                 text:
-                                    'U have 3 Individuals Under Your Supervision',
+                                    'U have ;;; Individuals Under Your Supervision',
                                 color: AppColor.secondColor,
                                 size: 20,
                                 bold: true,

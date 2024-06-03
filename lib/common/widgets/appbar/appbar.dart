@@ -6,7 +6,7 @@ class TAppBar extends StatelessWidget implements PreferredSizeWidget {
   const TAppBar(
       {super.key,
         this.title,
-        this.showBackArrow = false,
+        this.showBackArrow = true,
         this.leadingIcon,
         this.actions,
         this.leadingOnPressed,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:neat/Admin%20Screens/performance/performance.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Admin%20Screens/Task%20template%20Screen.dart';
 import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
@@ -82,14 +83,7 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                             .bodyMedium!
                             .apply(color: TColors.secondaryColor),
                       ),
-                      trailing: IconButton(
-                          onPressed: () {
-                            navigateTo(context, const EditProfileScreen());
-                          },
-                          icon: const Icon(
-                            Iconsax.edit,
-                            color: TColors.backgroundColor,
-                          )),
+
                     ),
                     const SizedBox(
                       height: TSizes.spaceBtwSections,
@@ -189,18 +183,17 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                         icon: Iconsax.user,
                         title: "Account Information",
                         onTap: () {
-                          navigateTo(
-                              context,
-                              const TaskTemplateScreen(
+                          navigateTo(context, const EditProfileScreen());
 
-                              ));
                         },
                       ),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                        TSettingsMenuTile(
-                          icon: Icons.star_rate_outlined , title: "Performance",onTap: (){},),
+                          icon: Icons.star_rate_outlined , title: "Performance",onTap: (){
+                            navigateTo(context, const AdminPerformance());
+                       },),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
