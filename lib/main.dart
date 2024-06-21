@@ -17,7 +17,7 @@ import 'firebase_options.dart';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 void main() async {
-  final WidgetsBinding widgetsBinding=WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
 
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
@@ -28,16 +28,12 @@ void main() async {
     child: const MyApp(),
   ));
 }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
   State<MyApp> createState() => _MyAppState();
 }
-
-
-
 class _MyAppState extends State<MyApp> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;

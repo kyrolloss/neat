@@ -108,21 +108,6 @@ class AppCubit extends Cubit<AppState> {
         title = Title;
         url = image!;
         typee = type!;
-        // await updateInfo(
-        //     id: id,
-        //     name: name,
-        //     email: email,
-        //     phone: phone,
-        //     title: title,
-        //     url: url,
-        //     typee: typee,
-        //     NewId: userUid,
-        //     Newname: userName,
-        //     Newemail: userEmail,
-        //     Newphone: userPhone,
-        //     Newtitle: Title,
-        //     Newurl: image,
-        //     Newtypee: type!);
 
         emit(GetUserInfoSuccess());
       }
@@ -257,9 +242,9 @@ class AppCubit extends Cubit<AppState> {
       emit(LoginSuccess());
 
       if (typee == 'Admin') {
-        navigateToToFinish(context, AdminMainLayout(uid: user!.uid));
+        navigateToToFinish(context, AdminMainLayout(uid: userCredential.user!.uid));
       } else if (typee == 'User') {
-        navigateTo(context, MainLayout(uid: user!.uid));
+        navigateTo(context, MainLayout(uid: userCredential.user!.uid));
       }
       emit(NavigationDone());
 

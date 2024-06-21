@@ -96,12 +96,21 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                       Padding(
                         padding: const EdgeInsets.all(15.0),
                         child: Center(
-                          child: BuildText(
-                            text: widget.name!,
-                            bold: true,
-                            color: AppColor.primeColor,
-                            size: 25,
-                            center: true,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              IconButton(onPressed: (){
+                                Navigator.pop(context);
+                              }, icon: Icon(Icons.arrow_back_ios_new_outlined , color: AppColor.primeColor,)),
+                              BuildText(
+                                text: widget.name!,
+                                bold: true,
+                                color: AppColor.primeColor,
+                                size: 25,
+                                center: true,
+                              ),
+                              SizedBox()
+                            ],
                           ),
                         ),
                       ),

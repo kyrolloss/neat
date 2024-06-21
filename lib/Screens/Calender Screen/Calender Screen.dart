@@ -48,26 +48,10 @@ class _CalenderScreenState extends State<CalenderScreen>
           backgroundColor: Theme.of(context).colorScheme.background,
           body: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(15.0),
+              padding: const EdgeInsets.symmetric(horizontal: 15.0,vertical: 65),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  EasyInfiniteDateTimeLine(
-                    controller: _controller,
-                    firstDate: DateTime(2024),
-                    focusDate: _focusDate,
-                    lastDate: DateTime(2024, 12, 31),
-                    onDateChange: (selectedDate) async{
-                      setState(()  {
-                        cubit.tasksCalendar.clear();
-                        _focusDate = selectedDate;
-
-                        cubit.getTasksInCalender(selectedDate.day,
-                            selectedDate.month, selectedDate.year);
-
-                      });
-                    },
-                  ),
                   EasyDateTimeLine(
                     initialDate: DateTime.now(),
                     activeColor: AppColor.primeColor,
