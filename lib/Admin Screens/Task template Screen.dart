@@ -1,9 +1,17 @@
+import 'dart:io';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:iconsax/iconsax.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/texts/section_heading.dart';
 import 'package:neat/utlis/constants/colors.dart';
 import 'package:neat/utlis/constants/sizes.dart';
+import 'package:path/path.dart';
 import 'package:provider/provider.dart';
 import 'package:uuid/uuid.dart';
 import 'package:flutter/material.dart';
@@ -35,6 +43,55 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
   String _taskName = '';
   String _taskDescription = '';
   String _receiverId = '';
+  File? file;
+  String? url;
+
+  getImageGallery({required BuildContext context}) async {
+    final ImagePicker picker = ImagePicker();
+
+    /// Pick an image.
+    final XFile? imageGallery =
+    await picker.pickImage(source: ImageSource.gallery);
+    if (imageGallery != null) {
+      file = File(imageGallery!.path);
+      var imageName = basename(imageGallery!.path);
+
+      /// start upload
+      var random = Random().nextInt(10000000);
+      imageName = "$random$imageName";
+
+      var refStorage = FirebaseStorage.instance.ref("TaskTemplateImages/$imageName");
+      await refStorage.putFile(file!);
+      url = await refStorage.getDownloadURL();
+      print(url);
+
+
+
+      /// end upload
+    } else {
+      if (kDebugMode) {
+        print("Please choose Image");
+      }
+    }
+
+    setState(() {
+      if (imageGallery != null) {
+        file = File(imageGallery.path);
+      }
+    });
+
+    getImagesAndFolderName() async {
+      var ref = await FirebaseStorage.instance.ref("ProfileImg").list();
+      for (var element in ref.items) {
+        if (kDebugMode) {
+          print("**********");
+        }
+        if (kDebugMode) {
+          print(element.name);
+        }
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -429,7 +486,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                           ),
                           const Spacer(),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () async{
+                              getImageGallery(context: context, );
+                            },
                             icon: const Icon(
                               Icons.attach_file_outlined,
                               // Use a more appropriate calendar icon
@@ -520,6 +579,7 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                               year: cubit.year,
                               day: cubit.day,
                               month: cubit.month,
+                              url: url
                             );
                             taskNameController.clear();
                             taskDescriptionController.clear();

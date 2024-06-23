@@ -47,21 +47,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     //  _loadPhotoUrl();
   }
 
-  // _initPrefs() async{
-  //   _prefs = await SharedPreferences.getInstance();
-  // }
-  // _loadPhotoUrl() async{
-  //
-  //   _photoUrl = _prefs.getString('photoUrl') ?? '';
-  //   setState(() {
-  //
-  //   });
-  // }
-  // _savePhotoUrl(String photoUrl) async{
-  //
-  //   await _prefs.setString('photoUrl', photoUrl);
-  //   _photoUrl =photoUrl;
-  // }
+
 
   getImageGallery(BuildContext context) async {
     final ImagePicker picker = ImagePicker();
@@ -70,12 +56,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final XFile? imageGallery =
         await picker.pickImage(source: ImageSource.gallery);
     if (imageGallery != null) {
-      // if (kDebugMode) {
-      //   print('******');
-      // }
-      // if (kDebugMode) {
-      //   print(imageGallery.path);
-      // }
+
       file = File(imageGallery!.path);
       // if (kDebugMode) {
       //   print(imageGallery.path);

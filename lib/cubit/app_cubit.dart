@@ -274,6 +274,7 @@ class AppCubit extends Cubit<AppState> {
     required int day,
     required int month,
     required int year,
+     String? url
   }) async {
     emit(SendTaskLoading());
     final String currentUserId = auth.currentUser!.uid;
@@ -297,6 +298,7 @@ class AppCubit extends Cubit<AppState> {
       dayCompleted: 0,
       monthCompleted: 0,
       yearCompleted: 0,
+     image: url
     );
 
     await database

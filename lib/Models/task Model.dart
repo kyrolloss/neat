@@ -19,7 +19,7 @@ class  Tasks {
   final int? dayCompleted;
   final int? monthCompleted;
   final int? yearCompleted;
-  final File? image;
+  final String? image;
 
   Tasks({
     required this.name,
