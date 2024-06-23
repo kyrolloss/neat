@@ -312,7 +312,7 @@ class _SignupFormState extends State<SignupForm> {
                           borderRadius: BorderRadius.all(Radius.circular(25))),
                     ));
                   } else {
-                    navigateToToFinish(
+                    navigateTo(
                         context,
                         AdminOrUserScreen(
                           email: email.text.toString(),
