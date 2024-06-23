@@ -50,7 +50,7 @@ class _adminNotificationScreenState extends State<adminNotificationScreen> {
           child: StreamBuilder<QuerySnapshot>(
               stream: FirebaseFirestore.instance
                   .collection('Notification')
-                  .doc(AppCubit.get(context).id)
+                  .doc('VLCOlKkUE5TcnPUnRFZSqIb7Os02')
                   .collection('notification')
                   .snapshots(),
               builder: (context, snapshot) {
@@ -83,16 +83,11 @@ class _adminNotificationScreenState extends State<adminNotificationScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 BuildText(
-                                  text: notification['name'],
+                                  text: '${notification['receiverName']} change status of ${notification['taskName']} to ${notification['status']}',
                                   color: AppColor.primeColor,
                                   size: 15,
                                 ),
-                                BuildText(
-                                  text: notification['deadline'],
-                                  color: AppColor.primeColor,
-                                  size: 17.5,
-                                  bold: true,
-                                ),
+
                                 Row(
                                   children: [
                                     Icon(
@@ -104,7 +99,7 @@ class _adminNotificationScreenState extends State<adminNotificationScreen> {
                                       width: width * .02,
                                     ),
                                     BuildText(
-                                      text: '15.00 pm - 16.00',
+                                      text: '${notification['yearCompleted'] }-${notification['monthCompleted']}-${notification['dayCompleted']}',
                                       color: AppColor.primeColor,
                                       size: 15,
                                     ),

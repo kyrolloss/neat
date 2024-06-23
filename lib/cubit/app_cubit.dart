@@ -16,6 +16,7 @@ import 'package:neat/components/color.dart';
 import '../Admin Screens/Home/home Screen.dart';
 import '../Admin Screens/Main Layout.dart';
 import '../Admin Screens/Profile/profile_screen.dart';
+import '../Admin Screens/notification/notification Screen.dart';
 import '../Screens/Calender Screen/Calender Screen.dart';
 import '../Screens/Home/home.dart';
 import '../Screens/MainLayout.dart';
@@ -672,7 +673,7 @@ Future<void> getPerformanceTask({required String ID}) async {
     adminHomeScreen(),
     adminCalenderScreen(),
     TaskTemplateScreen(),
-    NotificationScreen(
+    adminNotificationScreen(
       uid: 'aiQxoxrg5zPLIQ7NniWdyUFnwmF2',
     ),
     AdminProfileScreen(

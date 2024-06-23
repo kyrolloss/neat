@@ -26,7 +26,7 @@ class taskDetailsScreen extends StatefulWidget {
   // String? imageURl;
   // dynamic attachments;
 
-  taskDetailsScreen({
+  taskDetailsScreen({super.key,
     this.senderID,
     this.description,
     this.senderName,
@@ -457,6 +457,27 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                                     'monthCompleted':now.month,
                                                     'yearCompleted':now.year,
                                                   });
+                                                  FirebaseFirestore.instance
+                                                      .collection('Notification')
+                                                      .doc('${widget.senderID}')
+                                                      .collection('notification').add({
+                                                      'taskID': widget.taskId,
+                                                      'status': 'in progress',
+                                                      'dayCompleted':now.day,
+                                                      'monthCompleted':now.month,
+                                                      'yearCompleted':now.year,
+                                                      'senderID': widget.senderID,
+                                                      'senderName': widget.senderName,
+                                                      'receiverID': cubit.id,
+                                                    'receiverName': cubit.name,
+                                                    'taskName': widget.name,
+
+
+
+
+                                                  });
+
+
                                                 }
                                               });
                                               controller
@@ -541,6 +562,19 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
 
 
                                                       });
+                                                  FirebaseFirestore.instance
+                                                      .collection('Notification')
+                                                      .doc('${widget.senderID}')
+                                                      .collection('notification').add({
+                                                    'taskID': widget.taskId,
+                                                    'status': 'completed',
+                                                    'dayCompleted':now.day,
+                                                    'monthCompleted':now.month,
+                                                    'yearCompleted':now.year,
+                                                    'senderID': widget.senderID,
+                                                    'senderName': widget.senderName,
+                                                    'receiverID': cubit.id,
+                                                  });
                                                 }
                                               });
                                               Future.delayed(

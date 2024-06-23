@@ -6,5 +6,4 @@ class AppColor {
   static Color  secondColor = const Color(0xFFd1d0f9);
 
 
-
 }

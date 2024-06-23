@@ -10,6 +10,8 @@ import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
 import 'Screens/Notification/notification services/notification services.dart';
+import 'Screens/authentication/screens/login/forget_password.dart';
+import 'Screens/authentication/screens/login/reset_password.dart';
 import 'Screens/authentication/screens/onboarding/onboarding_screen.dart';
 import 'cubit/app_cubit.dart';
 import 'firebase_options.dart';
@@ -89,7 +91,7 @@ class _MyAppState extends State<MyApp> {
       child: MaterialApp(
         navigatorKey: navigatorKey,
         debugShowCheckedModeBanner: false,
-        home: OnboardingScreen(),
+        home: ForgetPassword(),
         theme: Provider.of<ThemeProvider>(context).themeData,
       ),
     );
