@@ -329,6 +329,8 @@ class _HomeScreenState extends State<HomeScreen> {
               taskId: taskData['id'],
               sender: false,
               status: taskData['status'],
+              imageURl:  taskData['image'],
+
             ));
       },
       child: Padding(

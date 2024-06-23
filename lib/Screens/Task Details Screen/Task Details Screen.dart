@@ -1,10 +1,16 @@
 
+import 'dart:io';
+
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:http/http.dart' as http;
+import 'package:image_downloader/image_downloader.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../components/Text.dart';
 
 class taskDetailsScreen extends StatefulWidget {
@@ -23,7 +29,7 @@ class taskDetailsScreen extends StatefulWidget {
   String? senderEmail;
   bool? sender = false;
 
-  // String? imageURl;
+  String? imageURl;
   // dynamic attachments;
 
   taskDetailsScreen({super.key,
@@ -40,11 +46,13 @@ class taskDetailsScreen extends StatefulWidget {
     //  // this.priority,
     this.senderEmail,
     this.sender,
-    // this.imageURl,
+    this.imageURl,
     // this.attachments,
     // this.imageURl,
     // // this.attachments,
   });
+
+
 
   @override
   State<taskDetailsScreen> createState() => _taskDetailsScreenState();
@@ -55,7 +63,36 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
   ActionSliderController inProgressController = ActionSliderController();
   ActionSliderController completeController = ActionSliderController();
 
-  @override
+
+  final FirebaseStorage storage = FirebaseStorage.instance;
+  String? localFilePath;
+
+  Future<String> _downloadImageUrl(String imageName) async {
+    try {
+      String downloadUrl = await storage.ref(imageName).getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      print('Error getting download URL: $e');
+      throw Exception('Error getting download URL: $e');
+    }
+  }
+
+  Future<void> _downloadAndSaveImage(String imageName) async {
+    try {
+      String url = await _downloadImageUrl(imageName);
+      final http.Response response = await http.get(Uri.parse(url));
+      final Directory appDir = await getApplicationDocumentsDirectory();
+      final File file = File('${appDir.path}/$imageName');
+
+      await file.writeAsBytes(response.bodyBytes);
+      setState(() {
+        localFilePath = file.path;
+      });
+    } catch (e) {
+      print('Error downloading or saving image: $e');
+    }
+  }
+
   void initState() {
     if (widget.status == 'to do') {
       toDoController.reset();
@@ -72,6 +109,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
     }
     super.initState();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -298,27 +336,43 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                             size: 20,
                             center: true,
                           ),
-                          Container(
-                            height: height * .07,
-                            width: width * .155,
-                            decoration: BoxDecoration(
-                              color: AppColor.primeColor,
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                const Icon(
-                                  Icons.attachment,
-                                  size: 25,
-                                  color: Colors.white,
-                                ),
-                                BuildText(
-                                  text: 'Download',
-                                  size: 10,
-                                  color: Colors.white,
-                                ),
-                              ],
+                          GestureDetector(
+                            onTap: () {
+                              if(widget.imageURl != null){ _downloadAndSaveImage(widget.imageURl!);
+
+
+                              }else{
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    backgroundColor: Colors.red,
+                                    content: Text('No Attachment find'),
+                                  ),
+                                );
+                              }
+
+                            },
+                            child: Container(
+                              height: height * .07,
+                              width: width * .155,
+                              decoration: BoxDecoration(
+                                color: AppColor.primeColor,
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  const Icon(
+                                    Icons.attachment,
+                                    size: 25,
+                                    color: Colors.white,
+                                  ),
+                                  BuildText(
+                                    text: 'Download',
+                                    size: 10,
+                                    color: Colors.white,
+                                  ),
+                                ],
+                              ),
                             ),
                           )
                         ],
