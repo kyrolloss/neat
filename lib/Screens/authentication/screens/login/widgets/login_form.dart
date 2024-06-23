@@ -14,6 +14,7 @@ import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
 import '../../../../../utlis/constants/text_strings.dart';
 import '../../../../../utlis/constants/themes/theme_provider.dart';
+import '../forget_password.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({
@@ -177,6 +178,31 @@ class _LoginFormState extends State<LoginForm> {
               ),
 
               /// Don't have account , Create account
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Row(
+                    children: [
+                      /// Don't have an account
+                      Text(
+                        'Forgot Password?',
+                        style: TextStyle(color: TColors.greyColor),
+                      ),
+                    ],
+                  ),
+
+                  /// Create Account
+                  TextButton(
+                      onPressed: () {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>  ForgetPassword()));
+                      },
+                      child: const Text(
+                        'Reset Password',
+                        style: TextStyle(color: TColors.primaryColor),
+                      )),
+                ],
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
