@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/Admin%20Screens/Home/Completed%20Tasks/Completed%20Task.dart';
@@ -138,6 +139,13 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                   SizedBox(
                     height: height * .045,
                   ),
+                  StreamBuilder(stream: FirebaseFirestore.instance.collection('groups').doc(cubit.id).collection('members').snapshots(), builder: (context, snapshot) {
+                    if(snapshot.hasData) {
+                      cubit.membersUnderSupervision = snapshot.data!.docs.length;
+                     return const SizedBox();
+                    }
+                    return const SizedBox();
+                  },),
                   BuildText(
                     text: "Let's Check the performance",
                     color: isDarkMode
@@ -165,7 +173,7 @@ class _adminHomeScreenState extends State<adminHomeScreen> {
                             child: Center(
                               child: BuildText(
                                 text:
-                                    'U have ;;; Individuals Under Your Supervision',
+                                    'U have ${cubit.membersUnderSupervision} Individuals Under Your Supervision',
                                 color: AppColor.secondColor,
                                 size: 20,
                                 bold: true,

@@ -24,8 +24,8 @@ class TUserProfileTile extends StatelessWidget {
         var cubit = AppCubit.get(context);
         return ListTile(
           leading: Container(
-              height: 120,
-              width: 120,
+              height: 370,
+              width: 100,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
               ),
@@ -33,13 +33,13 @@ class TUserProfileTile extends StatelessWidget {
                   ? ClipOval(
                       child: Image.network(
                         cubit.url!,
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     )
-                  : ClipOval(
+                  : const ClipOval(
                       child: Image(
                         image: AssetImage('assets/images/user/user.png'),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain,
                       ),
                     )),
           title: Text(cubit.name,

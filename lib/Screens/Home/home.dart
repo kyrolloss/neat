@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     /// Profile picture
-                                    ProfilePicture(cubit: cubit, width: 120, height: 120),
+                                    ProfilePicture(cubit: cubit, width: 120, height: 130),
                                     SizedBox(
                                       width: width * .025,
                                     ),
@@ -114,13 +114,18 @@ class _HomeScreenState extends State<HomeScreen> {
                                               : TColors.primaryColor,
                                           size: 20,
                                         ),
-                                        BuildText(
-                                          text: cubit.name,
-                                          color: isDarkMode
-                                              ? TColors.secondaryColor
-                                              : TColors.primaryColor,
-                                          size: 20,
-                                          bold: true,
+                                        SizedBox(
+                                          width: width*.45,
+                                          height: height*.1,
+                                          child: BuildText(
+                                            text: cubit.name,
+                                            maxLines: 3,
+                                            color: isDarkMode
+                                                ? TColors.secondaryColor
+                                                : TColors.primaryColor,
+                                            size: 20,
+                                            bold: true,
+                                          ),
                                         ),
                                       ],
                                     ),

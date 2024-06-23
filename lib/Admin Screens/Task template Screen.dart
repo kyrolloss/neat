@@ -74,7 +74,6 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                             ? TColors.secondaryColor
                             : TColors.primaryColor,
                       ),
-
                       SizedBox(
                         height: height * .01,
                       ),
@@ -129,14 +128,9 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                                   fontWeight: FontWeight.bold)),
                         ),
                       ),
-
-                      //
-
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
-                      // const Divider(color: TColors.secondaryColor,),
-
                       TSectionHeading(
                         title: 'Task Description',
                         showActionButton: false,
@@ -148,7 +142,6 @@ class _TaskTemplateScreenState extends State<TaskTemplateScreen> {
                       SizedBox(
                         height: height * .01,
                       ),
-
                       SizedBox(
                         height: height * .065,
                         width: width * .975,

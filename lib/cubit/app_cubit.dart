@@ -38,6 +38,7 @@ class AppCubit extends Cubit<AppState> {
   int numberOfTodoTasks = 0;
   int numberOfInProgressTasks = 0;
   int numberOfCompletedTasks = 0;
+  int membersUnderSupervision = 0;
   String id = '';
   String name = '';
   String email = '';
@@ -242,7 +243,8 @@ class AppCubit extends Cubit<AppState> {
       emit(LoginSuccess());
 
       if (typee == 'Admin') {
-        navigateToToFinish(context, AdminMainLayout(uid: userCredential.user!.uid));
+        navigateToToFinish(
+            context, AdminMainLayout(uid: userCredential.user!.uid));
       } else if (typee == 'User') {
         navigateTo(context, MainLayout(uid: userCredential.user!.uid));
       }
@@ -338,83 +340,152 @@ class AppCubit extends Cubit<AppState> {
       }
 
       tasksCalendar = tasks;
-      emit(EqualityBetweenTheTwoLists());
-    });
-  }
+    emit(EqualityBetweenTheTwoLists());
+  });
+}
 
-  double competedTask = 0;
-  double toDoTask = 0;
+double competedTask = 0;
+double toDoTask = 0;
 
-  Future<void> getPerformanceTask() async {
-    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-        FirebaseFirestore.instance
-            .collection('tasks_rooms')
-            .doc('taskRoomId')
-            .collection('tasks')
-            .where('receiverId', isEqualTo: id)
-            .snapshots();
-    emit(GetCalenderTasks());
+Future<void> getPerformanceTask({required String ID}) async {
+  Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+  FirebaseFirestore.instance
+      .collection('tasks_rooms')
+      .doc('taskRoomId')
+      .collection('tasks')
+      .where('receiverId', isEqualTo: ID)
+      .snapshots();
+  emit(GetCalenderTasks());
 
     notificationStream.listen((snapshot) {
       List<Tasks> tasks = [];
       for (var doc in snapshot.docs) {
         Map<String, dynamic> data = doc.data();
         Tasks task = Tasks.fromJson(data);
-        if (data['yearCompleted'] != 0 && data['monthCompleted'] != 0 && data['dayCompleted'] != 0){
+        if (data['yearCompleted'] != 0 &&
+            data['monthCompleted'] != 0 &&
+            data['dayCompleted'] != 0) {
           tasks.add(task);
-
         }
       }
       taskss = tasks;
+      print('taskss  is $taskss');
       emit(EqualityBetweenTheTwoLists());
     });
   }
 
-  Future<void> getPerformance(BuildContext context) async {
-    await getPerformanceTask();
-    emit(GetPerformanceLoading());
-    Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
-        FirebaseFirestore.instance
-            .collection('tasks_rooms')
-            .doc('taskRoomId')
-            .collection('tasks')
-            .where('receiverId', isEqualTo: id)
-            .snapshots();
-    notificationStream.listen((snapshot) {
-      competedTask = 0;
-      toDoTask = 0;
-      for (var doc in snapshot.docs) {
-        Map<String, dynamic> data = doc.data();
-if (data['yearCompleted'] != 0 && data['monthCompleted'] != 0 && data['dayCompleted'] != 0) {
-  if (data['yearCompleted'] == data['year']) {
-    if (data['monthCompleted'] < data['month']) {
-    competedTask++;
+  Future<void> getPerformance({required BuildContext context}) async {
+    try {
+      await getPerformanceTask(ID: id);
+      emit(GetPerformanceLoading());
+      Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+          FirebaseFirestore.instance
+              .collection('tasks_rooms')
+              .doc('taskRoomId')
+              .collection('tasks')
+              .where('receiverId', isEqualTo: id)
+              .snapshots();
+      emit(GetCalenderTasks());
 
+      notificationStream.listen((snapshot) {
+        competedTask = 0;
+        toDoTask = 0;
+
+
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          if (data['yearCompleted'] != 0 &&
+              data['monthCompleted'] != 0 &&
+              data['dayCompleted'] != 0) {
+            if (data['yearCompleted'] == data['year']) {
+              if (data['monthCompleted'] < data['month']) {
+                competedTask++;
+
+              } else if (data['monthCompleted'] == data['month'] &&
+                  data['dayCompleted'] <= data['day'])
+              {
+                {
+                  competedTask++;
+                }
+              } else {
+                toDoTask++;
+              }
+            } else {
+              toDoTask++;
+            }
+          }
+
+
+          print('toDoTask is $toDoTask');
+          print('competedTask is $competedTask');
+        }
+      });
+      navigateTo(context,  PerformanceScreen(toDoTask: toDoTask, completeTask: competedTask, tasksList: taskss,));
+      emit(GetPerformanceSuccess());
+    } on Exception catch (e) {
+      print(e.toString());
+      // TODO
     }
-    else if(data['monthCompleted'] == data['month']&& data['dayCompleted'] <= data['day']){ {
-      competedTask++;
-    }
-
   }
 
-  else {
-    toDoTask++;
-  }
-}
-  else {
-    toDoTask++;
-  }
+  Future<void> adminGetPerformance({required BuildContext context , required String receiverId}) async {
+    try {
+      await getPerformanceTask(ID: receiverId);
+      emit(GetPerformanceLoading());
+      Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =
+      FirebaseFirestore.instance
+          .collection('tasks_rooms')
+          .doc('taskRoomId')
+          .collection('tasks')
+          .where('receiverId', isEqualTo: receiverId)
+          .snapshots();
+      emit(GetCalenderTasks());
 
-      }
+      notificationStream.listen((snapshot) {
+        competedTask = 0;
+        toDoTask = 0;
 
-      print('toDoTask is $toDoTask');
-      print('competedTask is $competedTask');
+
+        for (var doc in snapshot.docs) {
+          Map<String, dynamic> data = doc.data();
+          if (data['yearCompleted'] != 0 &&
+              data['monthCompleted'] != 0 &&
+              data['dayCompleted'] != 0) {
+            if (data['yearCompleted'] == data['year']) {
+              if (data['monthCompleted'] < data['month']) {
+                competedTask++;
+
+              } else if (data['monthCompleted'] == data['month'] &&
+                  data['dayCompleted'] <= data['day'])
+              {
+                {
+                  competedTask++;
+                }
+              } else {
+                toDoTask++;
+              }
+            } else {
+              toDoTask++;
+            }
+          }
+
+
+          print('toDoTask is $toDoTask');
+          print('competedTask is $competedTask');
+        }
+      });
+      Future.delayed(const Duration(seconds: 1), () {
+        navigateTo(context,  PerformanceScreen(toDoTask: toDoTask, completeTask: competedTask, tasksList: taskss,));
+      });
+
       emit(GetPerformanceSuccess());
 
-    }});
-
-
+    } on Exception catch (e) {
+      print(e.toString());
+      // TODO
+    }
   }
+
 
   Future<void> getAdminTasksInCalender(int day, int month, int year) async {
     Stream<QuerySnapshot<Map<String, dynamic>>> notificationStream =

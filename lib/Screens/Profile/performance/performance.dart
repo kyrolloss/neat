@@ -174,7 +174,7 @@ class _PerformanceScreenState extends State<PerformanceScreen> {
                                     SizedBox(
                                       width: width*.01,
                                     ),
-                                    Icon(Icons.circle,color: widget.tasksList[index].year>=widget.tasksList[index].yearCompleted!&&widget.tasksList[index].month>=widget.tasksList[index].monthCompleted!&&widget.tasksList[index].day>=widget.tasksList[index].dayCompleted!?Colors.green:Colors.red,)
+                                    Icon(Icons.circle,color: (widget.tasksList[index].year>=widget.tasksList[index].yearCompleted!&&widget.tasksList[index].month>=widget.tasksList[index].monthCompleted!) || (widget.tasksList[index].month==widget.tasksList[index].monthCompleted! && widget.tasksList[index].day>=widget.tasksList[index].dayCompleted!)?Colors.green:Colors.red,)
                                   ],
                                 ),
 

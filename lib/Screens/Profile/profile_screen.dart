@@ -166,15 +166,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ),
-                      SizedBox(
-                        height: height * .03,
-                      ),
 
-                      TSettingsMenuTile(
-                        icon: Iconsax.user,
-                        title: "Account Information",
-                        onTap: () {},
-                      ),
+
+
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
@@ -182,23 +176,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.star_rate_outlined,
                         title: "performance",
                         onTap: () async {
-                          await cubit.getPerformance(context);
+                          await cubit.getPerformance(context: context);
 
-                          setState(() {
-
-                              if (state is GetPerformanceSuccess && AppCubit.get(context).taskss.isNotEmpty) {
-                                navigateTo(
-                                    context,
-                                    PerformanceScreen(
-                                      toDoTask: AppCubit.get(context).toDoTask,
-                                      completeTask: AppCubit.get(context).competedTask,
-                                      tasksList: AppCubit.get(context).taskss,
-                                    ));
-
-                              }
-
-
-                          });
+                         
                         }
                       ),
                       //
