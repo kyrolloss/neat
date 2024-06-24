@@ -1,4 +1,3 @@
-
 import 'dart:io';
 
 import 'package:action_slider/action_slider.dart';
@@ -7,7 +6,6 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
-import 'package:image_downloader/image_downloader.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:path_provider/path_provider.dart';
@@ -30,9 +28,11 @@ class taskDetailsScreen extends StatefulWidget {
   bool? sender = false;
 
   String? imageURl;
+
   // dynamic attachments;
 
-  taskDetailsScreen({super.key,
+  taskDetailsScreen({
+    super.key,
     this.senderID,
     this.description,
     this.senderName,
@@ -52,8 +52,6 @@ class taskDetailsScreen extends StatefulWidget {
     // // this.attachments,
   });
 
-
-
   @override
   State<taskDetailsScreen> createState() => _taskDetailsScreenState();
 }
@@ -63,26 +61,13 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
   ActionSliderController inProgressController = ActionSliderController();
   ActionSliderController completeController = ActionSliderController();
 
-
-  final FirebaseStorage storage = FirebaseStorage.instance;
   String? localFilePath;
 
-  Future<String> _downloadImageUrl(String imageName) async {
+  Future<void> _downloadAndSaveImage(String imageUrl) async {
     try {
-      String downloadUrl = await storage.ref(imageName).getDownloadURL();
-      return downloadUrl;
-    } catch (e) {
-      print('Error getting download URL: $e');
-      throw Exception('Error getting download URL: $e');
-    }
-  }
-
-  Future<void> _downloadAndSaveImage(String imageName) async {
-    try {
-      String url = await _downloadImageUrl(imageName);
-      final http.Response response = await http.get(Uri.parse(url));
+      final http.Response response = await http.get(Uri.parse(imageUrl));
       final Directory appDir = await getApplicationDocumentsDirectory();
-      final File file = File('${appDir.path}/$imageName');
+      final File file = File('${appDir.path}/image.jpg');
 
       await file.writeAsBytes(response.bodyBytes);
       setState(() {
@@ -92,6 +77,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
       print('Error downloading or saving image: $e');
     }
   }
+
 
   void initState() {
     if (widget.status == 'to do') {
@@ -109,7 +95,6 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
     }
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -137,9 +122,14 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              IconButton(onPressed: (){
-                                Navigator.pop(context);
-                              }, icon: Icon(Icons.arrow_back_ios_new_outlined , color: AppColor.primeColor,)),
+                              IconButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  icon: Icon(
+                                    Icons.arrow_back_ios_new_outlined,
+                                    color: AppColor.primeColor,
+                                  )),
                               BuildText(
                                 text: widget.name!,
                                 bold: true,
@@ -338,10 +328,9 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              if(widget.imageURl != null){ _downloadAndSaveImage(widget.imageURl!);
-
-
-                              }else{
+                              if (widget.imageURl != null) {
+                                _downloadAndSaveImage(widget.imageURl!);
+                              } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     backgroundColor: Colors.red,
@@ -349,7 +338,6 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                   ),
                                 );
                               }
-
                             },
                             child: Container(
                               height: height * .07,
@@ -359,7 +347,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: Column(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
                                 children: [
                                   const Icon(
                                     Icons.attachment,
@@ -507,31 +496,29 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                                 for (var doc in snapshot.docs) {
                                                   doc.reference.update({
                                                     'status': 'in progress',
-                                                    'dayCompleted':now.day,
-                                                    'monthCompleted':now.month,
-                                                    'yearCompleted':now.year,
+                                                    'dayCompleted': now.day,
+                                                    'monthCompleted': now.month,
+                                                    'yearCompleted': now.year,
                                                   });
                                                   FirebaseFirestore.instance
-                                                      .collection('Notification')
+                                                      .collection(
+                                                          'Notification')
                                                       .doc('${widget.senderID}')
-                                                      .collection('notification').add({
-                                                      'taskID': widget.taskId,
-                                                      'status': 'in progress',
-                                                      'dayCompleted':now.day,
-                                                      'monthCompleted':now.month,
-                                                      'yearCompleted':now.year,
-                                                      'senderID': widget.senderID,
-                                                      'senderName': widget.senderName,
-                                                      'receiverID': cubit.id,
+                                                      .collection(
+                                                          'notification')
+                                                      .add({
+                                                    'taskID': widget.taskId,
+                                                    'status': 'in progress',
+                                                    'dayCompleted': now.day,
+                                                    'monthCompleted': now.month,
+                                                    'yearCompleted': now.year,
+                                                    'senderID': widget.senderID,
+                                                    'senderName':
+                                                        widget.senderName,
+                                                    'receiverID': cubit.id,
                                                     'receiverName': cubit.name,
                                                     'taskName': widget.name,
-
-
-
-
                                                   });
-
-
                                                 }
                                               });
                                               controller
@@ -605,28 +592,27 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                                   .get()
                                                   .then((snapshot) {
                                                 for (var doc in snapshot.docs) {
-                                                  doc.reference.update(
-                                                      {
-                                                        'status': 'completed',
-                                                        'dayCompleted':now.day,
-                                                        'monthCompleted':now.month,
-                                                        'yearCompleted':now.year,
-
-
-
-
-                                                      });
+                                                  doc.reference.update({
+                                                    'status': 'completed',
+                                                    'dayCompleted': now.day,
+                                                    'monthCompleted': now.month,
+                                                    'yearCompleted': now.year,
+                                                  });
                                                   FirebaseFirestore.instance
-                                                      .collection('Notification')
+                                                      .collection(
+                                                          'Notification')
                                                       .doc('${widget.senderID}')
-                                                      .collection('notification').add({
+                                                      .collection(
+                                                          'notification')
+                                                      .add({
                                                     'taskID': widget.taskId,
                                                     'status': 'completed',
-                                                    'dayCompleted':now.day,
-                                                    'monthCompleted':now.month,
-                                                    'yearCompleted':now.year,
+                                                    'dayCompleted': now.day,
+                                                    'monthCompleted': now.month,
+                                                    'yearCompleted': now.year,
                                                     'senderID': widget.senderID,
-                                                    'senderName': widget.senderName,
+                                                    'senderName':
+                                                        widget.senderName,
                                                     'receiverID': cubit.id,
                                                   });
                                                 }
@@ -658,8 +644,6 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                 ),
                               ),
                             )
-
-
                           : const SizedBox(),
                       widget.sender == false
                           ? SizedBox(
