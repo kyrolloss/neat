@@ -4,6 +4,7 @@ import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:neat/Screens/chat/chat_screen.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
@@ -116,12 +117,17 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                     Icons.arrow_back_ios_new_outlined,
                                     color: AppColor.primeColor,
                                   )),
-                              BuildText(
-                                text: widget.name!,
-                                bold: true,
-                                color: AppColor.primeColor,
-                                size: 25,
-                                center: true,
+                              SizedBox(
+                                height: height*.07,
+                                width: width*.7,
+                                child: BuildText(
+                                  text: widget.name!,
+                                  bold: true,
+                                  color: AppColor.primeColor,
+                                  size: 25,
+                                  maxLines: 5,
+                                  center: true,
+                                ),
                               ),
                               SizedBox()
                             ],
@@ -694,30 +700,35 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                       ),
                                     ),
                                   ),
-                                  Container(
-                                    height: height * .075,
-                                    width: width * .15,
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          Icon(
-                                            Icons.send,
-                                            size: 25,
-                                            color: AppColor.primeColor,
-                                          ),
-                                          BuildText(
-                                            text: 'Chat',
-                                            size: 12.5,
-                                            color: AppColor.primeColor,
-                                            bold: true,
-                                          ),
-                                        ],
+                                  GestureDetector(
+                                    onTap: () {
+                                      navigateTo(context, ChatScreen(receiverUserEmail: widget.senderEmail!, receiverUserID: cubit.id!));
+                                    },
+                                    child: Container(
+                                      height: height * .075,
+                                      width: width * .15,
+                                      decoration: BoxDecoration(
+                                        color: Colors.white,
+                                        borderRadius: BorderRadius.circular(20),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            Icon(
+                                              Icons.send,
+                                              size: 25,
+                                              color: AppColor.primeColor,
+                                            ),
+                                            BuildText(
+                                              text: 'Chat',
+                                              size: 12.5,
+                                              color: AppColor.primeColor,
+                                              bold: true,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   )

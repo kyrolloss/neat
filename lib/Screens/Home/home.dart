@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +35,41 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  Timer? timer;
+  int timeRemaining = 3;
+  @override
+  void initState() {
+    super.initState();
+    startTimer();
+  }
+
+  void startTimer() {
+    timer = Timer.periodic(const Duration(seconds: 1), (Timer t) {
+      setState(() {
+        if (timeRemaining > 0) {
+          timeRemaining--;
+        } else {
+          restartTimer();
+        }
+      });
+    });
+  }
+  @override
+  void dispose() {
+    timer?.cancel();
+
+    super.dispose();
+  }
+
+  void restartTimer() {
+    timer?.cancel();
+    startTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
+
+
     bool isDarkMode =
         Provider.of<ThemeProvider>(context, listen: false).isDarkMode;
     var height = MediaQuery.of(context).size.height;
@@ -51,6 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
           backgroundColor: Theme.of(context).colorScheme.background,
           appBar: TAppBar(
             backgroundColor: Colors.transparent,
+            showBackArrow: false,
             actions: [
               IconButton(
                   onPressed: () {
