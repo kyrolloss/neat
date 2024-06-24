@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:neat/Screens/authentication/terms/terms.dart';
+import 'package:neat/components/components.dart';
 
 import '../../../../../utlis/constants/colors.dart';
 import '../../../../../utlis/constants/sizes.dart';
@@ -36,7 +38,8 @@ class _TermsAndConditionsCheckboxState
               });
             }),
 
-        Text.rich(TextSpan(children: [
+        Text.rich(
+            TextSpan(children: [
           TextSpan(
               text: '${TText.iAgreeTo} ',
               style: Theme.of(context).textTheme.bodySmall),

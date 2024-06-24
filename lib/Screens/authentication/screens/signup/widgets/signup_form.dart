@@ -6,6 +6,7 @@ import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/authentication/screens/signup/admin_or_user_screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/verify_email.dart';
 import 'package:neat/Screens/authentication/screens/signup/widgets/terms_and_conditions_checkbox.dart';
+import 'package:neat/Screens/authentication/terms/terms.dart';
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
@@ -41,6 +42,7 @@ class _SignupFormState extends State<SignupForm> {
   TextEditingController lastName = TextEditingController();
 
   TextEditingController phone = TextEditingController();
+  bool status = false;
 
   /// sign up user
   bool isObsecuredText = true;
@@ -278,7 +280,50 @@ class _SignupFormState extends State<SignupForm> {
               height: TSizes.spaceBtwSections,
             ),
 
-            TermsAndConditionsCheckbox(),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Checkbox(
+                    checkColor: TColors.secondaryColor,
+                    activeColor: TColors.primaryColor,
+                    side: BorderSide(color: TColors.primaryColor),
+                    shape: RoundedRectangleBorder(
+                        side: BorderSide(
+                          color: TColors.primaryColor,
+                        ),
+                        borderRadius: BorderRadius.circular(4)),
+                    value: status,
+                    onChanged: (value) {
+                      setState(() {
+                        status = value!;
+                      });
+                    }),
+                GestureDetector(
+                  onTap: () {
+                    navigateTo(context, Terms());
+                  },
+                  child: Text.rich(TextSpan(children: [
+                    TextSpan(
+                        text: '${TText.iAgreeTo} ',
+                        style: Theme.of(context).textTheme.bodySmall),
+                    TextSpan(
+                      text: TText.privacyPolicy,
+                      style: Theme.of(context).textTheme.bodyMedium!.apply(
+                          color: TColors.primaryColor,
+                          decoration: TextDecoration.underline),
+                    ),
+                    TextSpan(
+                        text: ' ${TText.and}',
+                        style: Theme.of(context).textTheme.bodySmall),
+                    TextSpan(
+                        text: ' ${TText.termsOfUse} ',
+                        style: Theme.of(context).textTheme.bodyMedium!.apply(
+                            color: TColors.primaryColor,
+                            decoration: TextDecoration.underline)),
+                  ])),
+                )
+              ],
+            ),
 
             const SizedBox(
               height: TSizes.spaceBtwSections,

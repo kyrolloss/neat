@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:action_slider/action_slider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:http/http.dart' as http;
 import 'package:neat/components/color.dart';
 import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
