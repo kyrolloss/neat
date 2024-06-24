@@ -342,8 +342,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                     color: Colors.white,
                                   ),
                                   BuildText(
-                                    text: 'Download',
-                                    size: 10,
+                                    text: 'Show',
+                                    size: 12,
                                     color: Colors.white,
                                   ),
                                 ],
@@ -407,6 +407,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                         ),
                                         startAction: (controller) async {
                                           if (widget.status != 'to do') {
+
                                             ScaffoldMessenger.of(context)
                                                 .showSnackBar(
                                               const SnackBar(
@@ -453,6 +454,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                         startAction: (controller) async {
                                           setState(() {
                                             if (widget.status == 'to do') {
+                                              widget.status = 'in progress';
                                               controller
                                                   .loading(); //starts loading animation
                                               Future.delayed(
@@ -467,6 +469,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                         endAction: (controller) async {
                                           setState(() {
                                             if (widget.status == 'to do') {
+                                              widget.status = 'in progress';
+
                                               controller
                                                   .loading(); //starts loading animation
                                               Future.delayed(
@@ -552,6 +556,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                             if (widget.status == 'to do' ||
                                                 widget.status ==
                                                     'in progress') {
+                                              widget.status = 'completed';
+
                                               controller
                                                   .loading(); //starts loading animation
                                               Future.delayed(
@@ -568,6 +574,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                                             if (widget.status == 'to do' ||
                                                 widget.status ==
                                                     'in progress') {
+                                              widget.status = 'completed';
                                               controller.loading();
                                               FirebaseFirestore.instance
                                                   .collection('tasks_rooms')

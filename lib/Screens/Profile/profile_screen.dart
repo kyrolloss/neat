@@ -1,10 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
 import 'package:neat/Screens/Profile/edit_profile_screen.dart';
 import 'package:neat/Screens/Profile/performance/performance.dart';
+import 'package:neat/Screens/authentication/screens/login/login_screen.dart';
 import 'package:neat/Screens/chat/services/auth_services.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/custom_shapes/containers/primary_header_container.dart';
@@ -34,11 +36,32 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen> {
   /// Sign user out
-  void signOut() {
-    /// get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      navigateTo(context, const LoginScreen());
 
-    authService.signOut();
+      AppCubit.get(context).premium = false;
+      AppCubit.get(context).year = 0;
+      AppCubit.get(context).month = 0;
+      AppCubit.get(context).day = 0;
+      AppCubit.get(context).tasksList = [];
+      AppCubit.get(context).numberOfTodoTasks = 0;
+      AppCubit.get(context).numberOfInProgressTasks = 0;
+      AppCubit.get(context).numberOfCompletedTasks = 0;
+      AppCubit.get(context).membersUnderSupervision = 0;
+      AppCubit.get(context).id = '';
+      AppCubit.get(context).name = '';
+      AppCubit.get(context).email = '';
+      AppCubit.get(context).phone = '';
+      AppCubit.get(context).title = '';
+      AppCubit.get(context).url;
+
+      String typee = '';
+      print("User signed out successfully");
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 
   double competedTask = 0;
@@ -52,9 +75,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     var width = MediaQuery.of(context).size.width;
 
     return BlocConsumer<AppCubit, AppState>(
-      listener: (context, state) {
-
-      },
+      listener: (context, state) {},
       builder: (context, state) {
         var cubit = AppCubit.get(context);
         return Scaffold(
@@ -144,63 +165,45 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   )
                                 ],
                               ),
-                              GestureDetector(
-                                onTap: () async {},
-                                child: Container(
-                                  height: height * .03,
-                                  width: width * .3,
-                                  decoration: BoxDecoration(
-                                    color: AppColor.secondColor,
-                                    borderRadius: BorderRadius.circular(25),
-                                  ),
-                                  child: Center(
-                                    child: BuildText(
-                                      text: "Details",
-                                      color: AppColor.primeColor,
-                                      size: 17.5,
-                                      bold: true,
-                                    ),
-                                  ),
-                                ),
-                              ),
+
                             ],
                           ),
                         ),
                       ),
 
-
-
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
                       TSettingsMenuTile(
-                        icon: Icons.star_rate_outlined,
-                        title: "performance",
-                        onTap: () async {
-                          bool isPremium = false;
+                          icon: Icons.star_rate_outlined,
+                          title: "Performance",
+                          onTap: () async {
+                            bool isPremium = false;
 
-                          // استرجاع بيانات المستخدم من قاعدة البيانات
-                          DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(cubit.id).get();
+                            DocumentSnapshot userDoc = await FirebaseFirestore
+                                .instance
+                                .collection('Users')
+                                .doc(cubit.id)
+                                .get();
 
-                          if (userDoc.exists) {
-                            isPremium = userDoc['premium'] ?? false;
-                            print(isPremium);
-                          }
-                          if (isPremium == true) {
-                            await cubit.getPerformance(context: context);
-
-                          }
-                          else if (isPremium == false) {
-                            navigateTo(context, const SubscriptionPage(auth: false,));
-                          }
-
-
-                        }
-                      ),
+                            if (userDoc.exists) {
+                              isPremium = userDoc['premium'] ?? false;
+                              print(isPremium);
+                            }
+                            if (isPremium == true) {
+                              await cubit.getPerformance(context: context);
+                            } else if (isPremium == false) {
+                              navigateTo(
+                                  context,
+                                  const SubscriptionPage(
+                                    auth: false,
+                                  ));
+                            }
+                          }),
                       //
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
-                       ),
+                      ),
                       TSettingsMenuTile(
                         icon: Icons.settings_suggest_outlined,
                         title: "Settings",
@@ -214,7 +217,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       TSettingsMenuTile(
                         icon: Icons.logout_sharp,
                         title: "Logout",
-                        onTap: signOut,
+                        onTap: ()async{
+                          signOut();
+                        },
                       )
                     ],
                   ),

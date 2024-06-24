@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:iconsax/iconsax.dart';
@@ -18,6 +20,8 @@ import 'package:neat/utlis/constants/sizes.dart';
 import 'package:neat/utlis/constants/themes/theme_provider.dart';
 import 'package:provider/provider.dart';
 
+import '../../Screens/authentication/screens/login/login_screen.dart';
+import '../../Screens/authentication/screens/signup/packages Scren/packages screen.dart';
 import '../../components/Text.dart';
 import '../../components/color.dart';
 
@@ -32,11 +36,32 @@ class AdminProfileScreen extends StatefulWidget {
 
 class _AdminProfileScreenState extends State<AdminProfileScreen> {
   /// Sign user out
-  void signOut() {
-    /// get auth service
-    final authService = Provider.of<AuthService>(context, listen: false);
+  Future<void> signOut() async {
+    try {
+      await FirebaseAuth.instance.signOut();
+      navigateTo(context, const LoginScreen());
 
-    authService.signOut();
+      AppCubit.get(context).premium = false;
+      AppCubit.get(context).year = 0;
+      AppCubit.get(context).month = 0;
+      AppCubit.get(context).day = 0;
+      AppCubit.get(context).tasksList = [];
+      AppCubit.get(context).numberOfTodoTasks = 0;
+      AppCubit.get(context).numberOfInProgressTasks = 0;
+      AppCubit.get(context).numberOfCompletedTasks = 0;
+      AppCubit.get(context).membersUnderSupervision = 0;
+      AppCubit.get(context).id = '';
+      AppCubit.get(context).name = '';
+      AppCubit.get(context).email = '';
+      AppCubit.get(context).phone = '';
+      AppCubit.get(context).title = '';
+      AppCubit.get(context).url;
+
+      String typee = '';
+      print("User signed out successfully");
+    } catch (e) {
+      print("Error signing out: $e");
+    }
   }
 
   @override
@@ -190,10 +215,32 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
-                       TSettingsMenuTile(
-                          icon: Icons.star_rate_outlined , title: "Performance",onTap: (){
-                            navigateTo(context, const AdminPerformance());
-                       },),
+                      TSettingsMenuTile(
+                          icon: Icons.star_rate_outlined,
+                          title: "Performance",
+                          onTap: () async {
+                            bool isPremium = false;
+
+                            DocumentSnapshot userDoc = await FirebaseFirestore
+                                .instance
+                                .collection('Users')
+                                .doc(cubit.id)
+                                .get();
+
+                            if (userDoc.exists) {
+                              isPremium = userDoc['premium'] ?? false;
+                              print(isPremium);
+                            }
+                            if (isPremium == true) {
+                              navigateTo(context, const AdminPerformance());
+                            } else if (isPremium == false) {
+                              navigateTo(
+                                  context,
+                                  const SubscriptionPage(
+                                    auth: false,
+                                  ));
+                            }
+                          }),
                       const SizedBox(
                         height: TSizes.spaceBtwItems,
                       ),
@@ -210,7 +257,9 @@ class _AdminProfileScreenState extends State<AdminProfileScreen> {
                       TSettingsMenuTile(
                         icon: Icons.logout_sharp,
                         title: "Logout",
-                        onTap: signOut,
+                        onTap: ()async{
+                          signOut();
+                        },
                       )
                     ],
                   ),
