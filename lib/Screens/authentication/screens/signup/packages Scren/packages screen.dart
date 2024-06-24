@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neat/components/color.dart';
@@ -88,8 +89,11 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       buttonText: 'try Free',
                       features: freeFeatures,
                       onPressed: () {
-                        if (widget.auth == true){                        AppCubit.get(context).Register(email: widget.email, password: widget.password, name: widget.name, phone: widget.phone, title: widget.title, type: widget.type , premium:cubit.premium);
+                        cubit.premium = false;
+                        if (widget.auth == true){
+                          AppCubit.get(context).Register(email: widget.email!, password: widget.password!, name: widget.name!, phone: widget.phone!, title: widget.title!, type: widget.type! , premium:cubit.premium);
                         navigateTo(context,  SuccessScreen(
+
                           image: TImages.staticSuccessIllustration2,
                           title: TText.yourAccountCreatedTitle,
                           subTitle: TText.yourAccountCreatedSubTitle,
@@ -106,7 +110,8 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                         ));
                         }
                         else {
-                          widget.type == 'User' ? navigateTo(context, MainLayout(uid: '')) : navigateTo(context, AdminMainLayout(uid: ''));
+                          FirebaseFirestore.instance.collection('users').doc(AppCubit.get(context).id).update({ 'premium': false});
+                          cubit.typee == 'User' ? navigateTo(context, MainLayout(uid: '')) : navigateTo(context, AdminMainLayout(uid: ''));
                         }
                       },
                     ),
@@ -120,22 +125,29 @@ class _SubscriptionPageState extends State<SubscriptionPage> {
                       features: premiumFeatures,
                       onPressed: () {
                         cubit.premium = true;
-                        AppCubit.get(context).Register(email: widget.email!, password: widget.password!, name: widget.name!, phone: widget.phone!, title: widget.title!, type: widget.type! , premium:cubit.premium);
-                        navigateTo(context,  SuccessScreen(
-                          image: TImages.staticSuccessIllustration2,
-                          title: TText.yourAccountCreatedTitle,
-                          subTitle: TText.yourAccountCreatedSubTitle,
-                          type: widget.type!,
-                          onPressed: () {
-                            if (widget.type == 'User')
-                            {navigateToToFinish(context,  MainLayout(uid: AppCubit.get(context).id));}
-                            else if (widget.type =='Admin')
-                            {
-                              navigateToToFinish(context,  AdminMainLayout(uid: AppCubit.get(context).id));
-                            }
+                        if (widget.auth == true){
+                          AppCubit.get(context).Register(email: widget.email!, password: widget.password!, name: widget.name!, phone: widget.phone!, title: widget.title!, type: widget.type! , premium:cubit.premium);
+                          navigateTo(context,  SuccessScreen(
 
-                          },
-                        ));
+                            image: TImages.staticSuccessIllustration2,
+                            title: TText.yourAccountCreatedTitle,
+                            subTitle: TText.yourAccountCreatedSubTitle,
+                            type: widget.type!,
+                            onPressed: () {
+                              if (widget.type == 'User')
+                              {navigateToToFinish(context,  MainLayout(uid: AppCubit.get(context).id));}
+                              else if (widget.type =='Admin')
+                              {
+                                navigateToToFinish(context,  AdminMainLayout(uid: AppCubit.get(context).id));
+                              }
+
+                            },
+                          ));
+                        }
+                        else {
+                          FirebaseFirestore.instance.collection('Users').doc(AppCubit.get(context).id).update({ 'premium': true});
+                          cubit.typee == 'User' ? navigateTo(context, MainLayout(uid: '')) : navigateTo(context, AdminMainLayout(uid: ''));
+                        }
 
                       },
                     ),

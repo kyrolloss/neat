@@ -190,7 +190,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             await cubit.getPerformance(context: context);
 
                           }
-                          else{
+                          else if (isPremium == false) {
                             navigateTo(context, const SubscriptionPage(auth: false,));
                           }
 
