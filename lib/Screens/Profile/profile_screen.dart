@@ -23,6 +23,7 @@ import '../../Models/task Model.dart';
 import '../../components/Text.dart';
 import '../../components/color.dart';
 import '../../cubit/app_cubit.dart';
+import '../authentication/screens/signup/packages Scren/packages screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -176,9 +177,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         icon: Icons.star_rate_outlined,
                         title: "performance",
                         onTap: () async {
-                          await cubit.getPerformance(context: context);
+                          bool isPremium = false;
 
-                         
+                          // استرجاع بيانات المستخدم من قاعدة البيانات
+                          DocumentSnapshot userDoc = await FirebaseFirestore.instance.collection('Users').doc(cubit.id).get();
+
+                          if (userDoc.exists) {
+                            isPremium = userDoc['premium'] ?? false;
+                            print(isPremium);
+                          }
+                          if (isPremium == true) {
+                            await cubit.getPerformance(context: context);
+
+                          }
+                          else{
+                            navigateTo(context, const SubscriptionPage(auth: false,));
+                          }
+
+
                         }
                       ),
                       //

@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:neat/Screens/MainLayout.dart';
 import 'package:neat/Screens/Profile/widgets/profile_picture.dart';
+import 'package:neat/Screens/authentication/screens/signup/packages%20Scren/packages%20screen.dart';
 import 'package:neat/Screens/authentication/screens/signup/signup_screen.dart';
 import 'package:neat/common/widgets/appbar/appbar.dart';
 import 'package:neat/common/widgets/images/circular_image.dart';
@@ -152,8 +153,8 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
                         onPressed: () {
                           setState(() async{
 
-                            await AppCubit.get(context).Register(email: widget.email, password: widget.password, name: widget.name, phone: widget.phone, title: widget.title, type: type);
                             _navigateToSuccessScreen(context , type);
+
                           });
                         },
                         style: ButtonStyle(
@@ -180,21 +181,8 @@ class _AdminOrUserScreenState extends State<AdminOrUserScreen> {
   }
 
   void _navigateToSuccessScreen(BuildContext context , String type) {
-    Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => SuccessScreen(
-              image: TImages.staticSuccessIllustration2,
-              title: TText.yourAccountCreatedTitle,
-              subTitle: TText.yourAccountCreatedSubTitle,
-          type: type,
-              onPressed: () {
-                if (type == 'User')
-                  {navigateToToFinish(context,  MainLayout(uid: AppCubit.get(context).id));}
-                else if (type =='Admin')
-                  {
-                    navigateToToFinish(context,  AdminMainLayout(uid: AppCubit.get(context).id));
-                  }
 
-              },
-            )));
+    Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) => SubscriptionPage(email: widget.email, password: widget.password, name: widget.name, phone: widget.phone, title: widget.title, type: type, auth: true,)));
   }
 }

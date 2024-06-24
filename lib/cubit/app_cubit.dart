@@ -32,6 +32,8 @@ class AppCubit extends Cubit<AppState> {
   static AppCubit get(context) => BlocProvider.of(context);
 
   DateTime? selectedDate = DateTime.tryParse('yyyy-MM-dd');
+
+  bool premium = false;
   int year = 0;
   int month = 0;
   int day = 0;
@@ -185,7 +187,8 @@ class AppCubit extends Cubit<AppState> {
       required String phone,
       String? image,
       required String title,
-      required String type}) async {
+      required String type ,
+      required bool premium}) async {
     try {
       emit(RegisterLoading());
       UserCredential userCredential = await auth.createUserWithEmailAndPassword(
@@ -197,7 +200,8 @@ class AppCubit extends Cubit<AppState> {
         'title': title,
         'phone': phone,
         'url': image ?? '',
-        'type': type
+        'type': type,
+        'premium': premium
       });
       getUserInfo(userCredential.user!.uid);
       emit(RegisterSuccess());
@@ -210,25 +214,6 @@ class AppCubit extends Cubit<AppState> {
     }
   }
 
-  Future<void> updateProfilePicture(String uid, String imageUrl) async {
-    try {
-      /// Upload the image to Firebase Storage and get the download URL
-      var refStorage = FirebaseStorage.instance.ref("ProfileImg/$uid");
-      await refStorage.putFile(File(imageUrl));
-      String downloadUrl = await refStorage.getDownloadURL();
-
-      /// Once you have the download URL, update the Firestore document
-      await FirebaseFirestore.instance.collection('Users').doc(uid).update({
-        'url': downloadUrl,
-
-        /// Update the 'url' field with the new photo URL
-      });
-
-      /// Now the photo URL is associated with the user's email in Firestore
-    } catch (e) {
-      print(e.toString());
-    }
-  }
 
   Future<UserCredential> Login(
       {required String email,
@@ -423,8 +408,10 @@ Future<void> getPerformanceTask({required String ID}) async {
           print('competedTask is $competedTask');
         }
       });
-      navigateTo(context,  PerformanceScreen(toDoTask: toDoTask, completeTask: competedTask, tasksList: taskss,));
-      emit(GetPerformanceSuccess());
+
+      Future.delayed(const Duration(seconds: 1), () {
+        navigateTo(context,  PerformanceScreen(toDoTask: toDoTask, completeTask: competedTask, tasksList: taskss,));
+      });      emit(GetPerformanceSuccess());
     } on Exception catch (e) {
       print(e.toString());
       // TODO

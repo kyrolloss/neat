@@ -7,9 +7,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:http/http.dart' as http;
 import 'package:neat/components/color.dart';
+import 'package:neat/components/components.dart';
 import 'package:neat/cubit/app_cubit.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../components/Text.dart';
+import 'Task photo/task photo.dart';
 
 class taskDetailsScreen extends StatefulWidget {
   String? senderID;
@@ -61,22 +63,8 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
   ActionSliderController inProgressController = ActionSliderController();
   ActionSliderController completeController = ActionSliderController();
 
-  String? localFilePath;
 
-  Future<void> _downloadAndSaveImage(String imageUrl) async {
-    try {
-      final http.Response response = await http.get(Uri.parse(imageUrl));
-      final Directory appDir = await getApplicationDocumentsDirectory();
-      final File file = File('${appDir.path}/image.jpg');
 
-      await file.writeAsBytes(response.bodyBytes);
-      setState(() {
-        localFilePath = file.path;
-      });
-    } catch (e) {
-      print('Error downloading or saving image: $e');
-    }
-  }
 
 
   void initState() {
@@ -329,7 +317,7 @@ class _taskDetailsScreenState extends State<taskDetailsScreen> {
                           GestureDetector(
                             onTap: () {
                               if (widget.imageURl != null) {
-                                _downloadAndSaveImage(widget.imageURl!);
+                               navigateTo(context, ImageDisplayPage(imageUrl: widget.imageURl!,));
                               } else {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
