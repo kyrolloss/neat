@@ -1,16 +1,25 @@
 # neat
+Business Task Organizer 
 
-A new Flutter project.
+An application that enables the company to organize tasks between groups and follow up on task progress with an annual evaluation
+Like (Click up)
 
-## Getting Started
 
-This project is a starting point for a Flutter application.
+packages 
+- Firebase Core
+- state management (bloc)
+- Flutter UUid
+- shared_preferences
+- pie_chart
+- image_picker
+- image_picker
+- emoji_picker_flutter:
+- percent_indicator
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+  Fetures
+  - updates tasks ("To Do," "In Progress," "Completed")
+  - Chat
+  - Performance Tracking
+  - Supports light and dark modes
+  - Change Profile Info
+  - Tasks tracking
