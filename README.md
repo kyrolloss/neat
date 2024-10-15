@@ -7,6 +7,7 @@ Like (Click up)
 
 packages 
 - Firebase Core
+- flutter_local_notifications
 - state management (bloc)
 - Flutter UUid
 - shared_preferences
@@ -23,3 +24,5 @@ packages
   - Supports light and dark modes
   - Change Profile Info
   - Tasks tracking
+  - Notifications
+ 
